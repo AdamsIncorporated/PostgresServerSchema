@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug BudgetWebAppData",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\upload.py",
+      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "justMyCode": false
+    }
+  ]
+}

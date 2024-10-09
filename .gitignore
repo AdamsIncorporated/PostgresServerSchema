@@ -1,2 +1,4 @@
 source/
 *.db
+.venv/
+*.log
