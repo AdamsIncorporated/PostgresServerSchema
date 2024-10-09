@@ -1,5 +1,3 @@
-CREATE TABLE sqlite_sequence (name, seq)
-
 CREATE TABLE User (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     Username TEXT UNIQUE NOT NULL,
@@ -8,9 +6,9 @@ CREATE TABLE User (
     ImageFile BLOB NULL,
     FirstName TEXT,
     LastName TEXT,
-    DateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    IsRootUser BOOLEAN NULL
-) STRICT
+    DateCreated TEXT,
+    IsRootUser BLOB NULL
+) STRICT;
 
 CREATE TABLE Forecast (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -21,7 +19,7 @@ CREATE TABLE Forecast (
     Comments TEXT NULL,
     FOREIGN KEY (BudgetId) REFERENCES Budget (BudgetId),
     FOREIGN KEY (AccountNo) REFERENCES Account (Account)
-) STRICT
+) STRICT;
 
 CREATE TABLE ProposedBudget (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -34,13 +32,13 @@ CREATE TABLE ProposedBudget (
     [Comments] TEXT,
     FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
     FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit (BusinessUnitId)
-) STRICT
+) STRICT;
 
 CREATE TABLE ProposedBusinessUnit (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     BusinessUnitId TEXT,
     BusinessUnit TEXT
-) STRICT
+) STRICT;
 
 CREATE TABLE JournalEntry_Rad (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -48,7 +46,7 @@ CREATE TABLE JournalEntry_Rad (
     RADId TEXT,
     FOREIGN KEY (JournalEntryId) REFERENCES JournalEntry (Id),
     FOREIGN KEY (RADId) REFERENCES RAD (RADId)
-) STRICT
+) STRICT;
 
 CREATE TABLE Budget_Rad (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -56,7 +54,7 @@ CREATE TABLE Budget_Rad (
     RADId TEXT,
     FOREIGN KEY (BudgetId) REFERENCES Budget (Id),
     FOREIGN KEY (RADId) REFERENCES RAD (RADId)
-) STRICT
+) STRICT;
 
 CREATE TABLE Rad (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -64,20 +62,20 @@ CREATE TABLE Rad (
     RADId TEXT,
     RAD TEXT,
     FOREIGN KEY (RADTypeId) REFERENCES RADType (Id)
-) STRICT
+) STRICT;
 
 CREATE TABLE RadType (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     RADTypeId TEXT UNIQUE,
-    RADType  TEXT UNIQUE
-) STRICT
+    RADType TEXT UNIQUE
+) STRICT;
 
 CREATE TABLE "Account_RadType" (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     AccountId INTEGER UNIQUE,
     RadTypeId TEXT,
-    FOREIGN KEY (AccountId) REFERENCES Account(Id)
-) STRICT
+    FOREIGN KEY (AccountId) REFERENCES Account (Id)
+) STRICT;
 
 CREATE TABLE "Account" (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,7 +98,7 @@ CREATE TABLE "Account" (
     "XBRLTag" TEXT,
     "UserCreated" TEXT,
     "DateCreated" TEXT
-) STRICT
+) STRICT;
 
 CREATE TABLE JournalEntry (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -112,10 +110,10 @@ CREATE TABLE JournalEntry (
     Amount REAL,
     AccountingDate TEXT,
     Remarks TEXT,
-    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit(BusinessUnitId),
-    FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo),
-    FOREIGN KEY (CompanyId) REFERENCES Account(CompanyId)
-) STRICT
+    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit (BusinessUnitId),
+    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
+    FOREIGN KEY (CompanyId) REFERENCES Account (CompanyId)
+) STRICT;
 
 CREATE TABLE Budget (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -123,9 +121,9 @@ CREATE TABLE Budget (
     BusinessUnitId INTEGER,
     AccountNo TEXT,
     Amount REAL,
-    FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo),
-    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit(BusinessUnitId)
-) STRICT 
+    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
+    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit (BusinessUnitId)
+) STRICT;
 
 CREATE TABLE BusinessUnit (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -134,7 +132,7 @@ CREATE TABLE BusinessUnit (
     CompanyId TEXT,
     Company TEXT,
     DateCreated TEXT
-) STRICT
+) STRICT;
 
 CREATE TABLE Budget_Account (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
@@ -143,10 +141,10 @@ CREATE TABLE Budget_Account (
     Account TEXT,
     RAD TEXT,
     CreatedDate TEXT,
-    FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo),
-    FOREIGN KEY (Account) REFERENCES Account(Account),
-    FOREIGN KEY (RAD) REFERENCES RAD(RAD)
-) STRICT 
+    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
+    FOREIGN KEY (Account) REFERENCES Account (Account),
+    FOREIGN KEY (RAD) REFERENCES RAD (RAD)
+) STRICT;
 
 CREATE VIEW vwRad_RadType AS
 SELECT 

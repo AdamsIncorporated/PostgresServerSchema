@@ -38,11 +38,11 @@ class Migration:
         if not os.path.exists(self.db_name):
             self.connection = sqlite3.connect(self.db_name)
             logging.info(f"Database '{self.db_name}' created successfully.")
-            self.run_schema()
+            self._run_schema()
         else:
             logging.info(f"Database '{self.db_name}' already exists.")
 
-    def run_schema(self):
+    def _run_schema(self):
         try:
             with open(self.schema_file, 'r') as file:
                 schema_sql = file.read()
@@ -51,7 +51,7 @@ class Migration:
                 self.connection.commit()
                 logging.info(f"Schema from '{self.schema_file}' applied successfully.")
         except Exception as e:
-            logging.error(f"An error occurred while applying the schema: {e}")
+            logging.exception(f"An error occurred while applying the schema: {e}")
         finally:
             self.connection.close()
 
@@ -383,4 +383,5 @@ class Util:
 
 if __name__ == "__main__":
     migration = Migration()
+    migration.create_database()
     migration.import_all()
