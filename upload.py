@@ -8,6 +8,7 @@ import os
 # Configure logging
 logging.basicConfig(
     filename="migration.log",
+    filemode="w",
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
@@ -174,6 +175,7 @@ class Migration:
         df["Id"] = df.index + 1
         df = df.rename(columns={"BudgetId": "FiscalYear", "AccountNo.": "AccountNo"})
         df = df[["Id", "FiscalYear", "BusinessUnitId", "AccountNo", "Amount"]]
+        df["AccountNo"] = df["AccountNo"].astype(str).str.replace(".0", "")
         df["Amount"] = df["Amount"].str.replace(",", "").fillna(0).astype(float)
 
         table = "Budget"
@@ -311,6 +313,7 @@ class Migration:
         df.columns = df.columns.str.replace(' ', "")
         df['Id'] = df.index + 1
         df = df[['Id', 'BusinessUnitId', 'BusinessUnit', 'CompanyId', 'Company', 'DateCreated']]
+        df['DateCreated'] = pd.to_datetime(df['DateCreated'], format='%m/%d/%Y').dt.strftime('%Y-%m-%d %H:%M:%S')
         
         table = "BusinessUnit"
         Util.import_func(df, table)
@@ -382,6 +385,9 @@ class Util:
 
 
 if __name__ == "__main__":
-    migration = Migration()
-    migration.create_database()
-    migration.import_all()
+    try:
+        migration = Migration()
+        migration.create_database()
+        migration.import_all()
+    except Exception as error:
+        raise error
