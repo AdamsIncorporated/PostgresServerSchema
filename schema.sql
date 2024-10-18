@@ -8,17 +8,24 @@ CREATE TABLE User (
     LastName TEXT NOT NULL,
     DateCreated TEXT,
     IsRootUser INTEGER NOT NULL DEFAULT 0 CHECK (IsRootUser IN (0, 1))
-);
+) STRICT;
+
+CREATE TABLE User_BusinessUnit (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    BusinessUnitId INTEGER NOT NULL,
+    UserId INTEGER NOT NULL,
+    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit(BusinessUnitId),
+    FOREIGN KEY (UserId) REFERENCES User(Id)
+) STRICT
+
 
 CREATE TABLE MasterEmail (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     Email TEXT UNIQUE NOT NULL,
     UserCreatorId INTEGER NOT NULL,
-    BusinessUnitTableId INTEGER NOT NULL,
     DateCreated TEXT,
-    FOREIGN KEY (UserCreatorId) REFERENCES User(Id),
-    FOREIGN KEY (BusinessUnitTableId) REFERENCES BusinessUnit(Id)
-);
+    FOREIGN KEY (UserCreatorId) REFERENCES User(Id)
+)
 
 CREATE TABLE Forecast (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
