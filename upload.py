@@ -48,7 +48,7 @@ class Migration:
             with open(self.schema_file, 'r') as file:
                 schema_sql = file.read()
                 cursor = self.connection.cursor()
-                cursor.executescript(schema_sql)  # Execute multiple SQL statements
+                cursor.executescript(schema_sql)
                 self.connection.commit()
                 logging.info(f"Schema from '{self.schema_file}' applied successfully.")
         except Exception as e:
@@ -62,7 +62,7 @@ class Migration:
             self._import_account_rad_type()
             self._import_budget_rad()
             self._import_budget()
-            self._import_budget_account()
+            self.import_budget_entry_admin_view()
             self._import_journal_entry()
             self._import_journal_entry_rad()
             self._import_rad()
@@ -318,12 +318,12 @@ class Migration:
         table = "BusinessUnit"
         Util.import_func(df, table)
 
-    def _import_budget_account(self):
+    def import_budget_entry_admin_view(self):
         try:
-            raw = pd.read_csv(r"./source/BudgetAccount.csv")
-            logging.info("Budget Account data read from CSV.")
+            raw = pd.read_csv(r"./source/BudgetEntryAdminView.csv")
+            logging.info("Budget Entry Admin View data read from CSV.")
         except Exception as e:
-            logging.exception(f"Error reading Budget Account CSV: {e}")
+            logging.exception(f"Error reading Budget Entry Admin View CSV: {e}")
             return
         
         df = raw.copy()
@@ -331,7 +331,7 @@ class Migration:
         df.columns = df.columns.str.replace(' ', "")
         df['Id'] = df.index + 1
         
-        table = "Budget_Account"
+        table = "BudgetEntryAdminView"
         Util.import_func(df, table)
 
 class Util:

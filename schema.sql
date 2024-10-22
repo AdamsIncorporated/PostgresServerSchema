@@ -27,30 +27,22 @@ CREATE TABLE MasterEmail (
     FOREIGN KEY (UserCreatorId) REFERENCES User(Id)
 )
 
-CREATE TABLE Forecast (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    BudgetId TEXT NULL,
-    AccountNo TEXT NULL,
-    ForecastAmount REAL NULL,
-    ForecastFormula TEXT NULL,
-    Comments TEXT NULL,
-    FOREIGN KEY (BudgetId) REFERENCES Budget(BudgetId),
-    FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo)
-);
-
 CREATE TABLE ProposedBudget (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     FiscalYear TEXT,
     BusinessUnitId TEXT,
     AccountNo TEXT,
+    RAD TEXT,
     ProposedBudget REAL,
     BusinessCaseName TEXT,
     BusinessCaseAmount REAL,
     TotalBudget REAL,
     Comments TEXT,
+    IsSubTotal INTEGER CHECK (IsSubTotal IN (0, 1)),
     FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo),
     FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit(BusinessUnitId)
-);
+    FOREIGN KEY (RAD) REFERENCES Rad(RAD)
+) STRICT;
 
 CREATE TABLE ProposedBusinessUnit (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -152,20 +144,22 @@ CREATE TABLE BusinessUnit (
     DateCreated TEXT
 );
 
-CREATE TABLE Budget_Account (
+CREATE TABLE BudgetEntryAdminView (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
     DisplayOrder INTEGER UNIQUE NOT NULL,
     AccountNo TEXT,
     Account TEXT,
     RAD TEXT,
     CreatedDate TEXT,
-    IsTotalAccount INTEGER NOT NULL CHECK (IsTotalAccount IN (0, 1)),
+    ForecastMultiplier REAL,
+    ForecastComments TEXT,
+    UserId INTEGER,
     IsActiveTemplate INTEGER NOT NULL CHECK (IsActiveTemplate IN (0, 1)),
-    Creator TEXT NOT NULL,
     FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo),
     FOREIGN KEY (Account) REFERENCES Account(Account),
     FOREIGN KEY (RAD) REFERENCES RAD(RAD)
-);
+    FOREIGN KEY (UserId) REFERENCES User(Id)
+) STRICT;
 
 CREATE VIEW vwAccount_RadType_Rad AS 
 SELECT 
