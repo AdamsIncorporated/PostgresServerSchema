@@ -38,17 +38,10 @@ CREATE TABLE ProposedBudget (
     BusinessCaseAmount REAL,
     TotalBudget REAL,
     Comments TEXT,
-    IsSubTotal INTEGER CHECK (IsSubTotal IN (0, 1)),
     FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo),
-    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit(BusinessUnitId)
+    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit(BusinessUnitId),
     FOREIGN KEY (RAD) REFERENCES Rad(RAD)
-) STRICT;
-
-CREATE TABLE ProposedBusinessUnit (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    BusinessUnitId TEXT,
-    BusinessUnit TEXT
-);
+) STRICT
 
 CREATE TABLE JournalEntry_Rad (
     Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
