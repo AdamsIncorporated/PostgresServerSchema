@@ -143,15 +143,11 @@ CREATE TABLE BudgetEntryAdminView (
     AccountNo TEXT,
     Account TEXT,
     RAD TEXT,
-    CreatedDate TEXT,
     ForecastMultiplier REAL,
     ForecastComments TEXT,
-    UserId INTEGER,
-    IsActiveTemplate INTEGER NOT NULL CHECK (IsActiveTemplate IN (0, 1)),
     FOREIGN KEY (AccountNo) REFERENCES Account(AccountNo),
     FOREIGN KEY (Account) REFERENCES Account(Account),
     FOREIGN KEY (RAD) REFERENCES RAD(RAD)
-    FOREIGN KEY (UserId) REFERENCES User(Id)
 ) STRICT;
 
 CREATE VIEW vwAccount_RadType_Rad AS 
