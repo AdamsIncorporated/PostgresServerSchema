@@ -318,7 +318,7 @@ class Migration:
             return
 
         rad = raw.copy()
-        rad.columns = Util.sanitize_columns(rad)
+        rad = Util.sanitize_columns(rad)
         rad = rad[["rad_type_id", "rad_id", "rad"]]
 
         table = "rad"

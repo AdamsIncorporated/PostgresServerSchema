@@ -60,9 +60,12 @@ CREATE TABLE rad (
     id SERIAL PRIMARY KEY,
     rad_type_id TEXT,
     rad_id TEXT UNIQUE,
-    rad TEXT UNIQUE,
+    rad TEXT,
     FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id)
 );
+
+ALTER TABLE rad ADD CONSTRAINT unique_rad_id_rad UNIQUE (rad_id, rad);
+
 
 CREATE TABLE journal_entry (
     id SERIAL PRIMARY KEY,
@@ -128,6 +131,7 @@ CREATE TABLE proposed_budget (
     fiscal_year INTEGER,
     business_unit_id TEXT,
     account_no TEXT,
+    rad_id TEXT,
     rad TEXT,
     proposed_budget REAL,
     business_case_name TEXT,
@@ -136,7 +140,7 @@ CREATE TABLE proposed_budget (
     comments TEXT,
     FOREIGN KEY (account_no) REFERENCES account (account_no),
     FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
-    FOREIGN KEY (rad) REFERENCES rad (rad)
+    FOREIGN KEY (rad_id, rad) REFERENCES rad (rad_id, rad)
 );
 
 CREATE TABLE journal_entry_rad (
@@ -167,11 +171,12 @@ CREATE TABLE budget_entry_admin_view (
     display_order INTEGER UNIQUE NOT NULL,
     account_no TEXT,
     account TEXT,
+    rad_id TEXT,
     rad TEXT,
     forecast_multiplier REAL,
     forecast_comments TEXT,
     FOREIGN KEY (account_no, account) REFERENCES account(account_no, account),
-    FOREIGN KEY (rad) REFERENCES rad (rad)
+    FOREIGN KEY (rad, rad_id) REFERENCES rad (rad, rad_id)
 );
 
 CREATE VIEW vw_account_rad_type_rad AS
