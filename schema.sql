@@ -13,21 +13,35 @@ CREATE TABLE "user" (
 
 CREATE TABLE business_unit (
     id SERIAL PRIMARY KEY,
-    business_unit_id TEXT UNIQUE,
-    business_unit TEXT UNIQUE,
     company_id TEXT,
+    business_unit_id TEXT UNIQUE,
+    business_unit TEXT,
     company TEXT,
-    date_created TIMESTAMP,
-    UNIQUE (business_unit_id, company_id)
+    date_created TIMESTAMP
+);
+
+ALTER TABLE business_unit
+ADD CONSTRAINT unique_business_unit_id_business_unit_company_id UNIQUE (
+    company_id,
+    business_unit_id,
+    business_unit
 );
 
 CREATE TABLE user_business_unit (
     id SERIAL PRIMARY KEY,
-    business_unit TEXT NULL,
+    company_id TEXT,
     business_unit_id TEXT NOT NULL,
+    business_unit TEXT NULL,
     user_id INTEGER NOT NULL,
-    FOREIGN KEY (business_unit) REFERENCES business_unit (business_unit),
-    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
+    FOREIGN KEY (
+        company_id,
+        business_unit_id,
+        business_unit
+    ) REFERENCES business_unit (
+        company_id,
+        business_unit_id,
+        business_unit
+    ),
     FOREIGN KEY (user_id) REFERENCES "user" (id)
 );
 
@@ -48,7 +62,8 @@ CREATE TABLE account (
     date_created TIMESTAMP
 );
 
-ALTER TABLE account ADD CONSTRAINT unique_account_no_account UNIQUE (account_no, account);
+ALTER TABLE account
+ADD CONSTRAINT unique_account_no_account UNIQUE (account_no, account);
 
 CREATE TABLE rad_type (
     id SERIAL PRIMARY KEY,
@@ -59,19 +74,20 @@ CREATE TABLE rad_type (
 CREATE TABLE rad (
     id SERIAL PRIMARY KEY,
     rad_type_id TEXT,
-    rad_id TEXT UNIQUE,
+    rad_id TEXT,
     rad TEXT,
     FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id)
 );
 
-ALTER TABLE rad ADD CONSTRAINT unique_rad_id_rad UNIQUE (rad_id, rad);
-
+ALTER TABLE rad
+ADD CONSTRAINT unique_rad_id_rad UNIQUE (rad_type_id, rad_id, rad);
 
 CREATE TABLE journal_entry (
     id SERIAL PRIMARY KEY,
     company_id TEXT,
     entry_id TEXT,
-    business_unit_id TEXT UNIQUE,
+    business_unit_id TEXT,
+    business_unit TEXT,
     account_no TEXT,
     account TEXT,
     amount REAL,
@@ -92,14 +108,22 @@ CREATE TABLE journal_entry (
             )
         END
     ) STORED,
-    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
-    FOREIGN KEY (account_no, account) REFERENCES account(account_no, account),
-    FOREIGN KEY (business_unit_id, company_id) REFERENCES business_unit (business_unit_id, company_id)
+    FOREIGN KEY (
+        company_id,
+        business_unit_id,
+        business_unit
+    ) REFERENCES business_unit (
+        company_id,
+        business_unit_id,
+        business_unit
+    ),
+    FOREIGN KEY (account_no, account) REFERENCES account (account_no, account)
 );
 
 CREATE TABLE budget (
     id SERIAL PRIMARY KEY,
     budget_id TEXT,
+    company_id TEXT,
     business_unit_id TEXT,
     business_unit TEXT,
     account_no TEXT,
@@ -121,16 +145,26 @@ CREATE TABLE budget (
             )
         END
     ) STORED,
-    FOREIGN KEY (account_no, account) REFERENCES account(account_no, account),
-    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
-    FOREIGN KEY (business_unit) REFERENCES business_unit (business_unit)
+    FOREIGN KEY (account_no, account) REFERENCES account (account_no, account),
+    FOREIGN KEY (
+        company_id,
+        business_unit_id,
+        business_unit
+    ) REFERENCES business_unit (
+        company_id,
+        business_unit_id,
+        business_unit
+    )
 );
 
 CREATE TABLE proposed_budget (
     id SERIAL PRIMARY KEY,
     fiscal_year INTEGER,
+    company_id TEXT,
     business_unit_id TEXT,
+    business_unit TEXT,
     account_no TEXT,
+    rad_type_id TEXT,
     rad_id TEXT,
     rad TEXT,
     proposed_budget REAL,
@@ -139,31 +173,38 @@ CREATE TABLE proposed_budget (
     total_budget REAL,
     comments TEXT,
     FOREIGN KEY (account_no) REFERENCES account (account_no),
-    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
-    FOREIGN KEY (rad_id, rad) REFERENCES rad (rad_id, rad)
+    FOREIGN KEY (company_id, business_unit_id, business_unit) REFERENCES business_unit (company_id, business_unit_id, business_unit),
+    FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
 
 CREATE TABLE journal_entry_rad (
     id SERIAL PRIMARY KEY,
     journal_entry_id INTEGER,
+    rad_type_id TEXT,
     rad_id TEXT,
+    rad TEXT,
     FOREIGN KEY (journal_entry_id) REFERENCES journal_entry (id),
-    FOREIGN KEY (rad_id) REFERENCES rad (rad_id)
+    FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
 
 CREATE TABLE budget_rad (
     id SERIAL PRIMARY KEY,
     budget_id INTEGER,
+    rad_type_id TEXT,
     rad_id TEXT,
+    rad TEXT,
     FOREIGN KEY (budget_id) REFERENCES budget (id),
-    FOREIGN KEY (rad_id) REFERENCES rad (rad_id)
+    FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
 
 CREATE TABLE account_rad_type (
     id SERIAL PRIMARY KEY,
     account_id INTEGER UNIQUE,
     rad_type_id TEXT,
-    FOREIGN KEY (account_id) REFERENCES account (id)
+    rad_id TEXT,
+    rad TEXT,
+    FOREIGN KEY (account_id) REFERENCES account (id),
+    FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
 
 CREATE TABLE budget_entry_admin_view (
@@ -171,12 +212,13 @@ CREATE TABLE budget_entry_admin_view (
     display_order INTEGER UNIQUE NOT NULL,
     account_no TEXT,
     account TEXT,
+    rad_type_id TEXT,
     rad_id TEXT,
     rad TEXT,
     forecast_multiplier REAL,
     forecast_comments TEXT,
-    FOREIGN KEY (account_no, account) REFERENCES account(account_no, account),
-    FOREIGN KEY (rad, rad_id) REFERENCES rad (rad, rad_id)
+    FOREIGN KEY (account_no, account) REFERENCES account (account_no, account),
+    FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
 
 CREATE VIEW vw_account_rad_type_rad AS

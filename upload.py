@@ -100,8 +100,8 @@ class Migration:
             self._import_account()
             self._import_rad_type()
             self._import_rad()
-            self._import_business_unit()
             self._import_account_rad_type()
+            self._import_business_unit()
             self._import_budget()
             self._import_budget_rad()
             self._import_journal_entry()
@@ -112,19 +112,8 @@ class Migration:
             logging.exception(f"Error during import_all: {e}")
 
     def _import_account(self):
-        try:
-            account_raw = pd.read_csv(r"./source/Account.csv")
-            logging.info("Account data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error Account CSV: {e}")
-            return
-
-        try:
-            account_ownership_raw = pd.read_csv(r"./source/AccountOwnership.csv")
-            logging.info("Account data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error Account CSV: {e}")
-            return
+        account_raw = Util.read_csv_file(r"./source/Account.csv")
+        account_ownership_raw = Util.read_csv_file(r"./source/AccountOwnership.csv")
 
         account_df = account_raw.copy()
         account_df = Util.sanitize_columns(account_df)
@@ -146,14 +135,27 @@ class Migration:
         table = "account"
         Util.import_func(merge, table, self.conn)
 
-    def _import_account_rad_type(self):
-        try:
-            raw = pd.read_csv(r"./source/Rad_Account.csv")
-            logging.info("RAD Account data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error RAD Account CSV: {e}")
-            return
+    def _import_rad_type(self):
+        raw = Util.read_csv_file(r"./source/Rad")
+        rad = raw.copy()
+        rad = Util.sanitize_columns(rad)
+        rad = rad[["rad_type_id", "rad_type"]]
+        rad = rad.drop_duplicates()
 
+        table = "rad_type"
+        Util.import_func(rad, table, self.conn)
+
+    def _import_rad(self):
+        raw = Util.read_csv_file(r"./source/Rad.csv")
+        rad = raw.copy()
+        rad = Util.sanitize_columns(rad)
+        rad = rad[["rad_type_id", "rad_id", "rad"]]
+
+        table = "rad"
+        Util.import_func(rad, table, self.conn)
+
+    def _import_account_rad_type(self):
+        raw = Util.read_csv_file(r"./source/Rad_Account.csv")
         rad_account = raw.copy()
         rad_account = Util.sanitize_columns(rad_account)
         rad_account["account_no"] = rad_account["account_no"].astype(str)
@@ -169,14 +171,17 @@ class Migration:
         table = "account_rad_type"
         Util.import_func(merge, table, self.conn)
 
-    def _import_budget_rad(self):
-        try:
-            raw = pd.read_csv(r"./source/budget.csv")
-            logging.info("Budget RAD data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading Budget RAD CSV: {e}")
-            return
+    def _import_business_unit(self):
+        raw = Util.read_csv_file(r"./source/BusinessUnit.csv")
+        df = raw.copy()
+        df = Util.sanitize_columns(df)
+        df["date_created"] = pd.to_datetime(df["date_created"], format="%m/%d/%Y")
 
+        table = "business_unit"
+        Util.import_func(df, table, self.conn)
+
+    def _import_budget_rad(self):
+        raw = Util.read_csv_file(r"./source/Budget.csv")
         df = raw.copy()
         df = Util.sanitize_columns(df)
         df = df.reset_index(drop=True)
@@ -200,57 +205,38 @@ class Migration:
         df_result.dropna(inplace=True)
         df_result.rename(columns={"value": "rad_id", "id": "budget_id"}, inplace=True)
 
+        # combine the rad types and ids into the table
+        sql = "SELECT rad_type_id, rad_id, rad FROM rad"
+        rad_combined = Util.execute_query(sql, self.conn)
+        merge = pd.merge(rad_combined, df_result, on=["rad_id"], how="right")
+
         table = "budget_rad"
-        Util.import_func(df_result, table, self.conn)
+        Util.import_func(merge, table, self.conn)
 
     def _import_budget(self):
-        try:
-            raw = pd.read_csv(r"./source/Budget.csv")
-            logging.info("Budget data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading Budget CSV: {e}")
-            return
-
+        raw = Util.read_csv_file(r"./source/Budget.csv")
         df = raw.copy()
-        df.columns = Util.sanitize_columns(df)
-        df = df.reset_index(drop=True)
-        df["id"] = df.index + 1
+        df = Util.sanitize_columns(df)
 
-        df = df[["id", "budget_id", "business_unit_id", "account_no", "amount"]]
+        df["accounting_date"] = pd.to_datetime(
+            df["accounting_date"], format="%m/%d/%Y", errors="coerce"
+        )
         df["account_no"] = df["account_no"].astype(str).str.replace(".0", "")
+        df["business_unit_id"] = df["business_unit_id"].astype(str)
         df["amount"] = df["amount"].str.replace(",", "").fillna(0).astype(float)
 
         table = "budget"
         Util.import_func(df, table, self.conn)
 
-    def _import_journal_entry_rad(self):
-        try:
-            raw = pd.read_csv(r"./source/JournalEntry.csv")
-            logging.info("Journal Entry read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading Journal Entry CSV: {e}")
-            return
-
+    def _import_journal_entry(self):
+        raw = Util.read_csv_file(r"./source/JournalEntry.csv")
         df = raw.copy()
-        df = df.reset_index(drop=True)
-        df.columns = Util.sanitize_columns(df)
-        df["id"] = df.index + 1
+        df = Util.sanitize_columns(df)
 
         df["accounting_date"] = pd.to_datetime(
             df["accounting_date"], format="%m/%d/%Y", errors="coerce"
         )
-        je = df[
-            [
-                "id",
-                "company_id",
-                "entry_id",
-                "business_unit_id",
-                "account_no",
-                "amount",
-                "accounting_date",
-                "remarks",
-            ]
-        ].copy()
+        je = df.copy()
         je["entry_id"] = je["entry_id"].fillna(0).astype(int)
         je["account_no"] = (
             je["account_no"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
@@ -266,28 +252,31 @@ class Migration:
         )
         je["amount"] = je["amount"].str.replace(",", "").fillna(0).astype(float)
 
+        # combine the accounts and business units into the table
+        sql = "SELECT account_no, account FROM account"
+        accounts = Util.execute_query(sql, self.conn)
+        merge = pd.merge(accounts, je, on=["account_no"], how="right")
+
+        sql = "SELECT business_unit_id, business_unit FROM business_unit"
+        business_units = Util.execute_query(sql, self.conn)
+        merge = pd.merge(merge, business_units, on=["business_unit_id"], how="right")
+
         table = "journal_entry"
-        Util.import_func(je, table, self.conn)
+        Util.import_func(merge, table, self.conn)
 
-    def _import_journal_entry(self):
-        try:
-            raw = pd.read_csv(r"./source/JournalEntry.csv")
-            logging.info("Journal Entry read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading Journal Entry CSV: {e}")
-            return
-
+    def _import_journal_entry_rad(self):
+        raw = Util.read_csv_file(r"./source/JournalEntry.csv")
         df = raw.copy()
+        df = Util.sanitize_columns(df)
         df = df.reset_index(drop=True)
         df["id"] = df.index + 1
-        df.columns = Util.sanitize_columns(df)
 
         df["accounting_date"] = pd.to_datetime(
             df["accounting_date"], format="%m/%d/%Y", errors="coerce"
         )
         df_split = df.copy()
         cols = [
-            col for col in df_split.columns if "RAD" in col and "Description" not in col
+            col for col in df_split.columns if "rad" in col and "description" not in col
         ]
 
         df_split[cols] = df_split[cols].applymap(
@@ -306,89 +295,21 @@ class Migration:
             columns={"value": "rad_id", "id": "journal_entry_id"}, inplace=True
         )
 
+        # combine the rad types and ids into the table
+        sql = "SELECT rad_type_id, rad_id, rad FROM rad"
+        rad_combined = Util.execute_query(sql, self.conn)
+        merge = pd.merge(rad_combined, df_result, on=["rad_id"], how="right")
+
         table = "journal_entry_rad"
-        Util.import_func(df_result, table, self.conn)
-
-    def _import_rad(self):
-        try:
-            raw = pd.read_csv(r"./source/Rad.csv")
-            logging.info("RAD data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading RAD CSV: {e}")
-            return
-
-        rad = raw.copy()
-        rad = Util.sanitize_columns(rad)
-        rad = rad[["rad_type_id", "rad_id", "rad"]]
-
-        table = "rad"
-        Util.import_func(rad, table, self.conn)
-
-    def _import_rad_type(self):
-        try:
-            raw = pd.read_csv(r"./source/Rad.csv")
-            logging.info("RAD data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading RAD CSV: {e}")
-            return
-
-        rad = raw.copy()
-        rad = Util.sanitize_columns(rad)
-        rad = rad[["rad_type_id", "rad_type"]]
-        rad = rad.drop_duplicates()
-
-        table = "rad_type"
-        Util.import_func(rad, table, self.conn)
-
-    def _import_business_unit(self):
-        try:
-            raw = pd.read_csv(r"./source/BusinessUnit.csv")
-            logging.info("Business Unit data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading Business Unit CSV: {e}")
-            return
-
-        df = raw.copy()
-        df = df.reset_index(drop=True)
-        df.columns = Util.sanitize_columns(df)
-        df["id"] = df.index + 1
-        df = df[
-            [
-                "id",
-                "BusinessUnitid",
-                "BusinessUnit",
-                "company_id",
-                "Company",
-                "date_created",
-            ]
-        ]
-        df["date_created"] = pd.to_datetime(
-            df["date_created"], format="%m/%d/%Y"
-        ).dt.strftime("%Y-%m-%d %H:%M:%S")
-
-        table = "business_unit"
-        Util.import_func(df, table, self.conn)
+        Util.import_func(merge, table, self.conn)
 
     def _import_budget_entry_admin_view(self):
-        try:
-            raw = pd.read_csv(r"./source/BudgetEntryAdminView.csv")
-            logging.info("Budget Entry Admin View data read from CSV.")
-        except Exception as e:
-            logging.exception(f"Error reading Budget Entry Admin View CSV: {e}")
-            return
-
+        raw = Util.read_csv_file(r"./source/BudgetEntryAdminView.csv")
         df = raw.copy()
-        df = df.reset_index(drop=True)
-        df.columns = df.columns.str.replace(" ", "")
-        df["id"] = df.index + 1
+        df = Util.sanitize_columns(df)
 
         table = "budget_entry_admin_view"
         Util.import_func(df, table, self.conn)
-
-
-from psycopg2.extras import execute_values
-import pandas as pd
-import logging
 
 
 class Util:
@@ -448,6 +369,16 @@ class Util:
         df.columns = df.columns.str.replace("/", "")
         df.columns = df.columns.str.replace(".", "")
         return df
+
+    @staticmethod
+    def read_csv_file(path: str) -> pd.DataFrame:
+        try:
+            raw = pd.read_csv(path)
+            logging.info(f"{path} data read from CSV.")
+            return raw
+        except Exception as e:
+            logging.exception(f"Error reading {path}: {e}")
+            return
 
 
 if __name__ == "__main__":
