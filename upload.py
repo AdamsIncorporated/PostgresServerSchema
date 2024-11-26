@@ -1,9 +1,10 @@
-import sqlite3
+import psycopg2
+from psycopg2 import sql
+from psycopg2.extras import execute_values
 import pandas as pd
 import warnings
 import numpy as np
 import logging
-import os
 
 # Configure logging
 logging.basicConfig(
@@ -17,57 +18,95 @@ warnings.filterwarnings("ignore")
 
 
 class DBManager:
-    path: str = "main.db"
-    conn: sqlite3.Connection = None
-
-    def __init__(self):
-        pass
+    def __init__(
+        self,
+        dbname="central_health",
+        user="postgres",
+        password="1234",
+        host="localhost",
+        port=5432,
+    ):
+        self.dbname = dbname
+        self.user = user
+        self.password = password
+        self.host = host
+        self.port = port
+        self.conn = None
 
     def connect(self):
-        self.conn = sqlite3.connect(self.path)
-        logging.info("Connected to the database.")
+        try:
+            # Attempt to connect to the database
+            self.conn = psycopg2.connect(
+                dbname=self.dbname,
+                user=self.user,
+                password=self.password,
+                host=self.host,
+                port=self.port,
+            )
+            logging.info("Connected to the database.")
+        except psycopg2.OperationalError as e:
+            logging.warning(f"Database connection failed: {e}")
+            raise
 
         return self.conn
 
 
 class Migration:
-    def __init__(self, db_name='main.db', schema_file='schema.sql'):
-        self.db_name = db_name
+    def __init__(self, conn: DBManager.connect, schema_file="schema.sql"):
         self.schema_file = schema_file
+        self.conn = conn
 
-    def create_database(self):
-        if not os.path.exists(self.db_name):
-            self.connection = sqlite3.connect(self.db_name)
-            logging.info(f"Database '{self.db_name}' created successfully.")
-            self._run_schema()
-        else:
-            logging.info(f"Database '{self.db_name}' already exists.")
-
-    def _run_schema(self):
+    def delete_all_tables(self):
         try:
-            with open(self.schema_file, 'r') as file:
-                schema_sql = file.read()
-                cursor = self.connection.cursor()
-                cursor.executescript(schema_sql)
-                self.connection.commit()
-                logging.info(f"Schema from '{self.schema_file}' applied successfully.")
+            with self.conn.cursor() as cursor:
+                # Get a list of all table names in the current database
+                cursor.execute(
+                    """
+                    SELECT tablename
+                    FROM pg_tables
+                    WHERE schemaname = 'public';
+                    """
+                )
+                tables = cursor.fetchall()
+
+                # Drop each table
+                for table in tables:
+                    cursor.execute(
+                        sql.SQL("DROP TABLE IF EXISTS {} CASCADE").format(
+                            sql.Identifier(table[0])
+                        )
+                    )
+                    logging.info(f"Table '{table[0]}' dropped.")
+
+                self.conn.commit()
+                logging.info("All tables deleted successfully.")
         except Exception as e:
-            logging.exception(f"An error occurred while applying the schema: {e}")
-        finally:
-            self.connection.close()
+            logging.error(f"Failed to delete tables: {e}", exc_info=True)
+            raise
+
+    def apply_schema(self):
+        try:
+            with self.conn.cursor() as cursor:
+                with open(self.schema_file, "r") as schema:
+                    cursor.execute(schema.read())
+                    self.conn.commit()
+                    logging.info("Schema applied successfully.")
+        except Exception as e:
+            logging.error(f"Failed to apply schema: {e}", exc_info=True)
+            raise
 
     def import_all(self):
         try:
             self._import_account()
+            self._import_rad_type()
+            self._import_rad()
+            self._import_business_unit()
             self._import_account_rad_type()
-            self._import_budget_rad()
             self._import_budget()
-            self.import_budget_entry_admin_view()
+            self._import_budget_rad()
             self._import_journal_entry()
             self._import_journal_entry_rad()
-            self._import_rad()
-            self._import_rad_type()
-            self._import_business_unit()
+            self._import_budget_entry_admin_view()
             logging.info("All data imported successfully.")
         except Exception as e:
             logging.exception(f"Error during import_all: {e}")
@@ -88,23 +127,24 @@ class Migration:
             return
 
         account_df = account_raw.copy()
-        account_df.columns = account_df.columns.str.replace(" ", "")
-        account_df.columns = account_df.columns.str.replace("-", "")
-        account_df.dropna(inplace=True, subset="ChartId")
-        account_df["ChartId"] = account_df["ChartId"].astype(int)
+        account_df = Util.sanitize_columns(account_df)
+        account_df.dropna(inplace=True, subset="chart_id")
+        account_df["chart_id"] = account_df["chart_id"].astype(int)
 
         account_ownership_df = account_ownership_raw.copy()
-        account_ownership_df.columns = account_ownership_df.columns.str.replace(" ", "")
-        account_ownership_df.dropna(inplace=True, subset="AccountNo")
-        account_ownership_df = account_ownership_df[["AccountNo", "ParentKeyId"]]
-        account_ownership_df["ParentKeyId"] = account_ownership_df[
-            "ParentKeyId"
+        account_ownership_df = Util.sanitize_columns(account_ownership_df)
+        account_ownership_df.dropna(inplace=True, subset="account_no")
+        account_ownership_df = account_ownership_df[["account_no", "parent_key_id"]]
+        account_ownership_df["parent_key_id"] = account_ownership_df[
+            "parent_key_id"
         ].str.replace("1_", "")
-        merge = pd.merge(account_df, account_ownership_df, on="AccountNo")
-        merge.rename(columns={"ParentKeyId": "ParentAccountNo"}, inplace=True)
+        merge = pd.merge(account_df, account_ownership_df, on="account_no")
+        merge.rename(columns={"parent_key_id": "parent_account_no"}, inplace=True)
+        merge["date_created"] = pd.to_datetime(merge["date_created"], errors="coerce")
+        merge["date_created"] = merge["date_created"].astype("datetime64[ns]")
 
-        table = "Account"
-        Util.import_func(merge, table)
+        table = "account"
+        Util.import_func(merge, table, self.conn)
 
     def _import_account_rad_type(self):
         try:
@@ -115,19 +155,19 @@ class Migration:
             return
 
         rad_account = raw.copy()
-        rad_account.columns = rad_account.columns.str.replace(" ", "")
-        rad_account["AccountNo"] = rad_account["AccountNo"].astype(str)
+        rad_account = Util.sanitize_columns(rad_account)
+        rad_account["account_no"] = rad_account["account_no"].astype(str)
 
-        sql = "SELECT Id, AccountNo FROM Account;"
-        accounts = Util.execute_query(sql)
-        accounts["AccountNo"] = accounts["AccountNo"].astype(str)
-        merge = pd.merge(rad_account, accounts, on="AccountNo")
-        merge = merge[["RADTypeId", "Id"]]
-        merge = merge.rename(columns={"RADTypeId": "RadTypeId", "Id": "AccountId"})
+        sql = "SELECT id, account_no FROM account;"
+        accounts = Util.execute_query(sql, self.conn)
+        accounts["account_no"] = accounts["account_no"].astype(str)
+        merge = pd.merge(rad_account, accounts, on="account_no")
+        merge = merge[["rad_type_id", "id"]]
+        merge = merge.rename(columns={"rad_type_id": "rad_type_id", "id": "account_id"})
         merge.dropna(inplace=True)
 
-        table = "Account_RadType"
-        Util.import_func(merge, table)
+        table = "account_rad_type"
+        Util.import_func(merge, table, self.conn)
 
     def _import_budget_rad(self):
         try:
@@ -138,11 +178,13 @@ class Migration:
             return
 
         df = raw.copy()
+        df = Util.sanitize_columns(df)
         df = df.reset_index(drop=True)
-        df["Id"] = df.index + 1
+        df["id"] = df.index + 1
+
         df_split = df.copy()
         cols = [
-            col for col in df_split.columns if "RAD" in col and "Description" not in col
+            col for col in df_split.columns if "rad" in col and "description" not in col
         ]
         df_split[cols] = df_split[cols].applymap(
             lambda x: str(x) if not pd.isna(x) else np.nan
@@ -153,13 +195,13 @@ class Migration:
         df_split = df_split.assign(value=df_split["Combined"].str.split("|")).explode(
             "value"
         )
-        df_result = df_split[["Id", "value"]].reset_index(drop=True)
+        df_result = df_split[["id", "value"]].reset_index(drop=True)
         df_result.replace("", float("NaN"), inplace=True)
         df_result.dropna(inplace=True)
-        df_result.rename(columns={"value": "RADId", "Id": "BudgetId"}, inplace=True)
+        df_result.rename(columns={"value": "rad_id", "id": "budget_id"}, inplace=True)
 
-        table = "Budget_Rad"
-        Util.import_func(df_result, table)
+        table = "budget_rad"
+        Util.import_func(df_result, table, self.conn)
 
     def _import_budget(self):
         try:
@@ -170,16 +212,16 @@ class Migration:
             return
 
         df = raw.copy()
-        df.columns = df.columns.str.replace(" ", "")
+        df.columns = Util.sanitize_columns(df)
         df = df.reset_index(drop=True)
-        df["Id"] = df.index + 1
-        df = df.rename(columns={"BudgetId": "FiscalYear", "AccountNo.": "AccountNo"})
-        df = df[["Id", "FiscalYear", "BusinessUnitId", "AccountNo", "Amount"]]
-        df["AccountNo"] = df["AccountNo"].astype(str).str.replace(".0", "")
-        df["Amount"] = df["Amount"].str.replace(",", "").fillna(0).astype(float)
+        df["id"] = df.index + 1
 
-        table = "Budget"
-        Util.import_func(df, table)
+        df = df[["id", "budget_id", "business_unit_id", "account_no", "amount"]]
+        df["account_no"] = df["account_no"].astype(str).str.replace(".0", "")
+        df["amount"] = df["amount"].str.replace(",", "").fillna(0).astype(float)
+
+        table = "budget"
+        Util.import_func(df, table, self.conn)
 
     def _import_journal_entry_rad(self):
         try:
@@ -191,42 +233,41 @@ class Migration:
 
         df = raw.copy()
         df = df.reset_index(drop=True)
-        df["Id"] = df.index + 1
-        df = raw.copy()
-        df.columns = df.columns.str.replace(" ", "")
-        df = df.reset_index(drop=True)
-        df["Id"] = df.index + 1
-        df["AccountingDate"] = pd.to_datetime(
-            df["AccountingDate"], format="%m/%d/%Y", errors="coerce"
+        df.columns = Util.sanitize_columns(df)
+        df["id"] = df.index + 1
+
+        df["accounting_date"] = pd.to_datetime(
+            df["accounting_date"], format="%m/%d/%Y", errors="coerce"
         )
-        df["FiscalYear"] = df["AccountingDate"].apply(Util.get_fiscal_year)
         je = df[
             [
-                "Id",
-                "FiscalYear",
-                "CompanyId",
-                "EntryId",
-                "BusinessUnitId",
-                "AccountNo",
-                "Amount",
-                "AccountingDate",
-                "Remarks",
+                "id",
+                "company_id",
+                "entry_id",
+                "business_unit_id",
+                "account_no",
+                "amount",
+                "accounting_date",
+                "remarks",
             ]
         ].copy()
-        je["EntryId"] = je["EntryId"].fillna(0).astype(int)
-        je["AccountNo"] = (
-            je["AccountNo"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
+        je["entry_id"] = je["entry_id"].fillna(0).astype(int)
+        je["account_no"] = (
+            je["account_no"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
         )
-        je["BusinessUnitId"] = (
-            je["BusinessUnitId"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
+        je["business_unit_id"] = (
+            je["business_unit_id"]
+            .fillna(0)
+            .astype(str)
+            .replace(r"\.0$", "", regex=True)
         )
-        je["CompanyId"] = (
-            je["CompanyId"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
+        je["company_id"] = (
+            je["company_id"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
         )
-        je["Amount"] = je["Amount"].str.replace(",", "").fillna(0).astype(float)
-        
-        table = "JournalEntry"
-        Util.import_func(je, table)
+        je["amount"] = je["amount"].str.replace(",", "").fillna(0).astype(float)
+
+        table = "journal_entry"
+        Util.import_func(je, table, self.conn)
 
     def _import_journal_entry(self):
         try:
@@ -238,15 +279,12 @@ class Migration:
 
         df = raw.copy()
         df = df.reset_index(drop=True)
-        df["Id"] = df.index + 1
-        df = raw.copy()
-        df.columns = df.columns.str.replace(" ", "")
-        df = df.reset_index(drop=True)
-        df["Id"] = df.index + 1
-        df["AccountingDate"] = pd.to_datetime(
-            df["AccountingDate"], format="%m/%d/%Y", errors="coerce"
+        df["id"] = df.index + 1
+        df.columns = Util.sanitize_columns(df)
+
+        df["accounting_date"] = pd.to_datetime(
+            df["accounting_date"], format="%m/%d/%Y", errors="coerce"
         )
-        df["FiscalYear"] = df["AccountingDate"].apply(Util.get_fiscal_year)
         df_split = df.copy()
         cols = [
             col for col in df_split.columns if "RAD" in col and "Description" not in col
@@ -261,15 +299,15 @@ class Migration:
         df_split = df_split.assign(value=df_split["Combined"].str.split("|")).explode(
             "value"
         )
-        df_result = df_split[["Id", "value"]].reset_index(drop=True)
+        df_result = df_split[["id", "value"]].reset_index(drop=True)
         df_result.replace("", float("NaN"), inplace=True)
         df_result.dropna(inplace=True)
         df_result.rename(
-            columns={"value": "RADId", "Id": "JournalEntryId"}, inplace=True
+            columns={"value": "rad_id", "id": "journal_entry_id"}, inplace=True
         )
 
-        table = "JournalEntry_Rad"
-        Util.import_func(df_result, table)
+        table = "journal_entry_rad"
+        Util.import_func(df_result, table, self.conn)
 
     def _import_rad(self):
         try:
@@ -280,10 +318,11 @@ class Migration:
             return
 
         rad = raw.copy()
-        rad = rad[['RADTypeId', 'RADId', 'RAD']]
-        
-        table = "Rad"
-        Util.import_func(rad, table)
+        rad.columns = Util.sanitize_columns(rad)
+        rad = rad[["rad_type_id", "rad_id", "rad"]]
+
+        table = "rad"
+        Util.import_func(rad, table, self.conn)
 
     def _import_rad_type(self):
         try:
@@ -294,11 +333,12 @@ class Migration:
             return
 
         rad = raw.copy()
-        rad = rad[['RADTypeId', 'RADType']]
+        rad = Util.sanitize_columns(rad)
+        rad = rad[["rad_type_id", "rad_type"]]
         rad = rad.drop_duplicates()
-        
-        table = "RadType"
-        Util.import_func(rad, table)
+
+        table = "rad_type"
+        Util.import_func(rad, table, self.conn)
 
     def _import_business_unit(self):
         try:
@@ -307,87 +347,118 @@ class Migration:
         except Exception as e:
             logging.exception(f"Error reading Business Unit CSV: {e}")
             return
-        
+
         df = raw.copy()
         df = df.reset_index(drop=True)
-        df.columns = df.columns.str.replace(' ', "")
-        df['Id'] = df.index + 1
-        df = df[['Id', 'BusinessUnitId', 'BusinessUnit', 'CompanyId', 'Company', 'DateCreated']]
-        df['DateCreated'] = pd.to_datetime(df['DateCreated'], format='%m/%d/%Y').dt.strftime('%Y-%m-%d %H:%M:%S')
-        
-        table = "BusinessUnit"
-        Util.import_func(df, table)
+        df.columns = Util.sanitize_columns(df)
+        df["id"] = df.index + 1
+        df = df[
+            [
+                "id",
+                "BusinessUnitid",
+                "BusinessUnit",
+                "company_id",
+                "Company",
+                "date_created",
+            ]
+        ]
+        df["date_created"] = pd.to_datetime(
+            df["date_created"], format="%m/%d/%Y"
+        ).dt.strftime("%Y-%m-%d %H:%M:%S")
 
-    def import_budget_entry_admin_view(self):
+        table = "business_unit"
+        Util.import_func(df, table, self.conn)
+
+    def _import_budget_entry_admin_view(self):
         try:
             raw = pd.read_csv(r"./source/BudgetEntryAdminView.csv")
             logging.info("Budget Entry Admin View data read from CSV.")
         except Exception as e:
             logging.exception(f"Error reading Budget Entry Admin View CSV: {e}")
             return
-        
+
         df = raw.copy()
         df = df.reset_index(drop=True)
-        df.columns = df.columns.str.replace(' ', "")
-        df['Id'] = df.index + 1
-        
-        table = "BudgetEntryAdminView"
-        Util.import_func(df, table)
+        df.columns = df.columns.str.replace(" ", "")
+        df["id"] = df.index + 1
+
+        table = "budget_entry_admin_view"
+        Util.import_func(df, table, self.conn)
+
+
+from psycopg2.extras import execute_values
+import pandas as pd
+import logging
+
 
 class Util:
     @staticmethod
-    def import_func(df: pd.DataFrame(), table: str) -> None:
+    def import_func(df: pd.DataFrame, table: str, conn) -> None:
         try:
-            conn = DBManager().connect()
             cursor = conn.cursor()
-            cursor.execute(f"DELETE FROM {table}")
+
+            # Fetch columns from the target table
+            cursor.execute(
+                "SELECT column_name FROM information_schema.columns WHERE table_name = %s",
+                (table,),
+            )
+            table_columns = {row[0] for row in cursor.fetchall()}
+            df = df[[col for col in df.columns if col in table_columns]]
+            df = df.replace({np.nan: None})
+            df = df.replace({"": None})
+
+            if df.empty:
+                raise ValueError(
+                    f"No matching columns to import into table {table}. Available columns: {table_columns}"
+                )
+
+            # Dynamically construct SQL INSERT statement
+            columns = ", ".join([f"{col}" for col in df.columns])
+            values_template = ", ".join(["%s"] * len(df.columns))
+            insert_query = f"INSERT INTO {table} ({columns}) VALUES ({values_template})"
+
+            # Convert DataFrame rows to a list of tuples
+            rows = [tuple(row) for row in df.to_numpy()]
+
+            if len(rows[0]) != len(df.columns):
+                raise ValueError("Row length does not match number of columns in query")
+
+            cursor.executemany(insert_query, rows)
+
+            # Commit the transaction
             conn.commit()
-            df.to_sql(table, conn, if_exists="append", index=False)
             logging.info(f"Data imported into {table} successfully.")
         except Exception as error:
             logging.exception(f"Error importing data into {table}: {error}")
             raise error
-        finally:
-            cursor.close()
-            conn.close()
-            logging.info("Database connection closed.")
 
     @staticmethod
-    def execute_query(sql: str) -> pd.DataFrame() | None:
+    def execute_query(sql: str, conn) -> pd.DataFrame | None:
         try:
-            conn = DBManager().connect()
             df = pd.read_sql(sql, conn)
             logging.info(f"Data from query:\n{sql}\n successful.")
             return df
         except Exception as error:
             logging.exception(f"Error from query:\n{sql}\n {error}")
             raise error
-        finally:
-            conn.close()
-            logging.info("Database connection closed.")
 
     @staticmethod
-    def get_fiscal_year(date):
-        if pd.isna(date):
-            return "UnkownFiscalYear"
-
-        year = date.year
-
-        # Define fiscal year start and end based on the current year
-        fiscal_start = pd.Timestamp(f"{year-1}-10-01")
-        fiscal_end = pd.Timestamp(f"{year}-09-30")
-
-        # If date is between October 1st of the previous year and September 30th of the current year
-        if fiscal_start <= date <= fiscal_end:
-            return f"FY{str(year)[-2:]}"  # Current year as fiscal year
-        else:
-            return f"FY{str(year + 1)[-2:]}"  # Next year as fiscal year
+    def sanitize_columns(df: pd.DataFrame) -> pd.DataFrame:
+        df.columns = df.columns.str.replace(" ", "_").str.lower()
+        df.columns = df.columns.str.replace("/", "")
+        df.columns = df.columns.str.replace(".", "")
+        return df
 
 
 if __name__ == "__main__":
     try:
-        migration = Migration()
-        migration.create_database()
-        migration.import_all()
+        db_manager = DBManager()
+        conn = db_manager.connect()
+
+        if conn:
+            migration = Migration(conn=conn, schema_file="schema.sql")
+            migration.delete_all_tables()
+            migration.apply_schema()
+            migration.import_all()
     except Exception as error:
         raise error

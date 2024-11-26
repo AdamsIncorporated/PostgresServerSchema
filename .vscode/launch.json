@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug BudgetWebAppData",
+      "name": "Debug PostgresServerSchema",
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}\\upload.py",

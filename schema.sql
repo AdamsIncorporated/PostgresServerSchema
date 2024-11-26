@@ -1,174 +1,194 @@
-CREATE TABLE User (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    Username TEXT UNIQUE NOT NULL,
-    Email TEXT UNIQUE NOT NULL,
-    Password TEXT NOT NULL,
-    ImageFile BLOB NULL,
-    FirstName TEXT NOT NULL,
-    LastName TEXT NOT NULL,
-    DateCreated TEXT,
-    IsRootUser INTEGER NOT NULL DEFAULT 0 CHECK (IsRootUser IN (0, 1))
-) STRICT;
-
-CREATE TABLE User_BusinessUnit (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    BusinessUnitId INTEGER NOT NULL,
-    UserId INTEGER NOT NULL,
-    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit (BusinessUnitId),
-    FOREIGN KEY (UserId) REFERENCES User (Id)
-) STRICT
-
-CREATE TABLE ProposedBudget (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    FiscalYear TEXT,
-    BusinessUnitId TEXT,
-    AccountNo TEXT,
-    RAD TEXT,
-    ProposedBudget REAL,
-    BusinessCaseName TEXT,
-    BusinessCaseAmount REAL,
-    TotalBudget REAL,
-    Comments TEXT,
-    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
-    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit (BusinessUnitId),
-    FOREIGN KEY (RAD) REFERENCES Rad (RAD)
-) STRICT
-
-CREATE TABLE JournalEntry_Rad (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    JournalEntryId INTEGER,
-    RADId TEXT,
-    FOREIGN KEY (JournalEntryId) REFERENCES JournalEntry (Id),
-    FOREIGN KEY (RADId) REFERENCES RAD (RADId)
+-- Active: 1732559110932@@127.0.0.1@5432@central_health
+CREATE TABLE "user" (
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    image_file BYTEA,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    date_created TEXT,
+    is_root_user BOOLEAN NOT NULL DEFAULT FALSE CHECK (is_root_user IN (FALSE, TRUE))
 );
 
-CREATE TABLE Budget_Rad (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    BudgetId INTEGER,
-    RADId TEXT,
-    FOREIGN KEY (BudgetId) REFERENCES Budget (Id),
-    FOREIGN KEY (RADId) REFERENCES RAD (RADId)
+CREATE TABLE business_unit (
+    id SERIAL PRIMARY KEY,
+    business_unit_id TEXT UNIQUE,
+    business_unit TEXT UNIQUE,
+    company_id TEXT,
+    company TEXT,
+    date_created TIMESTAMP,
+    UNIQUE (business_unit_id, company_id)
 );
 
-CREATE TABLE Rad (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    RADTypeId TEXT,
-    RADId TEXT,
-    RAD TEXT,
-    FOREIGN KEY (RADTypeId) REFERENCES RADType (Id)
+CREATE TABLE user_business_unit (
+    id SERIAL PRIMARY KEY,
+    business_unit TEXT NULL,
+    business_unit_id TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (business_unit) REFERENCES business_unit (business_unit),
+    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
+    FOREIGN KEY (user_id) REFERENCES "user" (id)
 );
 
-CREATE TABLE RadType (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    RADTypeId TEXT UNIQUE,
-    RADType TEXT UNIQUE
+CREATE TABLE account (
+    id SERIAL PRIMARY KEY,
+    parent_account_no TEXT,
+    chart_id INTEGER,
+    account_no TEXT UNIQUE,
+    account TEXT,
+    account_type TEXT,
+    drcr TEXT,
+    posting_level TEXT,
+    inter_company_flag TEXT,
+    security_status TEXT,
+    account_control_class TEXT,
+    class_description TEXT,
+    user_created TEXT,
+    date_created TIMESTAMP
 );
 
-CREATE TABLE "Account_RadType" (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    AccountId INTEGER UNIQUE,
-    RadTypeId TEXT,
-    FOREIGN KEY (AccountId) REFERENCES Account (Id)
+ALTER TABLE account ADD CONSTRAINT unique_account_no_account UNIQUE (account_no, account);
+
+CREATE TABLE rad_type (
+    id SERIAL PRIMARY KEY,
+    rad_type_id TEXT UNIQUE,
+    rad_type TEXT UNIQUE
 );
 
-CREATE TABLE "Account" (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ParentAccountNo TEXT,
-    ChartId INTEGER,
-    AccountNo TEXT UNIQUE,
-    Account TEXT,
-    AccountType TEXT,
-    "DR/CR" TEXT,
-    PostingLevel TEXT,
-    InterCompanyFlag TEXT,
-    SecurityStatus TEXT,
-    Revaluation TEXT,
-    Reconciliation TEXT,
-    AccountControlClass TEXT,
-    ClassDescription TEXT,
-    ConversionTypeId TEXT,
-    ConversionTypeDescription TEXT,
-    UDF1 TEXT,
-    XBRLTag TEXT,
-    UserCreated TEXT,
-    DateCreated TEXT
+CREATE TABLE rad (
+    id SERIAL PRIMARY KEY,
+    rad_type_id TEXT,
+    rad_id TEXT UNIQUE,
+    rad TEXT UNIQUE,
+    FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id)
 );
 
-CREATE TABLE JournalEntry (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    FiscalYear TEXT,
-    CompanyId TEXT,
-    EntryId TEXT,
-    BusinessUnitId TEXT,
-    AccountNo TEXT,
-    Amount REAL,
-    AccountingDate TEXT,
-    Remarks TEXT,
-    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit (BusinessUnitId),
-    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
-    FOREIGN KEY (CompanyId) REFERENCES Account (CompanyId)
+CREATE TABLE journal_entry (
+    id SERIAL PRIMARY KEY,
+    company_id TEXT,
+    entry_id TEXT,
+    business_unit_id TEXT UNIQUE,
+    account_no TEXT,
+    account TEXT,
+    amount REAL,
+    accounting_date TIMESTAMP,
+    remarks TEXT,
+    fiscal_year INT GENERATED ALWAYS AS (
+        CASE
+            WHEN EXTRACT(
+                MONTH
+                FROM accounting_date
+            ) >= 10 THEN EXTRACT(
+                YEAR
+                FROM accounting_date
+            ) + 1
+            ELSE EXTRACT(
+                YEAR
+                FROM accounting_date
+            )
+        END
+    ) STORED,
+    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
+    FOREIGN KEY (account_no, account) REFERENCES account(account_no, account),
+    FOREIGN KEY (business_unit_id, company_id) REFERENCES business_unit (business_unit_id, company_id)
 );
 
-CREATE TABLE Budget (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    FiscalYear TEXT,
-    BusinessUnitId INTEGER,
-    AccountNo TEXT,
-    Amount REAL,
-    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
-    FOREIGN KEY (BusinessUnitId) REFERENCES BusinessUnit (BusinessUnitId)
+CREATE TABLE budget (
+    id SERIAL PRIMARY KEY,
+    budget_id TEXT,
+    business_unit_id TEXT,
+    business_unit TEXT,
+    account_no TEXT,
+    account TEXT,
+    amount REAL,
+    accounting_date TIMESTAMP,
+    fiscal_year INT GENERATED ALWAYS AS (
+        CASE
+            WHEN EXTRACT(
+                MONTH
+                FROM accounting_date
+            ) >= 10 THEN EXTRACT(
+                YEAR
+                FROM accounting_date
+            ) + 1
+            ELSE EXTRACT(
+                YEAR
+                FROM accounting_date
+            )
+        END
+    ) STORED,
+    FOREIGN KEY (account_no, account) REFERENCES account(account_no, account),
+    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
+    FOREIGN KEY (business_unit) REFERENCES business_unit (business_unit)
 );
 
-CREATE TABLE BusinessUnit (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    BusinessUnitId TEXT,
-    BusinessUnit TEXT,
-    CompanyId TEXT,
-    Company TEXT,
-    DateCreated TEXT
+CREATE TABLE proposed_budget (
+    id SERIAL PRIMARY KEY,
+    fiscal_year INTEGER,
+    business_unit_id TEXT,
+    account_no TEXT,
+    rad TEXT,
+    proposed_budget REAL,
+    business_case_name TEXT,
+    business_case_amount REAL,
+    total_budget REAL,
+    comments TEXT,
+    FOREIGN KEY (account_no) REFERENCES account (account_no),
+    FOREIGN KEY (business_unit_id) REFERENCES business_unit (business_unit_id),
+    FOREIGN KEY (rad) REFERENCES rad (rad)
 );
 
-CREATE TABLE BudgetEntryAdminView (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
-    DisplayOrder INTEGER UNIQUE NOT NULL,
-    AccountNo TEXT,
-    Account TEXT,
-    RAD TEXT,
-    ForecastMultiplier REAL,
-    ForecastComments TEXT,
-    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
-    FOREIGN KEY (Account) REFERENCES Account (Account),
-    FOREIGN KEY (RAD) REFERENCES RAD (RAD)
-) STRICT;
+CREATE TABLE journal_entry_rad (
+    id SERIAL PRIMARY KEY,
+    journal_entry_id INTEGER,
+    rad_id TEXT,
+    FOREIGN KEY (journal_entry_id) REFERENCES journal_entry (id),
+    FOREIGN KEY (rad_id) REFERENCES rad (rad_id)
+);
 
-CREATE VIEW vwAccount_RadType_Rad AS
+CREATE TABLE budget_rad (
+    id SERIAL PRIMARY KEY,
+    budget_id INTEGER,
+    rad_id TEXT,
+    FOREIGN KEY (budget_id) REFERENCES budget (id),
+    FOREIGN KEY (rad_id) REFERENCES rad (rad_id)
+);
+
+CREATE TABLE account_rad_type (
+    id SERIAL PRIMARY KEY,
+    account_id INTEGER UNIQUE,
+    rad_type_id TEXT,
+    FOREIGN KEY (account_id) REFERENCES account (id)
+);
+
+CREATE TABLE budget_entry_admin_view (
+    id SERIAL PRIMARY KEY UNIQUE,
+    display_order INTEGER UNIQUE NOT NULL,
+    account_no TEXT,
+    account TEXT,
+    rad TEXT,
+    forecast_multiplier REAL,
+    forecast_comments TEXT,
+    FOREIGN KEY (account_no, account) REFERENCES account(account_no, account),
+    FOREIGN KEY (rad) REFERENCES rad (rad)
+);
+
+CREATE VIEW vw_account_rad_type_rad AS
 SELECT
-    a.Id AS AccountTableId,
-    a.Account,
-    a.AccountNo,
-    a.AccountType,
-    a.ChartId,
-    rt.Id AS RadTypeTableId,
-    rt.RADType,
-    rt.RADTypeId,
-    r.Id AS RadTableId,
-    r.RADId,
-    r.RAD
+    a.id AS account_table_id,
+    a.account,
+    a.account_no,
+    a.account_type,
+    a.chart_id,
+    rt.id AS rad_type_table_id,
+    rt.rad_type,
+    rt.rad_type_id,
+    r.id AS rad_table_id,
+    r.rad_id,
+    r.rad
 FROM
-    Account a
-    JOIN "Account_RadType" art ON art.AccountId = a.Id
-    JOIN RadType rt ON rt.RADTypeId = art.RadTypeId
-    JOIN Rad r ON r.RADTypeId = rt.RADTypeId;
-
-CREATE TABLE BudgetEntryAdminView (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
-    DisplayOrder INTEGER UNIQUE,
-    AccountNo TEXT,
-    Account TEXT,
-    RAD TEXT,
-    ForecastMultiplier REAL,
-    ForecastComments TEXT,
-    FOREIGN KEY (AccountNo) REFERENCES Account (AccountNo),
-    FOREIGN KEY (Account) REFERENCES Account (Account),
-    FOREIGN KEY (RAD) REFERENCES RAD (RAD)
-) STRICT
+    account a
+    JOIN account_rad_type art ON art.account_id = a.id
+    JOIN rad_type rt ON rt.rad_type_id = art.rad_type_id
+    JOIN rad r ON r.rad_type_id = rt.rad_type_id;
