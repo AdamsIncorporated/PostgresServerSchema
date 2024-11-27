@@ -302,6 +302,8 @@ class Migration:
         rad_combined = Util.execute_query(sql, self.conn)
         merge = pd.merge(rad_combined, df, on=["rad"], how="right")
 
+        # (1, null, null, Salaries, SAL, REG, Regular, null, null)
+
         table = "budget_entry_admin_view"
         Util.import_func(merge, table, self.conn)
 
