@@ -244,23 +244,15 @@ class Migration:
 
         je = df.copy()
         je["accounting_date"] = pd.to_datetime(
-            je["accounting_date"], format="%m/%d/%Y", errors="raise"
+            je["accounting_date"], format="%m/%d/%Y", errors="coerce"
         )
         je["amount"] = je["amount"].str.replace(",", "").fillna(np.nan).astype(float)
         je["business_unit_id"] = je["business_unit_id"].astype(str)
         je["entry_id"] = je["entry_id"].astype(str)
-
-        # combine the accounts and business units into the table
-        sql = "SELECT account_no, account FROM account"
-        accounts = Util.execute_query(sql, self.conn)
-        merge = pd.merge(accounts, je, on=["account_no"], how="right")
-
-        sql = "SELECT business_unit_id, business_unit FROM business_unit"
-        business_units = Util.execute_query(sql, self.conn)
-        merge = pd.merge(je, business_units, on=["business_unit_id"], how="right")
+        je["company_id"] = je["company_id"].astype(str)
 
         table = "journal_entry"
-        Util.import_func(merge, table, self.conn)
+        Util.import_func(je, table, self.conn)
 
     def _import_journal_entry_rad(self):
         raw = Util.read_csv_file(r"./source/JournalEntry.csv")
@@ -306,8 +298,12 @@ class Migration:
         df = raw.copy()
         df = Util.sanitize_columns(df)
 
+        sql = "SELECT rad_type_id, rad_id, rad FROM rad"
+        rad_combined = Util.execute_query(sql, self.conn)
+        merge = pd.merge(rad_combined, df, on=["rad"], how="right")
+
         table = "budget_entry_admin_view"
-        Util.import_func(df, table, self.conn)
+        Util.import_func(merge, table, self.conn)
 
 
 class Util:
@@ -324,11 +320,9 @@ class Util:
             table_columns = {row[0] for row in cursor.fetchall()}
             final = (
                 df.copy(deep=True)
-                .replace({np.nan: None, pd.NaT: None, "": None})
+                .replace({np.nan: None, "": None})
                 .applymap(lambda x: x.strip() if isinstance(x, str) else x)
-                .loc[
-                    :, lambda x: x.columns.isin(table_columns)
-                ]  # Filter columns based on `table_columns`
+                .loc[:, lambda x: x.columns.isin(table_columns)]
             )
 
             if final.empty:

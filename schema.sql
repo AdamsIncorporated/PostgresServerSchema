@@ -59,11 +59,9 @@ CREATE TABLE account (
     account_control_class TEXT,
     class_description TEXT,
     user_created TEXT,
-    date_created TIMESTAMP
+    date_created TIMESTAMP,
+    CONSTRAINT unique_account_no_account UNIQUE (account_no, account)
 );
-
-ALTER TABLE account
-ADD CONSTRAINT unique_account_no_account UNIQUE (account_no, account);
 
 CREATE TABLE rad_type (
     id SERIAL PRIMARY KEY,
@@ -76,11 +74,17 @@ CREATE TABLE rad (
     rad_type_id TEXT,
     rad_id TEXT,
     rad TEXT,
-    FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id)
+    FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id),
+    CONSTRAINT unique_rad_id_rad UNIQUE (rad_type_id, rad_id, rad)
 );
 
-ALTER TABLE rad
-ADD CONSTRAINT unique_rad_id_rad UNIQUE (rad_type_id, rad_id, rad);
+CREATE TABLE account_rad_type (
+    id SERIAL PRIMARY KEY,
+    account_id INTEGER UNIQUE,
+    rad_type_id TEXT,
+    FOREIGN KEY (account_id) REFERENCES account (id),
+    FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id)
+);
 
 CREATE TABLE journal_entry (
     id SERIAL PRIMARY KEY,
@@ -197,16 +201,6 @@ CREATE TABLE budget_rad (
     FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
 
-CREATE TABLE account_rad_type (
-    id SERIAL PRIMARY KEY,
-    account_id INTEGER UNIQUE,
-    rad_type_id TEXT,
-    rad_id TEXT,
-    rad TEXT,
-    FOREIGN KEY (account_id) REFERENCES account (id),
-    FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
-);
-
 CREATE TABLE budget_entry_admin_view (
     id SERIAL PRIMARY KEY UNIQUE,
     display_order INTEGER UNIQUE NOT NULL,
@@ -220,6 +214,7 @@ CREATE TABLE budget_entry_admin_view (
     FOREIGN KEY (account_no, account) REFERENCES account (account_no, account),
     FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
+
 
 CREATE VIEW vw_account_rad_type_rad AS
 SELECT
