@@ -118,7 +118,9 @@ class Migration:
         account_df = account_raw.copy()
         account_df = Util.sanitize_columns(account_df)
         account_df.dropna(inplace=True, subset="chart_id")
-        account_df["chart_id"] = account_df["chart_id"].astype(int)
+        account_df["date_created"] = pd.to_datetime(
+            account_df["date_created"], errors="coerce"
+        )
 
         account_ownership_df = account_ownership_raw.copy()
         account_ownership_df = Util.sanitize_columns(account_ownership_df)
@@ -129,14 +131,12 @@ class Migration:
         ].str.replace("1_", "")
         merge = pd.merge(account_df, account_ownership_df, on="account_no")
         merge.rename(columns={"parent_key_id": "parent_account_no"}, inplace=True)
-        merge["date_created"] = pd.to_datetime(merge["date_created"], errors="coerce")
-        merge["date_created"] = merge["date_created"].astype("datetime64[ns]")
 
         table = "account"
         Util.import_func(merge, table, self.conn)
 
     def _import_rad_type(self):
-        raw = Util.read_csv_file(r"./source/Rad")
+        raw = Util.read_csv_file(r"./source/Rad.csv")
         rad = raw.copy()
         rad = Util.sanitize_columns(rad)
         rad = rad[["rad_type_id", "rad_type"]]
@@ -173,9 +173,16 @@ class Migration:
 
     def _import_business_unit(self):
         raw = Util.read_csv_file(r"./source/BusinessUnit.csv")
-        df = raw.copy()
-        df = Util.sanitize_columns(df)
-        df["date_created"] = pd.to_datetime(df["date_created"], format="%m/%d/%Y")
+        df = (
+            raw.copy()
+            .pipe(Util.sanitize_columns)
+            .assign(
+                date_created=lambda x: pd.to_datetime(
+                    x["date_created"], format="%m/%d/%Y"
+                )
+            )
+            .applymap(lambda x: x.strip() if isinstance(x, str) else x)
+        )
 
         table = "business_unit"
         Util.import_func(df, table, self.conn)
@@ -222,7 +229,9 @@ class Migration:
             df["accounting_date"], format="%m/%d/%Y", errors="coerce"
         )
         df["account_no"] = df["account_no"].astype(str).str.replace(".0", "")
+        df["business_unit"] = df["business_unit"].astype(str)
         df["business_unit_id"] = df["business_unit_id"].astype(str)
+        df["company_id"] = df["company_id"].astype(str)
         df["amount"] = df["amount"].str.replace(",", "").fillna(0).astype(float)
 
         table = "budget"
@@ -233,24 +242,13 @@ class Migration:
         df = raw.copy()
         df = Util.sanitize_columns(df)
 
-        df["accounting_date"] = pd.to_datetime(
-            df["accounting_date"], format="%m/%d/%Y", errors="coerce"
-        )
         je = df.copy()
-        je["entry_id"] = je["entry_id"].fillna(0).astype(int)
-        je["account_no"] = (
-            je["account_no"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
+        je["accounting_date"] = pd.to_datetime(
+            je["accounting_date"], format="%m/%d/%Y", errors="raise"
         )
-        je["business_unit_id"] = (
-            je["business_unit_id"]
-            .fillna(0)
-            .astype(str)
-            .replace(r"\.0$", "", regex=True)
-        )
-        je["company_id"] = (
-            je["company_id"].fillna(0).astype(str).replace(r"\.0$", "", regex=True)
-        )
-        je["amount"] = je["amount"].str.replace(",", "").fillna(0).astype(float)
+        je["amount"] = je["amount"].str.replace(",", "").fillna(np.nan).astype(float)
+        je["business_unit_id"] = je["business_unit_id"].astype(str)
+        je["entry_id"] = je["entry_id"].astype(str)
 
         # combine the accounts and business units into the table
         sql = "SELECT account_no, account FROM account"
@@ -259,7 +257,7 @@ class Migration:
 
         sql = "SELECT business_unit_id, business_unit FROM business_unit"
         business_units = Util.execute_query(sql, self.conn)
-        merge = pd.merge(merge, business_units, on=["business_unit_id"], how="right")
+        merge = pd.merge(je, business_units, on=["business_unit_id"], how="right")
 
         table = "journal_entry"
         Util.import_func(merge, table, self.conn)
@@ -324,24 +322,29 @@ class Util:
                 (table,),
             )
             table_columns = {row[0] for row in cursor.fetchall()}
-            df = df[[col for col in df.columns if col in table_columns]]
-            df = df.replace({np.nan: None})
-            df = df.replace({"": None})
+            final = (
+                df.copy(deep=True)
+                .replace({np.nan: None, pd.NaT: None, "": None})
+                .applymap(lambda x: x.strip() if isinstance(x, str) else x)
+                .loc[
+                    :, lambda x: x.columns.isin(table_columns)
+                ]  # Filter columns based on `table_columns`
+            )
 
-            if df.empty:
+            if final.empty:
                 raise ValueError(
                     f"No matching columns to import into table {table}. Available columns: {table_columns}"
                 )
 
             # Dynamically construct SQL INSERT statement
-            columns = ", ".join([f"{col}" for col in df.columns])
-            values_template = ", ".join(["%s"] * len(df.columns))
+            columns = ", ".join([f"{col}" for col in final.columns])
+            values_template = ", ".join(["%s"] * len(final.columns))
             insert_query = f"INSERT INTO {table} ({columns}) VALUES ({values_template})"
 
             # Convert DataFrame rows to a list of tuples
-            rows = [tuple(row) for row in df.to_numpy()]
+            rows = [tuple(row) for row in final.to_numpy()]
 
-            if len(rows[0]) != len(df.columns):
+            if len(rows[0]) != len(final.columns):
                 raise ValueError("Row length does not match number of columns in query")
 
             cursor.executemany(insert_query, rows)
