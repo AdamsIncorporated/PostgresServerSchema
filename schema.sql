@@ -7,8 +7,11 @@ CREATE TABLE "user" (
     image_file BYTEA,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-    date_created TEXT,
-    is_root_user BOOLEAN NOT NULL DEFAULT FALSE CHECK (is_root_user IN (FALSE, TRUE))
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_root_user BOOLEAN NOT NULL DEFAULT FALSE CHECK (is_root_user IN (FALSE, TRUE)),
+    user_creator_id INTEGER,
+    FOREIGN KEY (user_creator_id) REFERENCES "user"(id) 
+    ON DELETE SET NULL
 );
 
 CREATE TABLE business_unit (
@@ -76,14 +79,6 @@ CREATE TABLE rad (
     rad TEXT,
     FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id),
     CONSTRAINT unique_rad_id_rad UNIQUE (rad_type_id, rad_id, rad)
-);
-
-CREATE TABLE account_rad_type (
-    id SERIAL PRIMARY KEY,
-    account_id INTEGER UNIQUE,
-    rad_type_id TEXT,
-    FOREIGN KEY (account_id) REFERENCES account (id),
-    FOREIGN KEY (rad_type_id) REFERENCES rad_type (rad_type_id)
 );
 
 CREATE TABLE journal_entry (
@@ -214,23 +209,3 @@ CREATE TABLE budget_entry_admin_view (
     FOREIGN KEY (account_no, account) REFERENCES account (account_no, account),
     FOREIGN KEY (rad_type_id, rad_id, rad) REFERENCES rad (rad_type_id, rad_id, rad)
 );
-
-
-CREATE VIEW vw_account_rad_type_rad AS
-SELECT
-    a.id AS account_table_id,
-    a.account,
-    a.account_no,
-    a.account_type,
-    a.chart_id,
-    rt.id AS rad_type_table_id,
-    rt.rad_type,
-    rt.rad_type_id,
-    r.id AS rad_table_id,
-    r.rad_id,
-    r.rad
-FROM
-    account a
-    JOIN account_rad_type art ON art.account_id = a.id
-    JOIN rad_type rt ON rt.rad_type_id = art.rad_type_id
-    JOIN rad r ON r.rad_type_id = rt.rad_type_id;

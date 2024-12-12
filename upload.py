@@ -100,7 +100,6 @@ class Migration:
             self._import_account()
             self._import_rad_type()
             self._import_rad()
-            self._import_account_rad_type()
             self._import_business_unit()
             self._import_budget()
             self._import_budget_rad()
@@ -153,23 +152,6 @@ class Migration:
 
         table = "rad"
         Util.import_func(rad, table, self.conn)
-
-    def _import_account_rad_type(self):
-        raw = Util.read_csv_file(r"./source/Rad_Account.csv")
-        rad_account = raw.copy()
-        rad_account = Util.sanitize_columns(rad_account)
-        rad_account["account_no"] = rad_account["account_no"].astype(str)
-
-        sql = "SELECT id, account_no FROM account;"
-        accounts = Util.execute_query(sql, self.conn)
-        accounts["account_no"] = accounts["account_no"].astype(str)
-        merge = pd.merge(rad_account, accounts, on="account_no")
-        merge = merge[["rad_type_id", "id"]]
-        merge = merge.rename(columns={"rad_type_id": "rad_type_id", "id": "account_id"})
-        merge.dropna(inplace=True)
-
-        table = "account_rad_type"
-        Util.import_func(merge, table, self.conn)
 
     def _import_business_unit(self):
         raw = Util.read_csv_file(r"./source/BusinessUnit.csv")
