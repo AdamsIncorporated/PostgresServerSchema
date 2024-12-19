@@ -1,0 +1,8 @@
+[package]
+name = "migration"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = "1.42.0"
+tokio-postgres = "0.7.12"
