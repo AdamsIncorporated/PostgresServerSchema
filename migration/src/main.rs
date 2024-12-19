@@ -1,36 +1,12 @@
-use tokio_postgres::{Client, Error};
+use dotenv::dotenv;
 use std::env;
+use tokio_postgres::NoTls;
 
 #[tokio::main]
-async fn main() -> Result<(), Error> {
-    // Parse the database URL from the environment
-    let database_url = env::var("DATABASE_URL")
-        .expect("DATABASE_URL environment variable not set");
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenv().ok();
 
-    // Connect to the database
-    let (client, connection) = Client::connect(&database_url, tokio_postgres::NoTls)
-        .await
-        .expect("Failed to connect to database");
-
-    // Spawn the connection task
-    tokio::spawn(async move {
-        if let Err(e) = connection.await {
-            eprintln!("connection error: {}", e);
-        }
-    });
-
-    // Prepare a statement
-    let stmt = client.prepare("SELECT * FROM your_table_name").await?;
-
-    // Execute the statement
-    let rows = client.query(&stmt, &[]).await?;
-
-    // Iterate over the rows and print the results
-    for row in rows {
-        let id: i32 = row.get(0);
-        let name: String = row.get(1);
-        println!("Id: {}, Name: {}", id, name);
-    }
-
+    let database_url = env::var("DATABASE_URL").unwrap().to_string();
+    let mut client = tokio_postgres::connect(database_url.as_str(), NoTls).await?;
     Ok(())
 }
