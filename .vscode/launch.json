@@ -2,12 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug PostgresServerSchema",
-      "type": "debugpy",
+      "type": "lldb",
       "request": "launch",
-      "program": "${workspaceFolder}\\upload.py",
-      "python": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
-      "justMyCode": false
+      "name": "Debug Migration",
+      "program": "${workspaceFolder}/migration/target/debug/migration.exe",
+      "args": [],
+      "cwd": "${workspaceRoot}",
+      "sourceLanguages": ["rust"],
+      "envFile": "${workspaceFolder}/migration/.env"
     }
   ]
 }
