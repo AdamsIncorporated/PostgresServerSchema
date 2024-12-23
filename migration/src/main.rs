@@ -1,13 +1,7 @@
-use polars::prelude::*;
 use std::env;
 use tokio_postgres::NoTls;
-
-fn read_csv_to_dataframe(file_path: &str) -> PolarsResult<DataFrame> {
-    CsvReadOptions::default()
-        .with_has_header(true)
-        .try_into_reader_with_file_path(Some(file_path.into()))?
-        .finish()
-}
+mod schema_write;
+use schema_write::execute_schema_file;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -20,10 +14,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         if let Err(e) = connection.await {
             eprintln!("connection error: {}", e);
         }
-    });
 
-    let df = read_csv_to_dataframe("./seed/bt.csv");
-    print!("made it!");
+        let file_path = "schema/schema.sql";
+        let _ = execute_schema_file(&client, file_path).await;
+
+        println!("made it!");
+    });
 
     Ok(())
 }

@@ -9,7 +9,9 @@
       "args": [],
       "cwd": "${workspaceRoot}",
       "sourceLanguages": ["rust"],
-      "envFile": "${workspaceFolder}/migration/.env"
+      "envFile": "${workspaceFolder}/migration/.env",
+      "console": "integratedTerminal", 
+      "internalConsoleOptions": "openOnSessionStart" 
     }
   ]
 }
