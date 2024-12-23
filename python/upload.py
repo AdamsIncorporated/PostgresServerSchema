@@ -56,34 +56,6 @@ class Migration:
         self.schema_file = schema_file
         self.conn = conn
 
-    def delete_all_tables(self):
-        try:
-            with self.conn.cursor() as cursor:
-                # Get a list of all table names in the current database
-                cursor.execute(
-                    """
-                    SELECT tablename
-                    FROM pg_tables
-                    WHERE schemaname = 'public';
-                    """
-                )
-                tables = cursor.fetchall()
-
-                # Drop each table
-                for table in tables:
-                    cursor.execute(
-                        sql.SQL("DROP TABLE IF EXISTS {} CASCADE").format(
-                            sql.Identifier(table[0])
-                        )
-                    )
-                    logging.info(f"Table '{table[0]}' dropped.")
-
-                self.conn.commit()
-                logging.info("All tables deleted successfully.")
-        except Exception as e:
-            logging.error(f"Failed to delete tables: {e}", exc_info=True)
-            raise
-
     def apply_schema(self):
         try:
             with self.conn.cursor() as cursor:

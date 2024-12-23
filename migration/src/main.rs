@@ -10,16 +10,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Database URL: {}", database_url);
 
-    tokio::spawn(async move {
-        if let Err(e) = connection.await {
-            eprintln!("connection error: {}", e);
-        }
+    match env::current_dir() {
+        Ok(cwd) => println!("Current directory: {:?}", cwd),
+        Err(e) => println!("Error getting current directory: {:?}", e),
+    }
 
-        let file_path = "schema/schema.sql";
-        let _ = execute_schema_file(&client, file_path).await;
+    let file_path = "migration/src/schema/schema.sql";
+    let _ = execute_schema_file(&client, file_path).await;
 
-        println!("made it!");
-    });
+    println!("made it!");
 
     Ok(())
 }

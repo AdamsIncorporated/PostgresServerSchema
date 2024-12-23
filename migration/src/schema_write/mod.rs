@@ -6,7 +6,15 @@ pub async fn execute_schema_file(
     client: &Client,
     file_path: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::open(file_path)?;
+   
+    let file = match File::open(file_path) {
+        Ok(file) => file,
+        Err(error) => {
+            eprint!("Error opening file: {}", error);
+            return Err(Box::new(error));
+        }
+    };
+
     let reader = BufReader::new(file);
 
     let mut sql_script = String::new();

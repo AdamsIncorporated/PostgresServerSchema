@@ -2,16 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "lldb",
+      "type": "cppvsdbg",
       "request": "launch",
       "name": "Debug Migration",
       "program": "${workspaceFolder}/migration/target/debug/migration.exe",
       "args": [],
-      "cwd": "${workspaceRoot}",
-      "sourceLanguages": ["rust"],
+      "cwd": "${workspaceRoot}/migration",
       "envFile": "${workspaceFolder}/migration/.env",
-      "console": "integratedTerminal", 
-      "internalConsoleOptions": "openOnSessionStart" 
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "preLaunchTask": "Build",
+      "stopAtEntry": false
     }
   ]
 }

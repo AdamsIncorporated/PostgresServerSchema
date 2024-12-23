@@ -1,3 +1,4 @@
+-- Active: 1732559110932@@127.0.0.1@5432@central_health@multiview
 DROP SCHEMA IF EXISTS multiview CASCADE;
 
 CREATE SCHEMA multiview;
