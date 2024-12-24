@@ -1,7 +1,9 @@
 use std::env;
-use tokio_postgres::{Connection, NoTls};
+use tokio_postgres::NoTls;
 mod schema_write;
 use schema_write::execute_schema_file;
+mod utils;
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -17,6 +19,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let file_path = "./src/schema_write/schema.sql";
     execute_schema_file(&client, file_path).await?;
+    let df = utils::csv::read_csv_to_dataframe(file_path)?;
+    df;
 
     Ok(())
 }
