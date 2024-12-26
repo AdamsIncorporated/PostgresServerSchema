@@ -1,3 +1,4 @@
+use calamine::Data;
 use calamine::{open_workbook, Reader, Xlsx};
 use polars::prelude::*;
 
@@ -27,16 +28,35 @@ pub fn read_excel_to_dataframe(file_path: &str) -> PolarsResult<DataFrame> {
     };
 
     let column_names = range.headers();
+
     match column_names {
         Some(names) => {
             let mut cols = Vec::new();
 
-            for name in names {
-                let pl_small_str = name.try_into();
-                match pl_small_str {
+            for (index, name) in names.iter().enumerate() {
+                match name.try_into() {
                     Ok(name) => {
-                        let data: Vec<i32> = vec![1, 2, 3];
-                        cols.push(Column::new(name, &data));
+                        let mut excel_data = vec![];
+
+                        // populate the vector with data from each column
+                        for row in range.rows().skip(1) {
+                            let value = match row.get(index) {
+                                Some(data) => match data {
+                                    Data::Int(x) => x.to_string(),
+                                    Data::Float(x) => x.to_string(),
+                                    Data::String(x) => x.clone(),
+                                    Data::Bool(x) => x.to_string(),
+                                    Data::DateTime(x) => x.to_string(),
+                                    Data::DateTimeIso(x) => x.to_string(),
+                                    Data::DurationIso(x) => x.to_string(),
+                                    Data::Error(x) => x.to_string(),
+                                    Data::Empty => "".to_string(),
+                                },
+                                None => "".to_string(),
+                            };
+                            excel_data.push(value);
+                        }
+                        cols.push(Column::new(name, &excel_data));
                     }
                     Err(_) => {
                         return Err(PolarsError::ComputeError(
