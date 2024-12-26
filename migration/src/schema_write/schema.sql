@@ -30,7 +30,6 @@ CREATE TABLE multiview.account (
     account_no TEXT UNIQUE,
     account TEXT,
     account_type TEXT,
-    posting_level TEXT,
     CONSTRAINT unique_account_no_account UNIQUE (account_no, account)
 );
 

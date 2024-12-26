@@ -1,14 +1,60 @@
+use std::vec;
+
 use calamine::Data;
 use calamine::{open_workbook, Reader, Xlsx};
 use polars::prelude::*;
 
-pub fn construct_accounts() {
-    let file_path = "./src/seed/ownership.xlsx";
-    let df = read_excel_to_dataframe(file_path).expect("Dataframe was expected");
-    println!("{}", df);
+#[derive(Debug)]
+struct Account {
+    account_no: String,
+    account: String,
+    account_type: String,
 }
 
-pub fn read_excel_to_dataframe(file_path: &str) -> PolarsResult<DataFrame> {
+#[derive(Debug)]
+struct Accounts {
+    accounts: Vec<Account>,
+}
+
+impl Accounts {
+    fn new(accounts: Vec<Account>) -> Self {
+        Self { accounts }
+    }
+}
+
+pub fn construct_accounts_struct() -> Result<Accounts, polars::error::PolarsError> {
+    let df: DataFrame = construct_accounts_dataframe()?;
+    let accounts: Vec<_> = vec![];
+    let accounts: Vec<Account> = df
+        .iter()
+        .map(|row| Account {
+            account_no: row.get(0),
+            account: row[1].utf8().unwrap().to_string(),
+            account_type: row[2].utf8().unwrap().to_string(),
+        })
+        .collect();
+
+    Ok(Accounts::new(accounts))
+}
+
+fn construct_accounts_dataframe() -> PolarsResult<DataFrame> {
+    let file_path = "./src/seed/ownership.xlsx";
+    let df = read_excel_to_dataframe(file_path).expect("Dataframe was expected");
+    let df = df
+        .clone()
+        .lazy()
+        .select([
+            col("LayerNumber").cast(DataType::Int16),
+            col("Description"),
+            col("AccountNo"),
+            col("AccountType"),
+        ])
+        .collect()?;
+
+    Ok(df)
+}
+
+fn read_excel_to_dataframe(file_path: &str) -> PolarsResult<DataFrame> {
     let mut workbook: Xlsx<_> = match open_workbook(file_path) {
         Ok(workbook) => workbook,
         Err(err) => {
@@ -33,8 +79,8 @@ pub fn read_excel_to_dataframe(file_path: &str) -> PolarsResult<DataFrame> {
         Some(names) => {
             let mut cols = Vec::new();
 
-            for (index, name) in names.iter().enumerate() {
-                match name.try_into() {
+            for (index, col_name) in names.iter().enumerate() {
+                match col_name.try_into() {
                     Ok(name) => {
                         let mut excel_data = vec![];
 
