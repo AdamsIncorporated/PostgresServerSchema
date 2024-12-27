@@ -4,7 +4,7 @@ mod schema_write;
 mod extract;
 mod utils;
 use schema_write::execute_schema_file;
-use extract::account::construct_accounts_struct;
+use extract::account::insert_into_sql;
 
 
 #[tokio::main]
@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let file_path = "./src/schema_write/schema.sql";
     execute_schema_file(&client, file_path).await?;
-    construct_accounts_struct();
+    let _ = insert_into_sql();
 
     Ok(())
 }

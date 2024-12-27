@@ -1,40 +1,66 @@
-use std::vec;
-
 use calamine::Data;
 use calamine::{open_workbook, Reader, Xlsx};
+use itertools::multizip;
 use polars::prelude::*;
+use std::error::Error;
+use std::vec;
 
-#[derive(Debug)]
+#[derive()]
 struct Account {
     account_no: String,
     account: String,
     account_type: String,
 }
 
-#[derive(Debug)]
-struct Accounts {
+pub struct Accounts {
     accounts: Vec<Account>,
 }
 
-impl Accounts {
-    fn new(accounts: Vec<Account>) -> Self {
-        Self { accounts }
-    }
+pub fn insert_into_sql() -> Result<(), Box<dyn Error>> {
+    let accounts = construct_accounts_struct()?;
+
+    Ok(())
 }
 
-pub fn construct_accounts_struct() -> Result<Accounts, polars::error::PolarsError> {
+fn construct_accounts_struct() -> Result<Accounts, polars::error::PolarsError> {
     let df: DataFrame = construct_accounts_dataframe()?;
-    let accounts: Vec<_> = vec![];
-    let accounts: Vec<Account> = df
-        .iter()
-        .map(|row| Account {
-            account_no: row.get(0),
-            account: row[1].utf8().unwrap().to_string(),
-            account_type: row[2].utf8().unwrap().to_string(),
+
+    // find index delimeter value for slice
+    let target_value: &str = "~business_unit";
+
+    // Find the index where "Description" equals the target_value
+    let first_index = df
+        .clone()
+        .lazy()
+        .filter(col("Description").eq(lit(target_value)))
+        .collect()?
+        .column("Description")?
+        .str()?
+        .into_no_null_iter()
+        .enumerate()
+        .next()
+        .map(|(index, _)| index)
+        .ok_or_else(|| {
+            PolarsError::ComputeError(format!("No match found for {}", target_value).into())
+        })?;
+
+    let df = df.clone().slice(0, first_index);
+    let objects = df.take_columns();
+    let combined = multizip((
+        objects[1].str()?.iter(),
+        objects[2].str()?.iter(),
+        objects[3].str()?.iter(),
+    ));
+    let rows: Vec<Account> = combined
+        .map(|(a, b, c)| Account {
+            account: a.unwrap_or_default().to_string(),
+            account_no: b.unwrap_or_default().to_string(),
+            account_type: c.unwrap_or_default().to_string(),
         })
         .collect();
+    let accounts = Accounts { accounts: rows };
 
-    Ok(Accounts::new(accounts))
+    Ok(accounts)
 }
 
 fn construct_accounts_dataframe() -> PolarsResult<DataFrame> {
@@ -100,6 +126,7 @@ fn read_excel_to_dataframe(file_path: &str) -> PolarsResult<DataFrame> {
                                 },
                                 None => "".to_string(),
                             };
+
                             excel_data.push(value);
                         }
                         cols.push(Column::new(name, &excel_data));
