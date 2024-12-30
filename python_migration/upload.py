@@ -65,6 +65,7 @@ class Migration:
             self.__read_seed_files()
             self.__migrate_account_data()
             self.__migrate_business_unit_data()
+            self.__migrate_rad_data()
 
             logging.info("All data imported successfully.")
         except Exception as e:
@@ -159,6 +160,73 @@ class Migration:
         rows = ownerships.to_dicts()
         self.__insert_many("business_unit_ownership", rows)
 
+    def __migrate_rad_data(self) -> None:
+        jt = self.journal_transaction_df.clone()
+        bt = self.budget_transaction_df.clone()
+
+        jt_rads = self.__agg_rads(jt)
+        bt_rads = self.__agg_rads(bt)
+
+        combined = jt_rads.vstack(bt_rads).unique()
+        combined
+
+    def __agg_rads(self, df: pl.DataFrame) -> pl.DataFrame:
+        df = df.select(
+            [col for col in df.columns if "RAD" in col and "Unused" not in col]
+        ).unique()
+
+        description_columns = [col for col in df.columns if "Description" in col]
+
+        for desc_col in description_columns:
+            prefix = desc_col.replace(
+                " Description", ""
+            )  # Get the prefix by removing " Description"
+            if (
+                prefix in df.columns
+            ):  # Check if the corresponding non-description column exists
+                new_col = (
+                    pl.when(
+                        pl.col(desc_col).is_not_null() & pl.col(prefix).is_not_null()
+                    )
+                    .then(
+                        pl.concat_str([pl.col(desc_col), pl.col(prefix)], separator="|")
+                    )
+                    .otherwise(None)
+                    .alias(f"{prefix} Combined")
+                )
+
+                df = df.with_columns(new_col)
+
+        # Select all "Combined" columns
+        combined_columns = [col for col in df.columns if "Combined" in col]
+
+        melted = (
+            df.select(combined_columns)
+            .melt(
+                id_vars=[],
+                variable_name="parent_rad_id",
+                value_name="combined_id",
+            )
+            .with_columns(
+                pl.col("parent_rad_id")
+                .str.replace("RAD Combined", "")
+                .str.strip_chars()
+            )
+            .unique()
+            .drop_nulls(subset="combined_id")
+        )
+
+        data = []
+
+        for row in melted.to_dicts():
+            parent_rad_id = row["parent_rad_id"]
+            combined_id = row["combined_id"]
+            rad = combined_id.split("|")[0]
+            rad_id = combined_id.split("|")[1]
+            data.append({"parent_rad_id": parent_rad_id, "rad": rad, "rad_id": rad_id})
+
+        return pl.DataFrame(data)
+
     def __insert_many(self, table_name: str, rows: dict) -> int | None:
         try:
             with self.conn.cursor() as cur:
@@ -179,7 +247,7 @@ class Migration:
                     cur.execute(sql, row)
                     self.conn.commit()
 
-                logging.info(f"{len(data)} rows insrted into [{table_name}]")
+                logging.info(f"{len(data)} rows inserted into [{table_name}]")
 
         except (Exception, psycopg2.Error) as error:
             logging.exception("Error while inserting to PostgreSQL", error)
