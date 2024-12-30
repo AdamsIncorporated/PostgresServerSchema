@@ -44,8 +44,8 @@ fn construct_accounts_struct() -> Result<Accounts, polars::error::PolarsError> {
             PolarsError::ComputeError(format!("No match found for {}", target_value).into())
         })?;
 
-    let df = df.clone().slice(0, first_index);
-    let objects = df.take_columns();
+    let sliced = df.clone().slice(0, first_index);
+    let objects = sliced.take_columns();
     let combined = multizip((
         objects[1].str()?.iter(),
         objects[2].str()?.iter(),
