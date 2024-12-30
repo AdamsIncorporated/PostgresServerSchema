@@ -64,6 +64,8 @@ class Migration:
             self.__apply_schema()
             self.__read_seed_files()
             self.__migrate_account_data()
+            self.__migrate_business_unit_data()
+
             logging.info("All data imported successfully.")
         except Exception as e:
             logging.exception(f"Error during migration: {e}")
@@ -80,10 +82,23 @@ class Migration:
             raise
 
     def __read_seed_files(self) -> None:
-        config = {"ignore_errors": True, "infer_schema": True}
-        self.ownership_df = pl.read_excel("../seed/ownership.xlsx")
-        self.budget_transaction_df = pl.read_csv("../seed/bt.csv", **config)
-        self.journal_transaction_df = pl.read_csv("../seed/jt.csv", **config)
+        excel_config = {
+            "source": "../seed/ownership.xlsx",
+            "drop_empty_cols": False,
+            "raise_if_empty": True,
+            "sheet_name": "Layer1",
+            "engine": "calamine",
+            "schema_overrides": {
+                "Description": pl.Utf8,
+                "AccountNo": pl.Utf8,
+                "AccountType": pl.Utf8,
+                "BusinessUnitId": pl.Utf8,
+            },
+        }
+        self.ownership_df = pl.read_excel(**excel_config)
+        csv_config = {"ignore_errors": True, "infer_schema": True}
+        self.budget_transaction_df = pl.read_csv("../seed/bt.csv", **csv_config)
+        self.journal_transaction_df = pl.read_csv("../seed/jt.csv", **csv_config)
 
     def __migrate_account_data(self) -> None:
         df = (
@@ -109,9 +124,41 @@ class Migration:
             )  # remove 16100 for advance rec recursive bullshit
         )
 
+        # first upload the accounts
         accounts = df.clone().select(["account_no", "account", "account_type"])
         rows = accounts.to_dicts()
         self.__insert_many("account", rows)
+
+        # second upload the account ownership
+        ownerships = df.clone().select(["account_no", "parent_account_no"])
+        rows = ownerships.to_dicts()
+        self.__insert_many("account_ownership", rows)
+
+    def __migrate_business_unit_data(self) -> None:
+        df = (
+            self.ownership_df.clone()
+            .select(["Description", "BusinessUnitId"])
+            .filter(pl.col("BusinessUnitId") != "")
+            .with_columns(pl.all().str.strip_chars())
+            .drop("BusinessUnitId")
+            .rename(
+                {
+                    "Description": "business_unit",
+                    "BusinessUnitId": "business_unit_id",
+                    "ParentKey": "parent_business_unit_id",
+                }
+            )
+        )
+
+        # first upload the accounts
+        business_units = df.clone().select(["account_no", "account", "account_type"])
+        rows = business_units.to_dicts()
+        self.__insert_many("business_unit", rows)
+
+        # second upload the account ownership
+        ownerships = df.clone().select(["account_no", "parent_account_no"])
+        rows = ownerships.to_dicts()
+        self.__insert_many("business_unit_ownership", rows)
 
     def __insert_many(self, table_name: str, rows: dict) -> int | None:
         try:

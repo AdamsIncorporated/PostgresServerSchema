@@ -21,8 +21,7 @@ CREATE TABLE multiview.business_unit_ownership (
         business_unit_id,
         parent_business_unit_id
     ),
-    FOREIGN KEY (business_unit_id) REFERENCES multiview.business_unit (business_unit_id),
-    FOREIGN KEY (parent_business_unit_id) REFERENCES multiview.business_unit (business_unit_id)
+    FOREIGN KEY (business_unit_id) REFERENCES multiview.business_unit (business_unit_id)
 );
 
 CREATE TABLE multiview.account (
@@ -41,8 +40,7 @@ CREATE TABLE multiview.account_ownership (
         account_no,
         parent_account_no
     ),
-    FOREIGN KEY (account_no) REFERENCES multiview.account (account_no),
-    FOREIGN KEY (parent_account_no) REFERENCES multiview.account (account_no)
+    FOREIGN KEY (account_no) REFERENCES multiview.account (account_no)
 );
 
 CREATE TABLE multiview.rad (
