@@ -137,10 +137,9 @@ class Migration:
     def __migrate_business_unit_data(self) -> None:
         df = (
             self.ownership_df.clone()
-            .select(["Description", "BusinessUnitId"])
+            .select(["Description", "BusinessUnitId", "ParentKey"])
             .filter(pl.col("BusinessUnitId") != "")
             .with_columns(pl.all().str.strip_chars())
-            .drop("BusinessUnitId")
             .rename(
                 {
                     "Description": "business_unit",
@@ -151,12 +150,12 @@ class Migration:
         )
 
         # first upload the accounts
-        business_units = df.clone().select(["account_no", "account", "account_type"])
+        business_units = df.clone().select(["business_unit_id", "business_unit"])
         rows = business_units.to_dicts()
         self.__insert_many("business_unit", rows)
 
         # second upload the account ownership
-        ownerships = df.clone().select(["account_no", "parent_account_no"])
+        ownerships = df.clone().select(["business_unit_id", "parent_business_unit_id"])
         rows = ownerships.to_dicts()
         self.__insert_many("business_unit_ownership", rows)
 
