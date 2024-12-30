@@ -19,7 +19,9 @@
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/python_migration/upload.py",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "python": "${workspaceFolder}/python_migration/.venv/Scripts/python",
+      "cwd": "${workspaceFolder}/python_migration"
     }
   ]
 }

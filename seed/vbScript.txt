@@ -1,0 +1,60 @@
+Sub AssignParentKey()
+    Dim ws As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim parentStack() As Variant
+    Dim stackLevel As Integer
+    Dim isTopLevelRow As Boolean
+    Dim keyColIndex As Integer
+    
+    ' Set the worksheet
+    Set ws = ThisWorkbook.Sheets(1)
+    
+    ' Find the last row in the sheet
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    
+    ' Initialize the stack for tracking parent keys
+    ReDim parentStack(0 To 15)
+    
+    ' Initialize flag for top-level row detection
+    isTopLevelRow = True ' First time, we treat it as the first top-level row
+    
+    ' Loop through the rows
+    For i = 2 To lastRow ' Assuming headers are in row 1
+        Dim description As String
+        Dim currentIndent As Integer
+        
+        ' Get the description and its indent level
+        description = ws.Cells(i, 1).Value
+        currentIndent = ws.Cells(i, 1).IndentLevel
+        
+        ' Check if the row is a top-level row (No parent)
+        If currentIndent = 0 Then
+            If isTopLevelRow Then
+                keyColIndex = 3
+                isTopLevelRow = False ' Change the flag after the first top-level row
+            Else
+                keyColIndex = 5
+            End If
+        End If
+        
+        ' Update the parent stack for current row
+        parentStack(currentIndent) = ws.Cells(i, keyColIndex).Value ' Store AccountNo
+        If currentIndent > 0 Then
+            ' Set the ParentKey to the parent's AccountNo
+            ws.Cells(i, 2).Value = parentStack(currentIndent - 1)
+        Else
+            ' No parent (top level)
+            ws.Cells(i, 2).Value = "None"
+        End If
+        
+        ' Clear deeper levels in the stack
+        Dim j As Integer
+        For j = currentIndent + 1 To UBound(parentStack)
+            parentStack(j) = ""
+        Next j
+    Next i
+    
+    MsgBox "ParentKey assignment completed!", vbInformation
+End Sub
+
