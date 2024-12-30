@@ -2,9 +2,9 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Migration - Rs",
       "type": "cppvsdbg",
       "request": "launch",
-      "name": "Debug Migration",
       "program": "${workspaceFolder}/migration/target/debug/migration.exe",
       "args": [],
       "cwd": "${workspaceRoot}/migration",
@@ -13,6 +13,13 @@
       "internalConsoleOptions": "openOnSessionStart",
       "preLaunchTask": "Build",
       "stopAtEntry": false
+    },
+    {
+      "name": "Debug Migration - Py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/python_migration/upload.py",
+      "console": "integratedTerminal"
     }
   ]
 }

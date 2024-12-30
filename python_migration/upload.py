@@ -1,7 +1,7 @@
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extras import execute_values
-import pandas as pd
+import polars as pl
 import warnings
 import numpy as np
 import logging
