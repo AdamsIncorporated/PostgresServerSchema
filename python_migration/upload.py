@@ -86,10 +86,9 @@ class Migration:
         self.journal_transaction_df = pl.read_csv("../seed/jt.csv", **config)
 
     def __migrate_account_data(self) -> None:
-        final_df = (
+        df = (
             self.ownership_df.clone()[:, :-2]
             .filter(pl.col("AccountNo") != "")
-            .drop("ParentKey")
             .with_columns(
                 pl.all().str.strip_chars(),
                 pl.when(pl.col("AccountType") == "")
@@ -101,13 +100,17 @@ class Migration:
                 {
                     "Description": "account",
                     "AccountNo": "account_no",
+                    "ParentKey": "parent_account_no",
                     "literal": "account_type",
                 }
             )
-            .unique()
-            .select(["account_no", "account", "account_type"])
+            .unique(
+                subset="account_no"
+            )  # remove 16100 for advance rec recursive bullshit
         )
-        rows = final_df.to_dicts()
+
+        accounts = df.clone().select(["account_no", "account", "account_type"])
+        rows = accounts.to_dicts()
         self.__insert_many("account", rows)
 
     def __insert_many(self, table_name: str, rows: dict) -> int | None:
