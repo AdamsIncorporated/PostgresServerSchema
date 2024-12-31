@@ -36,10 +36,7 @@ CREATE TABLE multiview.account_ownership (
     id SERIAL PRIMARY KEY,
     account_no TEXT UNIQUE,
     parent_account_no TEXT,
-    CONSTRAINT unqiue_account_no_parent_account_no UNIQUE (
-        account_no,
-        parent_account_no
-    ),
+    CONSTRAINT unqiue_account_no_parent_account_no UNIQUE (account_no, parent_account_no),
     FOREIGN KEY (account_no) REFERENCES multiview.account (account_no)
 );
 
@@ -47,7 +44,7 @@ CREATE TABLE multiview.rad (
     id SERIAL PRIMARY KEY,
     rad_type_id TEXT,
     rad_id TEXT,
-    CONSTRAINT unique_rad_id_rad_type_id UNIQUE (rad_id, rad_type_id) 
+    CONSTRAINT unique_rad_id_rad_type_id UNIQUE (rad_id, rad_type_id)
 );
 
 CREATE TABLE multiview.journal_entry (
@@ -119,3 +116,74 @@ CREATE TABLE multiview.budget_rad (
     FOREIGN KEY (table_budget_id) REFERENCES multiview.budget (id),
     FOREIGN KEY (rad_id, rad_type_id) REFERENCES multiview.rad (rad_id, rad_type_id)
 );
+
+-- Active: 1732559110932@@127.0.0.1@5432@central_health@multiview
+DROP VIEW vw_flat_budget;
+
+CREATE VIEW vw_flat_budget AS (
+    SELECT
+        b.id,
+        a.id AS account_id,
+        a.account_no,
+        a.account,
+        a.account_type,
+        bu.id AS table_business_unit_id,
+        bu.business_unit_id,
+        bu.business_unit,
+        br.id AS budget_rad_id,
+        br.rad_type_id,
+        br.rad_id,
+        b.amount,
+        b.budget_id,
+        b.accounting_date,
+        b.fiscal_year
+    FROM (
+            (
+                (
+                    budget b
+                    JOIN budget_rad br ON ((br.table_budget_id = b.id))
+                )
+                JOIN business_unit bu ON (
+                    (
+                        bu.business_unit_id = b.business_unit_id
+                    )
+                )
+            )
+            JOIN account a ON ((a.account_no = b.account_no))
+        )
+    ORDER BY b.accounting_date, b.id
+)
+
+CREATE VIEW vw_flat_journal_entry AS (
+    SELECT
+        j.id,
+        a.id AS account_id,
+        a.account_no,
+        a.account,
+        a.account_type,
+        bu.id AS table_business_unit_id,
+        bu.business_unit_id,
+        bu.business_unit,
+        jr.id AS journal_rad_id,
+        jr.rad_type_id,
+        jr.rad_id,
+        j.amount,
+        j.entry_id,
+        j.accounting_date,
+        j.fiscal_year
+    FROM (
+            (
+                (
+                    journal_entry j
+                    JOIN journal_entry_rad jr ON ((jr.journal_entry_id = j.id))
+                )
+                JOIN business_unit bu ON (
+                    (
+                        bu.business_unit_id = j.business_unit_id
+                    )
+                )
+            )
+            JOIN account a ON ((a.account_no = j.account_no))
+        )
+    ORDER BY j.accounting_date, j.id
+)
