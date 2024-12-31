@@ -1,8 +1,5 @@
 import psycopg2
-from psycopg2 import sql
-from psycopg2.extras import execute_values
 import polars as pl
-import numpy as np
 import warnings
 import logging
 
@@ -172,65 +169,41 @@ class Migration:
         self.__insert_many("business_unit_ownership", rows)
 
     def __migrate_rad_data(self) -> None:
-        df = (
-            self.journal_transaction_df.clone()
-            .select(
-                [
-                    col
-                    for col in self.journal_transaction_df.columns
-                    if "RAD" in col and "Unused" not in col
-                ]
-            )
-            .unique()
-        )
-
-        description_columns = [col for col in df.columns if "Description" in col]
-
-        for desc_col in description_columns:
-            prefix = desc_col.replace(
-                " Description", ""
-            )  # Get the prefix by removing " Description"
-            if (
-                prefix in df.columns
-            ):  # Check if the corresponding non-description column exists
-                new_col = (
-                    pl.when(
-                        pl.col(desc_col).is_not_null() & pl.col(prefix).is_not_null()
-                    )
-                    .then(
-                        pl.concat_str([pl.col(desc_col), pl.col(prefix)], separator="|")
-                    )
-                    .otherwise(None)
-                    .alias(f"{prefix} Combined")
-                )
-
-                df = df.with_columns(new_col)
-
-        # Select all "Combined" columns
-        combined_columns = [col for col in df.columns if "Combined" in col]
-
-        melted = (
-            df.select(combined_columns)
-            .melt(
-                id_vars=[],
-                variable_name="rad_type_id",
-                value_name="combined_id",
-            )
-            .with_columns(
-                pl.col("rad_type_id").str.replace("RAD Combined", "").str.strip_chars()
-            )
-            .unique()
-            .drop_nulls(subset="combined_id")
-        )
-
+        stack = [self.budget_transaction_df, self.journal_transaction_df]
+        seen_combinations = set()
         rows = []
 
-        for row in melted.to_dicts():
-            rad_type_id = row["rad_type_id"]
-            combined_id = row["combined_id"]
-            rad = combined_id.split("|")[0]
-            rad_id = combined_id.split("|")[1]
-            rows.append({"rad_type_id": rad_type_id, "rad": rad, "rad_id": rad_id})
+        for frame in stack:
+            df = (
+                frame.clone()
+                .select(
+                    [
+                        col
+                        for col in self.journal_transaction_df.columns
+                        if "RAD" in col
+                        and "Unused" not in col
+                        and "Description" not in col
+                    ]
+                )
+                .unique()
+            )
+
+            for row in df.to_dicts():
+                for key, value in row.items():
+                    if value and key:
+                        clean_key = key.replace("RAD", "").strip()
+                        clean_value = value.strip()
+                        combination = (clean_key, clean_value)
+
+                        # add combo if not seen and then append rows for insert
+                        if combination not in seen_combinations:
+                            seen_combinations.add(combination)
+                            rows.append(
+                                {
+                                    "rad_type_id": clean_key,
+                                    "rad_id": clean_value,
+                                }
+                            )
 
         self.__insert_many("rad", rows)
 
@@ -239,7 +212,6 @@ class Migration:
             self.budget_transaction_df.clone()
             .select(
                 [
-                    "Budget Detail Id",
                     "Budget Id",
                     "Business Unit Id",
                     "Account No.",
@@ -249,7 +221,6 @@ class Migration:
             )
             .rename(
                 {
-                    "Budget Detail Id": "detail_id",
                     "Budget Id": "budget_id",
                     "Business Unit Id": "business_unit_id",
                     "Account No.": "account_no",
@@ -267,25 +238,117 @@ class Migration:
         rows = budgets.to_dicts()
         self.__insert_many("budget", rows)
 
+        # now insert the row by row rads with type and index number
+        rads = (
+            self.budget_transaction_df.clone()
+            .select(
+                [
+                    col
+                    for col in self.budget_transaction_df.columns
+                    if "RAD" in col and "Unused" not in col and "Description" not in col
+                ]
+            )
+            .with_row_index(name="index_id", offset=1)
+        ).to_dicts()
+
+        rows = []
+
+        for row in rads:
+            for key, value in row.items():
+                if value and key != "index_id":
+                    rows.append(
+                        {
+                            "table_budget_id": row["index_id"],
+                            "rad_type_id": key.replace("RAD", "").strip(),
+                            "rad_id": value.strip(),
+                        }
+                    )
+
+        self.__insert_many("budget_rad", rows)
+
+    def __migrate_journal_data(self) -> None:
+        journals = (
+            self.journal_transaction_df.clone()
+            .select(
+                [
+                    "Entry Id",
+                    "Business Unit Id",
+                    "Account No",
+                    "Amount",
+                    "Accounting Date",
+                ]
+            )
+            .rename(
+                {
+                    "Entry Id": "entry_id",
+                    "Business Unit Id": "business_unit_id",
+                    "Account No": "account_no",
+                    "Amount": "amount",
+                    "Accounting Date": "accounting_date",
+                }
+            )
+            .with_columns(
+                [
+                    pl.col("account_no").str.strip_chars(),
+                    pl.col("business_unit_id").str.strip_chars(),
+                ]
+            )
+        )
+        rows = journals.to_dicts()
+        self.__insert_many("journal_entry", rows)
+
+        # now insert the row by row rads with type and index number
+        rads = (
+            self.journal_transaction_df.clone()
+            .select(
+                [
+                    col
+                    for col in self.journal_transaction_df.columns
+                    if "RAD" in col and "Unused" not in col and "Description" not in col
+                ]
+            )
+            .with_row_index(name="index_id", offset=1)
+        ).to_dicts()
+
+        rows = []
+
+        for row in rads:
+            for key, value in row.items():
+                if value and key != "index_id":
+                    rows.append(
+                        {
+                            "journal_entry_id": row["index_id"],
+                            "rad_type_id": key.replace("RAD", "").strip(),
+                            "rad_id": value.strip(),
+                        }
+                    )
+
+        self.__insert_many("journal_entry_rad", rows)
+
     def __insert_many(self, table_name: str, rows: dict) -> int | None:
         try:
             with self.conn.cursor() as cur:
                 # Get column names from the first row (assuming all rows have the same structure)
                 columns = ", ".join(rows[0].keys())
 
-                # Create placeholders for the values
-                placeholders = ", ".join(["%s"] * len(rows[0]))
-
                 # Construct the SQL INSERT statement
-                sql = f"INSERT INTO multiview.{table_name} ({columns}) VALUES ({placeholders})"
+                sql = f"INSERT INTO multiview.{table_name} ({columns}) VALUES "
 
-                # Prepare the data for execution
+                # Create a list of tuples with the values for each row
                 data = [tuple(row.values()) for row in rows]
 
-                # Execute the INSERT statement with the provided data
-                for row in data:
-                    cur.execute(sql, row)
-                    self.conn.commit()
+                # Create a list of strings, each representing a single row's values
+                row_values = [f"({','.join(['%s'] * len(row))})" for row in data]
+
+                # Join the row values with commas
+                values_string = ",".join(row_values)
+
+                # Construct the final SQL statement
+                sql += values_string
+
+                # Execute the INSERT statement with all data at once
+                cur.execute(sql, [value for row in data for value in row])
+                self.conn.commit()
 
                 logging.info(f"{len(data)} rows inserted into [{table_name}]")
 

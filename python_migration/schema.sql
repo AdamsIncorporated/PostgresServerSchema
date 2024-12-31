@@ -47,13 +47,11 @@ CREATE TABLE multiview.rad (
     id SERIAL PRIMARY KEY,
     rad_type_id TEXT,
     rad_id TEXT,
-    rad TEXT,
     CONSTRAINT unique_rad_id_rad_type_id UNIQUE (rad_id, rad_type_id) 
 );
 
 CREATE TABLE multiview.journal_entry (
     id SERIAL PRIMARY KEY,
-    detail_id INT UNIQUE,
     entry_id TEXT,
     business_unit_id TEXT,
     account_no TEXT,
@@ -81,7 +79,6 @@ CREATE TABLE multiview.journal_entry (
 
 CREATE TABLE multiview.budget (
     id SERIAL PRIMARY KEY,
-    detail_id INT UNIQUE,
     budget_id TEXT,
     business_unit_id TEXT,
     account_no TEXT,
