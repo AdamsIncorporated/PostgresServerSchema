@@ -55,7 +55,6 @@ CREATE TABLE multiview.journal_entry (
     entry_id TEXT,
     business_unit_id TEXT,
     account_no TEXT,
-    account TEXT,
     amount REAL,
     accounting_date TIMESTAMP,
     fiscal_year INT GENERATED ALWAYS AS (
