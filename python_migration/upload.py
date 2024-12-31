@@ -66,6 +66,8 @@ class Migration:
             self.__migrate_account_data()
             self.__migrate_business_unit_data()
             self.__migrate_rad_data()
+            self.__migrate_budget_data()
+            self.__migrate_journal_data()
 
             logging.info("All data imported successfully.")
         except Exception as e:
@@ -97,7 +99,16 @@ class Migration:
             },
         }
         self.ownership_df = pl.read_excel(**excel_config)
-        csv_config = {"ignore_errors": True, "infer_schema": True}
+
+        csv_config = {
+            "ignore_errors": True,
+            "schema_overrides": {
+                "Business Unit Id": pl.Utf8,
+                "Account No.": pl.Utf8,
+                "Amount": pl.Float64,
+                "Accoutning Date": pl.Date,
+            },
+        }
         self.budget_transaction_df = pl.read_csv("../seed/bt.csv", **csv_config)
         self.journal_transaction_df = pl.read_csv("../seed/jt.csv", **csv_config)
 
@@ -202,30 +213,59 @@ class Migration:
             df.select(combined_columns)
             .melt(
                 id_vars=[],
-                variable_name="parent_rad_id",
+                variable_name="rad_type_id",
                 value_name="combined_id",
             )
             .with_columns(
-                pl.col("parent_rad_id")
-                .str.replace("RAD Combined", "")
-                .str.strip_chars()
+                pl.col("rad_type_id").str.replace("RAD Combined", "").str.strip_chars()
             )
             .unique()
             .drop_nulls(subset="combined_id")
         )
 
-        data = []
+        rows = []
 
         for row in melted.to_dicts():
-            parent_rad_id = row["parent_rad_id"]
+            rad_type_id = row["rad_type_id"]
             combined_id = row["combined_id"]
             rad = combined_id.split("|")[0]
             rad_id = combined_id.split("|")[1]
-            data.append({"parent_rad_id": parent_rad_id, "rad": rad, "rad_id": rad_id})
+            rows.append({"rad_type_id": rad_type_id, "rad": rad, "rad_id": rad_id})
 
-        rad = pl.DataFrame(data).drop("parent_rad_id")
-        rows = rad.to_dicts()
         self.__insert_many("rad", rows)
+
+    def __migrate_budget_data(self) -> None:
+        budgets = (
+            self.budget_transaction_df.clone()
+            .select(
+                [
+                    "Budget Detail Id",
+                    "Budget Id",
+                    "Business Unit Id",
+                    "Account No.",
+                    "Amount",
+                    "Accounting Date",
+                ]
+            )
+            .rename(
+                {
+                    "Budget Detail Id": "detail_id",
+                    "Budget Id": "budget_id",
+                    "Business Unit Id": "business_unit_id",
+                    "Account No.": "account_no",
+                    "Amount": "amount",
+                    "Accounting Date": "accounting_date",
+                }
+            )
+            .with_columns(
+                [
+                    pl.col("account_no").str.strip_chars(),
+                    pl.col("business_unit_id").str.strip_chars(),
+                ]
+            )
+        )
+        rows = budgets.to_dicts()
+        self.__insert_many("budget", rows)
 
     def __insert_many(self, table_name: str, rows: dict) -> int | None:
         try:

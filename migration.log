@@ -1,0 +1,15 @@
+2024-12-31 10:06:00,274 - INFO - Connected to the database.
+2024-12-31 10:06:00,274 - ERROR - Failed to apply schema: [Errno 2] No such file or directory: 'schema.sql'
+Traceback (most recent call last):
+  File "c:\Projects\PostgresServerSchema\python_migration\upload.py", line 77, in __apply_schema
+    with open(self.schema_file, "r") as schema:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'schema.sql'
+2024-12-31 10:06:00,274 - ERROR - Error during migration: [Errno 2] No such file or directory: 'schema.sql'
+Traceback (most recent call last):
+  File "c:\Projects\PostgresServerSchema\python_migration\upload.py", line 64, in migrate
+    self.__apply_schema()
+  File "c:\Projects\PostgresServerSchema\python_migration\upload.py", line 77, in __apply_schema
+    with open(self.schema_file, "r") as schema:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'schema.sql'
