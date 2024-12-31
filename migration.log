@@ -1,15 +1,12 @@
-2024-12-31 10:06:00,274 - INFO - Connected to the database.
-2024-12-31 10:06:00,274 - ERROR - Failed to apply schema: [Errno 2] No such file or directory: 'schema.sql'
-Traceback (most recent call last):
-  File "c:\Projects\PostgresServerSchema\python_migration\upload.py", line 77, in __apply_schema
-    with open(self.schema_file, "r") as schema:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'schema.sql'
-2024-12-31 10:06:00,274 - ERROR - Error during migration: [Errno 2] No such file or directory: 'schema.sql'
-Traceback (most recent call last):
-  File "c:\Projects\PostgresServerSchema\python_migration\upload.py", line 64, in migrate
-    self.__apply_schema()
-  File "c:\Projects\PostgresServerSchema\python_migration\upload.py", line 77, in __apply_schema
-    with open(self.schema_file, "r") as schema:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'schema.sql'
+2024-12-31 13:40:16,060 - INFO - Connected to the database.
+2024-12-31 13:40:16,112 - INFO - Schema applied successfully.
+2024-12-31 13:40:16,439 - INFO - 256 rows inserted into [account]
+2024-12-31 13:40:16,444 - INFO - 256 rows inserted into [account_ownership]
+2024-12-31 13:40:16,447 - INFO - 109 rows inserted into [business_unit]
+2024-12-31 13:40:16,450 - INFO - 109 rows inserted into [business_unit_ownership]
+2024-12-31 13:40:16,499 - INFO - 884 rows inserted into [rad]
+2024-12-31 13:40:16,974 - INFO - 28429 rows inserted into [budget]
+2024-12-31 13:40:17,200 - INFO - 14293 rows inserted into [budget_rad]
+2024-12-31 13:40:29,460 - INFO - 225027 rows inserted into [journal_entry]
+2024-12-31 13:40:35,641 - INFO - 110540 rows inserted into [journal_entry_rad]
+2024-12-31 13:40:35,700 - INFO - All data imported successfully.

@@ -2,26 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Migration - Rs",
-      "type": "cppvsdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/migration/target/debug/migration.exe",
-      "args": [],
-      "cwd": "${workspaceRoot}/migration",
-      "envFile": "${workspaceFolder}/migration/.env",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "openOnSessionStart",
-      "preLaunchTask": "Build",
-      "stopAtEntry": false
-    },
-    {
       "name": "Debug Migration - Py",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/python_migration/upload.py",
+      "program": "${workspaceFolder}/upload.py",
       "console": "integratedTerminal",
-      "python": "${workspaceFolder}/python_migration/.venv/Scripts/python",
-      "cwd": "${workspaceFolder}/python_migration"
+      "python": "${workspaceFolder}/.venv/Scripts/python",
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

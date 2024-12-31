@@ -83,7 +83,7 @@ class Migration:
 
     def __read_seed_files(self) -> None:
         excel_config = {
-            "source": "../seed/ownership.xlsx",
+            "source": "./seed/ownership.xlsx",
             "drop_empty_cols": False,
             "raise_if_empty": True,
             "sheet_name": "Layer1",
@@ -106,8 +106,8 @@ class Migration:
                 "Accoutning Date": pl.Date,
             },
         }
-        self.budget_transaction_df = pl.read_csv("../seed/bt.csv", **csv_config)
-        self.journal_transaction_df = pl.read_csv("../seed/jt.csv", **csv_config)
+        self.budget_transaction_df = pl.read_csv("./seed/bt.csv", **csv_config)
+        self.journal_transaction_df = pl.read_csv("./seed/jt.csv", **csv_config)
 
     def __migrate_account_data(self) -> None:
         df = (
