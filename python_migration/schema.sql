@@ -45,21 +45,10 @@ CREATE TABLE multiview.account_ownership (
 
 CREATE TABLE multiview.rad (
     id SERIAL PRIMARY KEY,
-    rad_id TEXT UNIQUE,
+    rad_type_id TEXT UNIQUE,
+    rad_id TEXT,
     rad TEXT,
-    CONSTRAINT unique_rad_id_rad UNIQUE (rad_id, rad) 
-);
-
-CREATE TABLE multiview.rad_ownership (
-    id SERIAL PRIMARY KEY,
-    rad_id TEXT UNIQUE,
-    parent_rad_id TEXT,
-    CONSTRAINT unqiue_rad_id_parent_rad_id UNIQUE (
-        rad_id,
-        parent_rad_id
-    ),
-    FOREIGN KEY (rad_id) REFERENCES multiview.rad (rad_id),
-    FOREIGN KEY (parent_rad_id) REFERENCES multiview.rad (rad_id)
+    CONSTRAINT unique_rad_id_rad_type_id UNIQUE (rad_id, rad_type_id) 
 );
 
 CREATE TABLE multiview.journal_entry (
@@ -121,17 +110,17 @@ CREATE TABLE multiview.budget (
 CREATE TABLE multiview.journal_entry_rad (
     id SERIAL PRIMARY KEY,
     journal_entry_id INTEGER,
-    parent_rad_id TEXT,
+    rad_type_id TEXT,
     rad_id TEXT,
     FOREIGN KEY (journal_entry_id) REFERENCES multiview.journal_entry (id),
-    FOREIGN KEY (rad_id, parent_rad_id) REFERENCES multiview.rad_ownership (rad_id, parent_rad_id)
+    FOREIGN KEY (rad_id, rad_type_id) REFERENCES multiview.rad (rad_id, rad_type_id)
 );
 
 CREATE TABLE multiview.budget_rad (
     id SERIAL PRIMARY KEY,
     table_budget_id INTEGER,
-    parent_rad_id TEXT,
+    rad_type_id TEXT,
     rad_id TEXT,
     FOREIGN KEY (table_budget_id) REFERENCES multiview.budget (id),
-    FOREIGN KEY (rad_id, parent_rad_id) REFERENCES multiview.rad_ownership (rad_id, parent_rad_id)
+    FOREIGN KEY (rad_id, rad_type_id) REFERENCES multiview.rad (rad_id, rad_type_id)
 );

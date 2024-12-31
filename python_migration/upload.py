@@ -161,19 +161,17 @@ class Migration:
         self.__insert_many("business_unit_ownership", rows)
 
     def __migrate_rad_data(self) -> None:
-        jt = self.journal_transaction_df.clone()
-        bt = self.budget_transaction_df.clone()
-
-        jt_rads = self.__agg_rads(jt)
-        bt_rads = self.__agg_rads(bt)
-
-        combined = jt_rads.vstack(bt_rads).unique()
-        combined
-
-    def __agg_rads(self, df: pl.DataFrame) -> pl.DataFrame:
-        df = df.select(
-            [col for col in df.columns if "RAD" in col and "Unused" not in col]
-        ).unique()
+        df = (
+            self.journal_transaction_df.clone()
+            .select(
+                [
+                    col
+                    for col in self.journal_transaction_df.columns
+                    if "RAD" in col and "Unused" not in col
+                ]
+            )
+            .unique()
+        )
 
         description_columns = [col for col in df.columns if "Description" in col]
 
@@ -225,7 +223,9 @@ class Migration:
             rad_id = combined_id.split("|")[1]
             data.append({"parent_rad_id": parent_rad_id, "rad": rad, "rad_id": rad_id})
 
-        return pl.DataFrame(data)
+        rad = pl.DataFrame(data).drop("parent_rad_id")
+        rows = rad.to_dicts()
+        self.__insert_many("rad", rows)
 
     def __insert_many(self, table_name: str, rows: dict) -> int | None:
         try:
