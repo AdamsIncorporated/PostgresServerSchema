@@ -117,9 +117,6 @@ CREATE TABLE multiview.budget_rad (
     FOREIGN KEY (rad_id, rad_type_id) REFERENCES multiview.rad (rad_id, rad_type_id)
 );
 
--- Active: 1732559110932@@127.0.0.1@5432@central_health@multiview
-DROP VIEW vw_flat_budget;
-
 CREATE VIEW vw_flat_budget AS (
     SELECT
         b.id,
@@ -137,20 +134,11 @@ CREATE VIEW vw_flat_budget AS (
         b.budget_id,
         b.accounting_date,
         b.fiscal_year
-    FROM (
-            (
-                (
-                    budget b
-                    JOIN budget_rad br ON ((br.table_budget_id = b.id))
-                )
-                JOIN business_unit bu ON (
-                    (
-                        bu.business_unit_id = b.business_unit_id
-                    )
-                )
-            )
-            JOIN account a ON ((a.account_no = b.account_no))
-        )
+    FROM 
+        multiview.budget b
+        join multiview.budget_rad br on b.id = br.table_budget_id
+        join multiview.account a on a.account_no = b.account_no
+        join multiview.business_unit bu on bu.business_unit_id = b.business_unit_id
     ORDER BY b.accounting_date, b.id
 )
 
@@ -171,19 +159,10 @@ CREATE VIEW vw_flat_journal_entry AS (
         j.entry_id,
         j.accounting_date,
         j.fiscal_year
-    FROM (
-            (
-                (
-                    journal_entry j
-                    JOIN journal_entry_rad jr ON ((jr.journal_entry_id = j.id))
-                )
-                JOIN business_unit bu ON (
-                    (
-                        bu.business_unit_id = j.business_unit_id
-                    )
-                )
-            )
-            JOIN account a ON ((a.account_no = j.account_no))
-        )
+    FROM 
+        multiview.journal_entry j
+        join multiview.journal_entry_rad jr on j.id = jr.journal_entry_id
+        join multiview.account a on a.account_no = j.account_no
+        join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
     ORDER BY j.accounting_date, j.id
 )
