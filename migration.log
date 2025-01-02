@@ -1,16 +1,16 @@
-2025-01-02 14:59:29,393 - INFO - Connected to the database.
-2025-01-02 14:59:29,396 - ERROR - Failed to apply schema: syntax error at or near "CREATE"
-LINE 157: CREATE VIEW vw_flat_journal_entry AS (
+2025-01-02 15:29:27,907 - INFO - Connected to the database.
+2025-01-02 15:29:27,908 - ERROR - Failed to apply schema: syntax error at or near "CREATE"
+LINE 145: CREATE VIEW vw_flat_journal_entry AS (
           ^
 Traceback (most recent call last):
   File "C:\Projects\PostgresServerSchema/upload.py", line 77, in __apply_schema
     cursor.execute(schema.read())
 psycopg2.errors.SyntaxError: syntax error at or near "CREATE"
-LINE 157: CREATE VIEW vw_flat_journal_entry AS (
+LINE 145: CREATE VIEW vw_flat_journal_entry AS (
           ^
 
-2025-01-02 14:59:29,397 - ERROR - Error during migration: syntax error at or near "CREATE"
-LINE 157: CREATE VIEW vw_flat_journal_entry AS (
+2025-01-02 15:29:27,908 - ERROR - Error during migration: syntax error at or near "CREATE"
+LINE 145: CREATE VIEW vw_flat_journal_entry AS (
           ^
 Traceback (most recent call last):
   File "C:\Projects\PostgresServerSchema/upload.py", line 61, in migrate
@@ -18,6 +18,6 @@ Traceback (most recent call last):
   File "C:\Projects\PostgresServerSchema/upload.py", line 77, in __apply_schema
     cursor.execute(schema.read())
 psycopg2.errors.SyntaxError: syntax error at or near "CREATE"
-LINE 157: CREATE VIEW vw_flat_journal_entry AS (
+LINE 145: CREATE VIEW vw_flat_journal_entry AS (
           ^
 

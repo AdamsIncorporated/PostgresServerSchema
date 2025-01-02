@@ -140,7 +140,7 @@ CREATE VIEW vw_flat_budget AS (
         join multiview.account a on a.account_no = b.account_no
         join multiview.business_unit bu on bu.business_unit_id = b.business_unit_id
     ORDER BY b.accounting_date, b.id
-)
+);
 
 CREATE VIEW vw_flat_journal_entry AS (
     SELECT
@@ -165,4 +165,4 @@ CREATE VIEW vw_flat_journal_entry AS (
         join multiview.account a on a.account_no = j.account_no
         join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
     ORDER BY j.accounting_date, j.id
-)
+);
