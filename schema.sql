@@ -117,7 +117,7 @@ CREATE TABLE multiview.budget_rad (
     FOREIGN KEY (rad_id, rad_type_id) REFERENCES multiview.rad (rad_id, rad_type_id)
 );
 
-CREATE VIEW vw_flat_budget AS (
+CREATE VIEW multiview.vw_flat_budget AS (
     SELECT
         b.id,
         a.id AS account_id,
@@ -142,7 +142,7 @@ CREATE VIEW vw_flat_budget AS (
     ORDER BY b.accounting_date, b.id
 );
 
-CREATE VIEW vw_flat_journal_entry AS (
+CREATE VIEW multiview.vw_flat_journal_entry AS (
     SELECT
         j.id,
         a.id AS account_id,
@@ -166,3 +166,103 @@ CREATE VIEW vw_flat_journal_entry AS (
         join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
     ORDER BY j.accounting_date, j.id
 );
+
+CREATE OR REPLACE FUNCTION multiview.get_account_hierarchy(account_no TEXT)
+RETURNS TABLE 
+(
+    "id" INT, 
+    "parent" TEXT, 
+    "child" TEXT
+) 
+AS $$
+BEGIN
+    RETURN QUERY (
+        WITH RECURSIVE
+        child_hierarchy AS (
+            SELECT 
+                x.id, 
+                x.account_no as child, 
+                x.parent_account_no as parent
+            FROM multiview.account_ownership x 
+            WHERE
+                parent_account_no = $1
+            UNION ALL
+            SELECT 
+                y.id, 
+                y.account_no as child, 
+                y.parent_account_no as parent
+            FROM multiview.account_ownership y
+            JOIN child_hierarchy ch ON y.parent_account_no = ch.child
+        )
+        SELECT z.id, z.parent, z.child
+        FROM child_hierarchy z
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION multiview.get_business_unit_hierarchy(business_unit_id TEXT)
+RETURNS TABLE 
+(
+    "id" INT, 
+    "parent" TEXT, 
+    "child" TEXT
+) 
+AS $$
+BEGIN
+    RETURN QUERY (
+        WITH RECURSIVE
+        child_hierarchy AS (
+            SELECT 
+                x.id, 
+                x.business_unit_id as child, 
+                x.parent_business_unit_id as parent
+            FROM multiview.business_unit_ownership x 
+            WHERE
+                x.parent_business_unit_id = $1
+            UNION ALL
+            SELECT 
+                y.id, 
+                y.business_unit_id as child, 
+                y.parent_business_unit_id as parent
+            FROM multiview.business_unit_ownership y
+            JOIN child_hierarchy ch ON y.parent_business_unit_id = ch.child
+        )
+        SELECT z.id, z.parent, z.child
+        FROM child_hierarchy z
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION multiview.get_rad_hierarchy(rad_id TEXT)
+RETURNS TABLE 
+(
+    "id" INT, 
+    "parent" TEXT, 
+    "child" TEXT
+) 
+AS $$
+BEGIN
+    RETURN QUERY (
+        WITH RECURSIVE
+        child_hierarchy AS (
+            SELECT 
+                x.id, 
+                x.rad_id as child, 
+                x.rad_type_id as parent
+            FROM multiview.rad x 
+            WHERE
+                x.rad_type_id = $1
+            UNION ALL
+            SELECT 
+                y.id, 
+                y.rad_id as child, 
+                y.rad_type_id as parent
+            FROM multiview.rad y
+            JOIN child_hierarchy ch ON y.rad_type_id = ch.child
+        )
+        SELECT z.id, z.parent, z.child
+        FROM child_hierarchy z
+    );
+END;
+$$ LANGUAGE plpgsql;
+

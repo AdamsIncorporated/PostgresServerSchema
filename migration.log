@@ -1,23 +1,12 @@
-2025-01-02 15:29:27,907 - INFO - Connected to the database.
-2025-01-02 15:29:27,908 - ERROR - Failed to apply schema: syntax error at or near "CREATE"
-LINE 145: CREATE VIEW vw_flat_journal_entry AS (
-          ^
-Traceback (most recent call last):
-  File "C:\Projects\PostgresServerSchema/upload.py", line 77, in __apply_schema
-    cursor.execute(schema.read())
-psycopg2.errors.SyntaxError: syntax error at or near "CREATE"
-LINE 145: CREATE VIEW vw_flat_journal_entry AS (
-          ^
-
-2025-01-02 15:29:27,908 - ERROR - Error during migration: syntax error at or near "CREATE"
-LINE 145: CREATE VIEW vw_flat_journal_entry AS (
-          ^
-Traceback (most recent call last):
-  File "C:\Projects\PostgresServerSchema/upload.py", line 61, in migrate
-    self.__apply_schema()
-  File "C:\Projects\PostgresServerSchema/upload.py", line 77, in __apply_schema
-    cursor.execute(schema.read())
-psycopg2.errors.SyntaxError: syntax error at or near "CREATE"
-LINE 145: CREATE VIEW vw_flat_journal_entry AS (
-          ^
-
+2025-01-02 15:43:58,527 - INFO - Connected to the database.
+2025-01-02 15:43:58,577 - INFO - Schema applied successfully.
+2025-01-02 15:43:58,938 - INFO - 256 rows inserted into [account]
+2025-01-02 15:43:58,943 - INFO - 256 rows inserted into [account_ownership]
+2025-01-02 15:43:58,946 - INFO - 109 rows inserted into [business_unit]
+2025-01-02 15:43:58,948 - INFO - 109 rows inserted into [business_unit_ownership]
+2025-01-02 15:43:59,000 - INFO - 884 rows inserted into [rad]
+2025-01-02 15:43:59,468 - INFO - 28429 rows inserted into [budget]
+2025-01-02 15:43:59,728 - INFO - 14293 rows inserted into [budget_rad]
+2025-01-02 15:44:11,271 - INFO - 225027 rows inserted into [journal_entry]
+2025-01-02 15:44:17,213 - INFO - 110540 rows inserted into [journal_entry_rad]
+2025-01-02 15:44:17,272 - INFO - All data imported successfully.
