@@ -1,18 +1,12 @@
-2025-01-03 11:02:56,121 - INFO - Connected to the database.
-2025-01-03 11:02:56,168 - INFO - Schema applied successfully.
-2025-01-03 11:02:56,184 - ERROR - Error during migration: required package 'fastexcel' not found.
-Please install using the command `pip install fastexcel`.
-Traceback (most recent call last):
-  File "upload.py", line 62, in migrate
-    self.__read_seed_files()
-  File "upload.py", line 98, in __read_seed_files
-    self.ownership_df = pl.read_excel(**excel_config)
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "polars\_utils\deprecation.py", line 92, in wrapper
-  File "polars\_utils\deprecation.py", line 92, in wrapper
-  File "polars\io\spreadsheet\functions.py", line 342, in read_excel
-  File "polars\io\spreadsheet\functions.py", line 600, in _read_spreadsheet
-  File "polars\io\spreadsheet\functions.py", line 771, in _initialise_spreadsheet_parser
-  File "polars\dependencies.py", line 270, in import_optional
-ModuleNotFoundError: required package 'fastexcel' not found.
-Please install using the command `pip install fastexcel`.
+2025-01-03 11:05:47,943 - INFO - Connected to the database.
+2025-01-03 11:05:47,989 - INFO - Schema applied successfully.
+2025-01-03 11:05:48,257 - INFO - 256 rows inserted into [account]
+2025-01-03 11:05:48,273 - INFO - 256 rows inserted into [account_ownership]
+2025-01-03 11:05:48,273 - INFO - 109 rows inserted into [business_unit]
+2025-01-03 11:05:48,273 - INFO - 109 rows inserted into [business_unit_ownership]
+2025-01-03 11:05:48,318 - INFO - 884 rows inserted into [rad]
+2025-01-03 11:05:48,770 - INFO - 28429 rows inserted into [budget]
+2025-01-03 11:05:49,009 - INFO - 14293 rows inserted into [budget_rad]
+2025-01-03 11:06:10,570 - INFO - 225027 rows inserted into [journal_entry]
+2025-01-03 11:06:16,065 - INFO - 110540 rows inserted into [journal_entry_rad]
+2025-01-03 11:06:16,120 - INFO - All data imported successfully.
