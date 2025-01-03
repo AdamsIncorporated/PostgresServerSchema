@@ -217,7 +217,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 CREATE OR REPLACE FUNCTION multiview.get_business_unit_hierarchy(business_unit_id TEXT)
 RETURNS TABLE 
 (
@@ -321,3 +320,113 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION multiview.get_fiscal_year(input_date DATE)
+RETURNS INTEGER AS $$
+DECLARE
+    fiscal_year INTEGER;
+BEGIN
+    -- Determine fiscal year based on September 30th as the end of the fiscal year
+    IF extract(month from input_date) >= 10 THEN
+        fiscal_year := extract(year from input_date);
+    ELSE
+        fiscal_year := extract(year from input_date) - 1;
+    END IF;
+
+    RETURN fiscal_year;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION multiview.get_line_item(
+    anchor_date DATE,
+    account_nos TEXT[],
+    business_unit_ids TEXT[],
+    rad_ids TEXT[]
+)
+RETURNS TABLE 
+(
+    "order" INT,
+    "label" TEXT,
+    "start_date" DATE,
+    "end_date" DATE,
+    "sum" REAL
+) 
+AS $$
+BEGIN
+    RETURN QUERY (
+        -- Current Month Actual
+        SELECT 
+            1 as "order",
+            'current_month_total' AS "label",
+            DATE_TRUNC('month', $1)::DATE AS "start_date",
+            (DATE_TRUNC('month', $1) + INTERVAL '1 month' - INTERVAL '1 day')::DATE AS "end_date",
+            SUM(actual.Amount) AS "sum"
+        FROM multiview.vw_flat_journal_entry actual
+        WHERE
+            actual.Amount IS NOT NULL
+            AND actual.fiscal_year = multiview.get_fiscal_year($1)
+            AND EXTRACT(MONTH FROM actual.accounting_date) = EXTRACT(MONTH FROM $1)
+            AND actual.account_no = ANY($2)
+            AND actual.business_unit_id = ANY($3)
+            AND actual.rad_id = ANY($4)
+        
+        UNION
+
+        -- Current Year To Date Actual
+        SELECT 
+            2 as "order",
+            'current_year_to_date' AS "label",
+            TO_DATE(CONCAT(multiview.get_fiscal_year($1), '-10-01'), 'YYYY-MM-DD') AS "start_date",
+            $1 AS "end_date",
+            SUM(actual.Amount) AS "sum"
+        FROM multiview.vw_flat_journal_entry actual
+        WHERE
+            actual.Amount IS NOT NULL
+            AND actual.accounting_date 
+                BETWEEN
+                    TO_DATE(CONCAT(multiview.get_fiscal_year($1), '-10-01'), 'YYYY-MM-DD')
+                    AND $1
+        
+        UNION
+
+        -- Current Fiscal Year Budget
+        SELECT 
+            3 as "order",
+            'current_fiscal_year_budget' AS "label",
+            TO_DATE(CONCAT(multiview.get_fiscal_year($1), '-10-01'), 'YYYY-MM-DD') AS "start_date",
+            TO_DATE(CONCAT(multiview.get_fiscal_year($1) + 1, '-9-30'), 'YYYY-MM-DD') AS "end_date",
+            SUM(budget.Amount) AS "sum"
+        FROM multiview.vw_flat_budget budget
+        WHERE
+            budget.Amount IS NOT NULL
+            AND budget.fiscal_year = multiview.get_fiscal_year($1)
+        
+        UNION
+
+        -- Current Year To Date Actual
+        SELECT 
+            4 as "order",
+            'prior_year_to_date' AS "label",
+            TO_DATE(CONCAT(multiview.get_fiscal_year($1) - 1, '-10-01'), 'YYYY-MM-DD') AS "start_date",
+            ($1 - INTERVAL '1 year')::DATE AS "end_date",
+            SUM(actual.Amount) AS "sum"
+        FROM multiview.vw_flat_journal_entry actual
+        WHERE
+            actual.Amount IS NOT NULL
+            AND actual.accounting_date 
+                BETWEEN
+                    TO_DATE(CONCAT(multiview.get_fiscal_year($1) - 1, '-10-01'), 'YYYY-MM-DD')
+                    AND ($1 - INTERVAL '1 year')::DATE
+               
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT * 
+FROM multiview.get_line_item(
+    anchor_date => '2024-10-31'::DATE,
+    account_nos => ARRAY['45700'],
+    business_unit_ids => '{}',
+    rad_ids => '{}'
+);
