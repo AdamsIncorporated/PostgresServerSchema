@@ -134,8 +134,7 @@ CREATE VIEW multiview.vw_flat_budget AS (
         b.budget_id,
         b.accounting_date,
         b.fiscal_year
-    FROM 
-        multiview.budget b
+    FROM multiview.budget b
         join multiview.budget_rad br on b.id = br.table_budget_id
         join multiview.account a on a.account_no = b.account_no
         join multiview.business_unit bu on bu.business_unit_id = b.business_unit_id
@@ -159,8 +158,7 @@ CREATE VIEW multiview.vw_flat_journal_entry AS (
         j.entry_id,
         j.accounting_date,
         j.fiscal_year
-    FROM 
-        multiview.journal_entry j
+    FROM multiview.journal_entry j
         join multiview.journal_entry_rad jr on j.id = jr.journal_entry_id
         join multiview.account a on a.account_no = j.account_no
         join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
@@ -170,6 +168,7 @@ CREATE VIEW multiview.vw_flat_journal_entry AS (
 CREATE OR REPLACE FUNCTION multiview.get_account_hierarchy(account_no TEXT)
 RETURNS TABLE 
 (
+    "is_input_id_root" BOOLEAN,
     "id" INT, 
     "parent" TEXT, 
     "child" TEXT
@@ -180,6 +179,7 @@ BEGIN
         WITH RECURSIVE
         child_hierarchy AS (
             SELECT 
+                FALSE as is_input_id_root,
                 x.id, 
                 x.account_no as child, 
                 x.parent_account_no as parent
@@ -188,21 +188,40 @@ BEGIN
                 parent_account_no = $1
             UNION ALL
             SELECT 
+                FALSE as is_input_id_root,
                 y.id, 
                 y.account_no as child, 
                 y.parent_account_no as parent
             FROM multiview.account_ownership y
             JOIN child_hierarchy ch ON y.parent_account_no = ch.child
         )
-        SELECT z.id, z.parent, z.child
+        SELECT 
+            z.is_input_id_root, 
+            z.id, 
+            z.parent, 
+            z.child
         FROM child_hierarchy z
     );
+
+    IF NOT FOUND THEN
+    RETURN QUERY (
+        SELECT 
+            TRUE as is_input_id_root,
+            not_found.id, 
+            not_found.parent_account_no as parent,
+            not_found.account_no as child
+        FROM multiview.account_ownership not_found 
+        WHERE not_found.account_no = $1
+    );
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION multiview.get_business_unit_hierarchy(business_unit_id TEXT)
 RETURNS TABLE 
 (
+    "is_input_id_root" BOOLEAN,
     "id" INT, 
     "parent" TEXT, 
     "child" TEXT
@@ -212,7 +231,8 @@ BEGIN
     RETURN QUERY (
         WITH RECURSIVE
         child_hierarchy AS (
-            SELECT 
+            SELECT
+                FALSE as is_input_id_root, 
                 x.id, 
                 x.business_unit_id as child, 
                 x.parent_business_unit_id as parent
@@ -221,21 +241,39 @@ BEGIN
                 x.parent_business_unit_id = $1
             UNION ALL
             SELECT 
+                FALSE as is_input_id_root,
                 y.id, 
                 y.business_unit_id as child, 
                 y.parent_business_unit_id as parent
             FROM multiview.business_unit_ownership y
             JOIN child_hierarchy ch ON y.parent_business_unit_id = ch.child
         )
-        SELECT z.id, z.parent, z.child
+        SELECT 
+            z.is_input_id_root,
+            z.id, 
+            z.parent, 
+            z.child
         FROM child_hierarchy z
     );
+
+    IF NOT FOUND THEN
+    RETURN QUERY (
+        SELECT 
+            TRUE as is_input_id_root,
+            not_found.id, 
+            not_found.parent_business_unit_id as parent,
+            not_found.business_unit_id as child
+        FROM multiview.business_unit_ownership not_found 
+        WHERE not_found.business_unit_id = $1
+    );
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION multiview.get_rad_hierarchy(rad_id TEXT)
 RETURNS TABLE 
 (
+    "is_input_id_root" BOOLEAN,
     "id" INT, 
     "parent" TEXT, 
     "child" TEXT
@@ -246,6 +284,7 @@ BEGIN
         WITH RECURSIVE
         child_hierarchy AS (
             SELECT 
+                FALSE as is_input_id_root,
                 x.id, 
                 x.rad_id as child, 
                 x.rad_type_id as parent
@@ -254,15 +293,31 @@ BEGIN
                 x.rad_type_id = $1
             UNION ALL
             SELECT 
+                FALSE as is_input_id_root,
                 y.id, 
                 y.rad_id as child, 
                 y.rad_type_id as parent
             FROM multiview.rad y
             JOIN child_hierarchy ch ON y.rad_type_id = ch.child
         )
-        SELECT z.id, z.parent, z.child
+        SELECT 
+            z.is_input_id_root,
+            z.id, 
+            z.parent, 
+            z.child
         FROM child_hierarchy z
     );
+
+    IF NOT FOUND THEN
+    RETURN QUERY (
+        SELECT 
+            TRUE as is_input_id_root,
+            not_found.id, 
+            not_found.rad_type_id as parent,
+            not_found.rad_id as child
+        FROM multiview.rad not_found 
+        WHERE not_found.rad_id = $1
+    );
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
-
