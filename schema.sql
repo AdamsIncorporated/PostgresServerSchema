@@ -337,7 +337,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 CREATE OR REPLACE FUNCTION multiview.get_line_item(
     anchor_date DATE,
     account_nos TEXT[],
@@ -367,9 +366,15 @@ BEGIN
             actual.Amount IS NOT NULL
             AND actual.fiscal_year = multiview.get_fiscal_year($1)
             AND EXTRACT(MONTH FROM actual.accounting_date) = EXTRACT(MONTH FROM $1)
-            AND actual.account_no = ANY($2)
-            AND actual.business_unit_id = ANY($3)
-            AND actual.rad_id = ANY($4)
+            AND (actual.account_no = ANY($2) AND $2 <> '{}') 
+                OR 
+                $2 = '{}' 
+            AND (actual.business_unit_id = ANY($3) AND $3 <> '{}') 
+                OR 
+                $3 = '{}' 
+            AND (actual.rad_id = ANY($4) AND $4 <> '{}') 
+                OR 
+                $4 = '{}'
         
         UNION
 
@@ -387,6 +392,15 @@ BEGIN
                 BETWEEN
                     TO_DATE(CONCAT(multiview.get_fiscal_year($1), '-10-01'), 'YYYY-MM-DD')
                     AND $1
+            AND (actual.account_no = ANY($2) AND $2 <> '{}') 
+                OR 
+                $2 = '{}' 
+            AND (actual.business_unit_id = ANY($3) AND $3 <> '{}') 
+                OR 
+                $3 = '{}' 
+            AND (actual.rad_id = ANY($4) AND $4 <> '{}') 
+                OR 
+                $4 = '{}'
         
         UNION
 
@@ -401,6 +415,15 @@ BEGIN
         WHERE
             budget.Amount IS NOT NULL
             AND budget.fiscal_year = multiview.get_fiscal_year($1)
+            AND (budget.account_no = ANY($2) AND $2 <> '{}') 
+                OR 
+                $2 = '{}' 
+            AND (budget.business_unit_id = ANY($3) AND $3 <> '{}') 
+                OR 
+                $3 = '{}' 
+            AND (budget.rad_id = ANY($4) AND $4 <> '{}') 
+                OR 
+                $4 = '{}'
         
         UNION
 
@@ -418,15 +441,28 @@ BEGIN
                 BETWEEN
                     TO_DATE(CONCAT(multiview.get_fiscal_year($1) - 1, '-10-01'), 'YYYY-MM-DD')
                     AND ($1 - INTERVAL '1 year')::DATE
+            AND (actual.account_no = ANY($2) AND $2 <> '{}') 
+                OR 
+                $2 = '{}' 
+            AND (actual.business_unit_id = ANY($3) AND $3 <> '{}') 
+                OR 
+                $3 = '{}' 
+            AND (actual.rad_id = ANY($4) AND $4 <> '{}') 
+                OR 
+                $4 = '{}'
                
     );
 END;
 $$ LANGUAGE plpgsql;
 
+-- PROPERTY TAX REVENUE	 80,939 		 80,939 		 346,638,452 		0%		 (172,425)
+
+
 SELECT * 
-FROM multiview.get_line_item(
-    anchor_date => '2024-10-31'::DATE,
-    account_nos => ARRAY['45700'],
-    business_unit_ids => '{}',
-    rad_ids => '{}'
-);
+FROM multiview.get_line_item (
+    anchor_date => '2024-10-31'::DATE, 
+    account_nos => (SELECT ARRAY(SELECT child::TEXT FROM multiview.get_account_hierarchy('ADVALTAX'))), 
+    business_unit_ids => (SELECT ARRAY(SELECT DISTINCT business_unit_id::TEXT FROM multiview.business_unit)), 
+    rad_ids => (SELECT ARRAY(SELECT DISTINCT rad_id::TEXT FROM multiview.rad))
+)
+
