@@ -328,14 +328,15 @@ DECLARE
 BEGIN
     -- Determine fiscal year based on September 30th as the end of the fiscal year
     IF extract(month from input_date) >= 10 THEN
-        fiscal_year := extract(year from input_date);
+        fiscal_year := extract(year from input_date) + 1;
     ELSE
-        fiscal_year := extract(year from input_date) - 1;
+        fiscal_year := extract(year from input_date);
     END IF;
 
     RETURN fiscal_year;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION multiview.get_line_item(
     anchor_date DATE,
