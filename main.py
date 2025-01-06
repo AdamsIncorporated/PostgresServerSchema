@@ -2,6 +2,7 @@ import psycopg2
 import polars as pl
 import warnings
 import logging
+import re
 
 # Configure logging
 logging.basicConfig(
@@ -102,7 +103,7 @@ class Migration:
             "schema_overrides": {
                 "Business Unit Id": pl.Utf8,
                 "Account No.": pl.Utf8,
-                "Amount": pl.Float64,
+                "Amount": pl.Utf8,
                 "Accoutning Date": pl.Date,
             },
         }
@@ -232,6 +233,9 @@ class Migration:
                 [
                     pl.col("account_no").str.strip_chars(),
                     pl.col("business_unit_id").str.strip_chars(),
+                    pl.col("amount")
+                    .map_elements(self.clean_amount, return_dtype=pl.String)
+                    .cast(pl.Float64),
                 ]
             )
         )
@@ -291,6 +295,9 @@ class Migration:
                 [
                     pl.col("account_no").str.strip_chars(),
                     pl.col("business_unit_id").str.strip_chars(),
+                    pl.col("amount")
+                    .map_elements(self.clean_amount, return_dtype=pl.String)
+                    .cast(pl.Float64),
                 ]
             )
         )
@@ -355,6 +362,14 @@ class Migration:
         except (Exception, psycopg2.Error) as error:
             logging.exception("Error while inserting to PostgreSQL", error)
             raise
+
+    @staticmethod
+    def clean_amount(value: str) -> str | None:
+        if value:
+            cleaned_str = re.sub(r"[^\d.-]", "", value)
+            return cleaned_str
+        else:
+            return None
 
 
 if __name__ == "__main__":
