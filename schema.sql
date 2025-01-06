@@ -53,7 +53,7 @@ CREATE TABLE multiview.journal_entry (
     business_unit_id TEXT,
     account_no TEXT,
     amount REAL,
-    accounting_date TIMESTAMP,
+    accounting_date DATE,
     fiscal_year INT GENERATED ALWAYS AS (
         CASE
             WHEN EXTRACT(
@@ -79,7 +79,7 @@ CREATE TABLE multiview.budget (
     business_unit_id TEXT,
     account_no TEXT,
     amount REAL,
-    accounting_date TIMESTAMP,
+    accounting_date DATE,
     fiscal_year INT GENERATED ALWAYS AS (
         CASE
             WHEN EXTRACT(
@@ -135,9 +135,9 @@ CREATE VIEW multiview.vw_flat_budget AS (
         b.accounting_date,
         b.fiscal_year
     FROM multiview.budget b
-        join multiview.budget_rad br on b.id = br.table_budget_id
-        join multiview.account a on a.account_no = b.account_no
-        join multiview.business_unit bu on bu.business_unit_id = b.business_unit_id
+        left join multiview.budget_rad br on b.id = br.table_budget_id
+        left join multiview.account a on a.account_no = b.account_no
+        left join multiview.business_unit bu on bu.business_unit_id = b.business_unit_id
     ORDER BY b.accounting_date, b.id
 );
 
@@ -159,9 +159,9 @@ CREATE VIEW multiview.vw_flat_journal_entry AS (
         j.accounting_date,
         j.fiscal_year
     FROM multiview.journal_entry j
-        join multiview.journal_entry_rad jr on j.id = jr.journal_entry_id
-        join multiview.account a on a.account_no = j.account_no
-        join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
+        left join multiview.journal_entry_rad jr on j.id = jr.journal_entry_id
+        left join multiview.account a on a.account_no = j.account_no
+        left join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
     ORDER BY j.accounting_date, j.id
 );
 
@@ -454,15 +454,4 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
-
--- PROPERTY TAX REVENUE	 80,939 		 80,939 		 346,638,452 		0%		 (172,425)
-
-
-SELECT * 
-FROM multiview.get_line_item (
-    anchor_date => '2024-10-31'::DATE, 
-    account_nos => (SELECT ARRAY(SELECT child::TEXT FROM multiview.get_account_hierarchy('ADVALTAX'))), 
-    business_unit_ids => (SELECT ARRAY(SELECT DISTINCT business_unit_id::TEXT FROM multiview.business_unit)), 
-    rad_ids => (SELECT ARRAY(SELECT DISTINCT rad_id::TEXT FROM multiview.rad))
-)
 
