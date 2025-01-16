@@ -338,121 +338,89 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION multiview.get_line_item(
-    anchor_date DATE,
-    account_nos TEXT[],
-    business_unit_ids TEXT[],
-    rad_ids TEXT[]
-)
-RETURNS TABLE 
-(
-    "order" INT,
-    "label" TEXT,
-    "start_date" DATE,
-    "end_date" DATE,
-    "sum" REAL
-) 
-AS $$
+CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line(
+    target_date DATE,
+    target_beginning_of_month_date DATE,
+    current_fiscal_year_int INT,
+    current_fiscal_year_start_date DATE,
+    prior_fiscal_year_start_date DATE,
+    prior_fiscal_year_end_date DATE,
+    account_list TEXT[] DEFAULT '{}',
+    business_unit_list TEXT[] DEFAULT '{}',
+    rad_list TEXT[] DEFAULT '{}'
+    )
+RETURNS TABLE (
+    CurrentMonthActual REAL,
+    CurrentYearToDate REAL,
+    CurrentYearBudget REAL,
+    PriorYearToDate REAL
+) AS $$
 BEGIN
-    RETURN QUERY (
-        -- Current Month Actual
-        SELECT 
-            1 as "order",
-            'current_month_total' AS "label",
-            DATE_TRUNC('month', $1)::DATE AS "start_date",
-            (DATE_TRUNC('month', $1) + INTERVAL '1 month' - INTERVAL '1 day')::DATE AS "end_date",
-            SUM(actual.Amount) AS "sum"
-        FROM multiview.vw_flat_journal_entry actual
-        WHERE
-            actual.Amount IS NOT NULL
-            AND actual.fiscal_year = multiview.get_fiscal_year($1)
-            AND EXTRACT(MONTH FROM actual.accounting_date) = EXTRACT(MONTH FROM $1)
-            AND (actual.account_no = ANY($2) AND $2 <> '{}') 
-                OR 
-                $2 = '{}' 
-            AND (actual.business_unit_id = ANY($3) AND $3 <> '{}') 
-                OR 
-                $3 = '{}' 
-            AND (actual.rad_id = ANY($4) AND $4 <> '{}') 
-                OR 
-                $4 = '{}'
-        
-        UNION
-
-        -- Current Year To Date Actual
-        SELECT 
-            2 as "order",
-            'current_year_to_date' AS "label",
-            TO_DATE(CONCAT(multiview.get_fiscal_year($1), '-10-01'), 'YYYY-MM-DD') AS "start_date",
-            $1 AS "end_date",
-            SUM(actual.Amount) AS "sum"
-        FROM multiview.vw_flat_journal_entry actual
-        WHERE
-            actual.Amount IS NOT NULL
-            AND actual.accounting_date 
-                BETWEEN
-                    TO_DATE(CONCAT(multiview.get_fiscal_year($1), '-10-01'), 'YYYY-MM-DD')
-                    AND $1
-            AND (actual.account_no = ANY($2) AND $2 <> '{}') 
-                OR 
-                $2 = '{}' 
-            AND (actual.business_unit_id = ANY($3) AND $3 <> '{}') 
-                OR 
-                $3 = '{}' 
-            AND (actual.rad_id = ANY($4) AND $4 <> '{}') 
-                OR 
-                $4 = '{}'
-        
-        UNION
-
-        -- Current Fiscal Year Budget
-        SELECT 
-            3 as "order",
-            'current_fiscal_year_budget' AS "label",
-            TO_DATE(CONCAT(multiview.get_fiscal_year($1), '-10-01'), 'YYYY-MM-DD') AS "start_date",
-            TO_DATE(CONCAT(multiview.get_fiscal_year($1) + 1, '-9-30'), 'YYYY-MM-DD') AS "end_date",
-            SUM(budget.Amount) AS "sum"
-        FROM multiview.vw_flat_budget budget
-        WHERE
-            budget.Amount IS NOT NULL
-            AND budget.fiscal_year = multiview.get_fiscal_year($1)
-            AND (budget.account_no = ANY($2) AND $2 <> '{}') 
-                OR 
-                $2 = '{}' 
-            AND (budget.business_unit_id = ANY($3) AND $3 <> '{}') 
-                OR 
-                $3 = '{}' 
-            AND (budget.rad_id = ANY($4) AND $4 <> '{}') 
-                OR 
-                $4 = '{}'
-        
-        UNION
-
-        -- Current Year To Date Actual
-        SELECT 
-            4 as "order",
-            'prior_year_to_date' AS "label",
-            TO_DATE(CONCAT(multiview.get_fiscal_year($1) - 1, '-10-01'), 'YYYY-MM-DD') AS "start_date",
-            ($1 - INTERVAL '1 year')::DATE AS "end_date",
-            SUM(actual.Amount) AS "sum"
-        FROM multiview.vw_flat_journal_entry actual
-        WHERE
-            actual.Amount IS NOT NULL
-            AND actual.accounting_date 
-                BETWEEN
-                    TO_DATE(CONCAT(multiview.get_fiscal_year($1) - 1, '-10-01'), 'YYYY-MM-DD')
-                    AND ($1 - INTERVAL '1 year')::DATE
-            AND (actual.account_no = ANY($2) AND $2 <> '{}') 
-                OR 
-                $2 = '{}' 
-            AND (actual.business_unit_id = ANY($3) AND $3 <> '{}') 
-                OR 
-                $3 = '{}' 
-            AND (actual.rad_id = ANY($4) AND $4 <> '{}') 
-                OR 
-                $4 = '{}'
-               
-    );
+    RETURN QUERY
+    WITH
+        budget_template AS (
+            SELECT budget.*
+            FROM multiview.vw_flat_budget budget
+            WHERE
+                budget.Amount IS NOT NULL
+                AND (
+                    budget.account_no::TEXT = ANY (account_list)
+                    OR budget.account_no IS NULL
+                )
+                AND (
+                    budget.business_unit_id::TEXT = ANY (business_unit_list)
+                    OR budget.business_unit_id IS NULL
+                )
+                AND (
+                    budget.rad_id::TEXT = ANY (rad_list)
+                    OR budget.rad_id IS NULL
+                )
+        ),
+        actual_template AS (
+            SELECT actual.*
+            FROM multiview.vw_flat_journal_entry actual
+            WHERE
+                actual.Amount IS NOT NULL
+                AND (
+                    actual.account_no::TEXT = ANY (account_list)
+                    OR actual.account_no IS NULL
+                )
+                AND (
+                    actual.business_unit_id::TEXT = ANY (business_unit_list)
+                    OR actual.business_unit_id IS NULL
+                )
+                AND (
+                    actual.rad_id::TEXT = ANY (rad_list)
+                    OR actual.rad_id IS NULL
+                )
+        )
+    SELECT 
+        (
+            (SELECT COALESCE(SUM(amount), 0) 
+                FROM actual_template
+                WHERE accounting_date = target_date) - 
+            (SELECT COALESCE(SUM(amount), 0) 
+                FROM actual_template
+                WHERE accounting_date = target_beginning_of_month_date)
+        ) AS CurrentMonthActual,
+        (
+            SELECT COALESCE(SUM(amount), 0) 
+            FROM actual_template
+            WHERE accounting_date 
+                BETWEEN current_fiscal_year_start_date
+                AND target_date
+        ) AS CurrentYearToDate,
+        (
+            SELECT COALESCE(SUM(amount), 0) 
+            FROM budget_template
+            WHERE fiscal_year = current_fiscal_year_int
+        ) AS CurrentYearBudget,
+        (
+            SELECT COALESCE(SUM(amount), 0) 
+            FROM actual_template
+            WHERE accounting_date BETWEEN 
+                prior_fiscal_year_start_date
+                AND prior_fiscal_year_end_date
+        ) AS PriorYearToDate;
 END;
 $$ LANGUAGE plpgsql;
-
