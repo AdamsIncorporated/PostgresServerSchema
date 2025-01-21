@@ -1,6 +1,7 @@
 INSERT INTO
-    multiview.report_template (report_structure)
+    multiview.report_template (report_name, report_structure)
 VALUES (
+        'Sources and Uses',
         '{
             "SOURCE": {
                 "RESTRICTIED REVENUE": {
@@ -1073,8 +1074,9 @@ VALUES (
         }'::JSONB
     );
 
-INSERT INTO multiview.report_template (report_structure)
+INSERT INTO multiview.report_template (report_name, report_structure)
 VALUES (
+    'Balance Sheet',
     '[
         {
             "AccountTypeDisplayName": "Asset",

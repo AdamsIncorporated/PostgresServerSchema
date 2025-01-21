@@ -1,14 +1,14 @@
-2025-01-21 10:57:03,720 - INFO - Connected to the database.
-2025-01-21 10:57:03,909 - INFO - Tables Schema applied successfully.
-2025-01-21 10:57:03,921 - INFO - Functions Schema applied successfully.
-2025-01-21 10:57:03,928 - INFO - Templates Schema applied successfully.
-2025-01-21 10:57:04,722 - INFO - 256 rows inserted into [account]
-2025-01-21 10:57:04,758 - INFO - 256 rows inserted into [account_ownership]
-2025-01-21 10:57:04,773 - INFO - 109 rows inserted into [business_unit]
-2025-01-21 10:57:04,787 - INFO - 109 rows inserted into [business_unit_ownership]
-2025-01-21 10:57:04,913 - INFO - 891 rows inserted into [rad]
-2025-01-21 10:57:06,786 - INFO - 28429 rows inserted into [budget]
-2025-01-21 10:57:07,478 - INFO - 14293 rows inserted into [budget_rad]
-2025-01-21 10:57:26,443 - INFO - 228426 rows inserted into [journal_entry]
-2025-01-21 10:57:34,865 - INFO - 114000 rows inserted into [journal_entry_rad]
-2025-01-21 10:57:35,036 - INFO - All data imported successfully.
+2025-01-21 11:15:51,778 - INFO - Connected to the database.
+2025-01-21 11:15:51,954 - INFO - Tables Schema applied successfully.
+2025-01-21 11:15:51,959 - INFO - Functions Schema applied successfully.
+2025-01-21 11:15:51,964 - INFO - Templates Schema applied successfully.
+2025-01-21 11:15:52,145 - INFO - 256 rows inserted into [account]
+2025-01-21 11:15:52,156 - INFO - 256 rows inserted into [account_ownership]
+2025-01-21 11:15:52,159 - INFO - 109 rows inserted into [business_unit]
+2025-01-21 11:15:52,164 - INFO - 109 rows inserted into [business_unit_ownership]
+2025-01-21 11:15:52,249 - INFO - 891 rows inserted into [rad]
+2025-01-21 11:15:52,942 - INFO - 28429 rows inserted into [budget]
+2025-01-21 11:15:53,706 - INFO - 14293 rows inserted into [budget_rad]
+2025-01-21 11:16:10,442 - INFO - 228426 rows inserted into [journal_entry]
+2025-01-21 11:16:19,714 - INFO - 114000 rows inserted into [journal_entry_rad]
+2025-01-21 11:16:19,862 - INFO - All data imported successfully.

@@ -118,6 +118,7 @@ CREATE TABLE multiview.budget_rad (
 
 CREATE TABLE multiview.report_template (
     id SERIAL PRIMARY KEY,
+    report_name TEXT UNIQUE,
     report_structure JSONB
 );
 
