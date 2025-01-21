@@ -50,8 +50,7 @@ class DBManager:
 
 
 class Migration:
-    def __init__(self, conn: DBManager.connect, schema_file="schema.sql"):
-        self.schema_file = schema_file
+    def __init__(self, conn: DBManager.connect):
         self.budget_transaction_df = None
         self.journal_transaction_df = None
         self.ownership_df = None
@@ -74,10 +73,20 @@ class Migration:
     def __apply_schema(self) -> None:
         try:
             with self.conn.cursor() as cursor:
-                with open(self.schema_file, "r") as schema:
-                    cursor.execute(schema.read())
+                with open("schema/tables.sql", "r") as file:
+                    cursor.execute(file.read())
                     self.conn.commit()
-                    logging.info("Schema applied successfully.")
+                    logging.info("Tables Schema applied successfully.")
+
+                with open("schema/func.sql", "r") as file:
+                    cursor.execute(file.read())
+                    self.conn.commit()
+                    logging.info("Functions Schema applied successfully.")
+
+                with open("schema/templates.sql", "r") as file:
+                    cursor.execute(file.read())
+                    self.conn.commit()
+                    logging.info("Templates Schema applied successfully.")
         except Exception as e:
             logging.error(f"Failed to apply schema: {e}", exc_info=True)
             raise
@@ -378,7 +387,7 @@ if __name__ == "__main__":
         conn = db_manager.connect()
 
         if conn:
-            migration = Migration(conn=conn, schema_file="schema.sql")
+            migration = Migration(conn=conn)
             migration.migrate()
     except Exception as error:
         logging.exception(error)
