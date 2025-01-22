@@ -1,4 +1,3 @@
---changing now
 INSERT INTO
     multiview.report_template (report_name, report_structure)
 VALUES (
@@ -91,28 +90,6 @@ VALUES (
                 "BusinessUnitId": "4100",
                 "RadId": "CARDIOLOGY",
                 "DisplayName": "HCD-Cardiology"
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
-                "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
-                "AggGroup4": "SPECIALTY CARE",
-                "AggGroup5": "HCD-Claims Administration",
-                "AccountNo": "65000",
-                "BusinessUnitId": "4100",
-                "RadId": "CLAIMS ADMIN",
-                "DisplayName": "HCD-Claims Administration"
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
-                "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
-                "AggGroup4": "SPECIALTY CARE",
-                "AggGroup5": "HCD-Client Referral Service",
-                "AccountNo": "65000",
-                "BusinessUnitId": "4100",
-                "RadId": "CLIENT RFRL",
-                "DisplayName": "HCD-Client Referral Service"
             },
             {
                 "AggGroup1": "USE",
@@ -240,17 +217,6 @@ VALUES (
                 "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
-                "AggGroup5": "HCD-MAP Basic Expansion",
-                "AccountNo": "65000",
-                "BusinessUnitId": "4100",
-                "RadId": "MAPBASICEXP",
-                "DisplayName": "HCD-MAP Basic Expansion"
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
-                "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
-                "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Musculoskeletal",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
@@ -300,17 +266,6 @@ VALUES (
                 "BusinessUnitId": "4100",
                 "RadId": "OPHTHALM",
                 "DisplayName": "HCD-Ophthalmology"
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
-                "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
-                "AggGroup4": "SPECIALTY CARE",
-                "AggGroup5": "HCD-Orthopedics",
-                "AccountNo": "65000",
-                "BusinessUnitId": "4100",
-                "RadId": "ORTHO",
-                "DisplayName": "HCD-Orthopedics"
             },
             {
                 "AggGroup1": "USE",
