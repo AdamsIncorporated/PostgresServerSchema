@@ -1,3 +1,4 @@
+--changing now
 INSERT INTO
     multiview.report_template (report_name, report_structure)
 VALUES (
