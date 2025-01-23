@@ -1,6 +1,6 @@
 *.csv
 *.xlsx
-migration.log
+*.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
