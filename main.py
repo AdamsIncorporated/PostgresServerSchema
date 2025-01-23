@@ -6,7 +6,7 @@ import re
 
 # Configure logging
 logging.basicConfig(
-    filename="migration.log",
+    filename=".log",
     filemode="w",
     level=logging.NOTSET,
     format="%(asctime)s - %(levelname)s - %(message)s",
