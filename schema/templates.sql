@@ -562,7 +562,8 @@ VALUES (
                 "AccountNo": "40000",
                 "BusinessUnitId": "3500",
                 "RadId": null,
-                "DisplayName": "Direct-Services - Gastroenterology"
+                "DisplayName": "Direct-Services - Gastroenterology",
+                "IsNegated": true
             },
             {
                 "AggGroup1": "USE",
@@ -2058,7 +2059,8 @@ VALUES (
                 "AccountNo": "77200",
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
+                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM",
+                "IsNegated": true
             },
             {
                 "AggGroup1": "USE",
@@ -2069,7 +2071,8 @@ VALUES (
                 "AccountNo": "77100",
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
+                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM",
+                "IsNegated": true
             },
             {
                 "AggGroup1": "USE",
