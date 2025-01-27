@@ -2152,7 +2152,7 @@ VALUES (
         {
             "AccountTypeDisplayName": "Asset",
             "DisplayName": "ACCOUNTS RECEIVABLE TAX",
-            "Accounts": ["13030", "13040", "13050", "13060", "13070", "13080"]
+            "Accounts": ["13030", "13040", "13050", "13060", "13070", "13080", "15200"]
         },
         {
             "AccountTypeDisplayName": "Asset",
@@ -2217,6 +2217,7 @@ VALUES (
             "17300",
             "17400",
             "17500",
+            "17550",
             "17600",
             "17700",
             "17800",
