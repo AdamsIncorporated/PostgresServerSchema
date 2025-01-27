@@ -2104,51 +2104,6 @@ VALUES (
                 "BusinessUnitId": null,
                 "RadId": null,
                 "DisplayName": "OPIOID ABATEMENT EXPENSE"
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "TRANSFER TO CAPITAL PROJECTS",
-                "AggGroup3": null,
-                "AggGroup4": null,
-                "AggGroup5": null,
-                "AccountNo": null,
-                "BusinessUnitId": null,
-                "RadId": null,
-                "DisplayName": "TRANSFER TO CAPITAL PROJECTS",
-                "currentmonthactual": 0,
-                "currentyeartodate": 0,
-                "currentyearbudget": 50000000,
-                "prioryeartodate": 0
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "TRANSFER TO EMERGENCY RESERVE",
-                "AggGroup3": null,
-                "AggGroup4": null,
-                "AggGroup5": null,
-                "AccountNo": null,
-                "BusinessUnitId": null,
-                "RadId": null,
-                "DisplayName": "TRANSFER TO EMERGENCY RESERVE",
-                "currentmonthactual": 0,
-                "currentyeartodate": 0,
-                "currentyearbudget": 11381015,
-                "prioryeartodate": 0
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "CONTINGENCY RESERVE",
-                "AggGroup3": null,
-                "AggGroup4": null,
-                "AggGroup5": null,
-                "AccountNo": null,
-                "BusinessUnitId": null,
-                "RadId": null,
-                "DisplayName": "CONTINGENCY RESERVE",
-                "currentmonthactual": 0,
-                "currentyeartodate": 0,
-                "currentyearbudget": 395732910,
-                "prioryeartodate": 0
             }
         ]'::JSONB
     );
