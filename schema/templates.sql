@@ -558,22 +558,11 @@ VALUES (
                 "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
-                "AggGroup5": "Direct-Services - Gastroenterology Sub 1",
+                "AggGroup5": "Direct-Services - Gastroenterology",
                 "AccountNo": "40000",
                 "BusinessUnitId": "3500",
                 "RadId": null,
-                "DisplayName": "Direct-Services - Gastroenterology Sub 1"
-            },
-            {
-                "AggGroup1": "USE",
-                "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
-                "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
-                "AggGroup4": "DIRECT SERVICES",
-                "AggGroup5": "Direct-Services - Gastroenterology Sub 2",
-                "AccountNo": "ALL",
-                "BusinessUnitId": "3500",
-                "RadId": null,
-                "DisplayName": "Direct-Services - Gastroenterology Sub 2"
+                "DisplayName": "Direct-Services - Gastroenterology"
             },
             {
                 "AggGroup1": "USE",
@@ -581,9 +570,9 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Gastroenterology",
-                "AccountNo": 0,
-                "BusinessUnitId": 0,
-                "RadId": 0,
+                "AccountNo": "ALL",
+                "BusinessUnitId": "3500",
+                "RadId": null,
                 "DisplayName": "Direct-Services - Gastroenterology"
             },
             {
