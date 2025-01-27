@@ -838,7 +838,8 @@ VALUES (
                 "AccountNo": "44200",
                 "BusinessUnitId": "6000",
                 "RadId": null,
-                "DisplayName": "UT LAND LEASE FOR TEACHING HOSPITAL"
+                "DisplayName": "UT LAND LEASE FOR TEACHING HOSPITAL",
+                "IsNegated": true
             },
             {
                 "AggGroup1": "USE",
@@ -1861,7 +1862,11 @@ VALUES (
                 "AccountNo": null,
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "TRANSFER TO SENDRO RISK CAPITAL"
+                "DisplayName": "TRANSFER TO SENDRO RISK CAPITAL",
+                "currentmonthactual": 0,
+                "currentyeartodate": 0,
+                "currentyearbudget": 8035000,
+                "prioryeartodate": 0
             },
             {
                 "AggGroup1": "USE",
@@ -1872,7 +1877,11 @@ VALUES (
                 "AccountNo": null,
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "DEBT SERVICE PRINCIPAL"
+                "DisplayName": "DEBT SERVICE PRINCIPAL",
+                "currentmonthactual": 0,
+                "currentyeartodate": 0,
+                "currentyearbudget": 800000,
+                "prioryeartodate": 0
             },
             {
                 "AggGroup1": "USE",
@@ -2105,7 +2114,11 @@ VALUES (
                 "AccountNo": null,
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "TRANSFER TO CAPITAL PROJECTS"
+                "DisplayName": "TRANSFER TO CAPITAL PROJECTS",
+                "currentmonthactual": 0,
+                "currentyeartodate": 0,
+                "currentyearbudget": 50000000,
+                "prioryeartodate": 0
             },
             {
                 "AggGroup1": "USE",
@@ -2116,7 +2129,11 @@ VALUES (
                 "AccountNo": null,
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "TRANSFER TO EMERGENCY RESERVE"
+                "DisplayName": "TRANSFER TO EMERGENCY RESERVE",
+                "currentmonthactual": 0,
+                "currentyeartodate": 0,
+                "currentyearbudget": 11381015,
+                "prioryeartodate": 0
             },
             {
                 "AggGroup1": "USE",
@@ -2127,7 +2144,11 @@ VALUES (
                 "AccountNo": null,
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "CONTIGENCY RESERVE"
+                "DisplayName": "CONTIGENCY RESERVE",
+                "currentmonthactual": 0,
+                "currentyeartodate": 0,
+                "currentyearbudget": 395732910,
+                "prioryeartodate": 0
             }
         ]'::JSONB
     );
