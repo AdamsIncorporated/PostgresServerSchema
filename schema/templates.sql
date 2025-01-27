@@ -1880,7 +1880,7 @@ VALUES (
                 "DisplayName": "DEBT SERVICE PRINCIPAL",
                 "currentmonthactual": 0,
                 "currentyeartodate": 0,
-                "currentyearbudget": 800000,
+                "currentyearbudget": 8000000,
                 "prioryeartodate": 0
             },
             {
@@ -2137,14 +2137,14 @@ VALUES (
             },
             {
                 "AggGroup1": "USE",
-                "AggGroup2": "CONTIGENCY RESERVE",
+                "AggGroup2": "CONTINGENCY RESERVE",
                 "AggGroup3": null,
                 "AggGroup4": null,
                 "AggGroup5": null,
                 "AccountNo": null,
                 "BusinessUnitId": null,
                 "RadId": null,
-                "DisplayName": "CONTIGENCY RESERVE",
+                "DisplayName": "CONTINGENCY RESERVE",
                 "currentmonthactual": 0,
                 "currentyeartodate": 0,
                 "currentyearbudget": 395732910,
