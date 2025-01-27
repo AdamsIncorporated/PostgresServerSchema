@@ -2115,36 +2115,6 @@ VALUES (
         '[
         {
             "AccountTypeDisplayName": "Asset",
-            "DisplayName": "TOTAL ASSETS",
-            "AccountTypes": ["Asset"],
-            "AggregationColumn": "ClosingBalance"
-        },
-        {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "TOTAL LIABILITIES",
-            "AccountTypes": ["Liability"],
-            "AggregationColumn": "ClosingBalance"
-        },
-        {
-            "AccountTypeDisplayName": "Capital",
-            "DisplayName": "TOTAL CAPITAL",
-            "AccountTypes": ["Capital"],
-            "AggregationColumn": "ClosingBalance"
-        },
-        {
-            "AccountTypeDisplayName": "Revenue",
-            "DisplayName": "TOTAL REVENUE",
-            "AccountTypes": ["Revenue"],
-            "AggregationColumn": "ClosingBalance"
-        },
-        {
-            "AccountTypeDisplayName": "Expense",
-            "DisplayName": "TOTAL EXPENSE",
-            "AccountTypes": ["Expense"],
-            "AggregationColumn": "ClosingBalance"
-        },
-        {
-            "AccountTypeDisplayName": "Asset",
             "DisplayName": "CASH AND CASH EQUIVALENTS",
             "Accounts": [
             "11000",
