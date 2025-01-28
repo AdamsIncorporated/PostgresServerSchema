@@ -214,17 +214,14 @@ BEGIN
         ),
         aggregates AS (
             SELECT
-                SUM(CASE WHEN accounting_date = target_date THEN total_actual ELSE 0 END) AS target_date_sum,
-                SUM(CASE WHEN accounting_date = target_beginning_of_month_date THEN total_actual ELSE 0 END) AS beginning_month_sum,
-                SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN total_actual ELSE 0 END) AS year_to_date_sum,
-                SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN total_actual ELSE 0 END) AS prior_year_sum
+                SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN total_actual ELSE 0 END) AS CurrentMonthActual,
+                SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN total_actual ELSE 0 END) AS CurrentYearToDate,
+                SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN total_actual ELSE 0 END) AS PriorYearToDate
             FROM filtered_actual
         )
     SELECT 
-        (target_date_sum - beginning_month_sum) AS CurrentMonthActual,
-        year_to_date_sum AS CurrentYearToDate,
-        (SELECT total_budget FROM filtered_budget WHERE fiscal_year = current_fiscal_year_int) AS CurrentYearBudget,
-        prior_year_sum AS PriorYearToDate
+        *,
+        (SELECT total_budget FROM filtered_budget WHERE fiscal_year = current_fiscal_year_int) AS CurrentYearBudget
     FROM aggregates;
 END;
 $$ LANGUAGE plpgsql;
