@@ -170,58 +170,61 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line(
-    target_date DATE,
-    target_beginning_of_month_date DATE,
-    current_fiscal_year_int INT,
-    current_fiscal_year_start_date DATE,
-    prior_fiscal_year_start_date DATE,
-    prior_fiscal_year_end_date DATE,
-    account_list TEXT[] DEFAULT '{}',
-    business_unit_list TEXT[] DEFAULT '{}',
-    rad_list TEXT[] DEFAULT '{}'
-)
-RETURNS TABLE (
-    CurrentMonthActual REAL,
-    CurrentYearToDate REAL,
-    CurrentYearBudget REAL,
-    PriorYearToDate REAL
-) AS $$
-BEGIN
-    RETURN QUERY
-    WITH
-        filtered_budget AS (
-            SELECT 
-                fiscal_year,
-                COALESCE(SUM(amount), 0) AS total_budget
-            FROM multiview.vw_flat_budget
-            WHERE amount IS NOT NULL
-                AND (array_length(account_list, 1) IS NULL OR account_no::TEXT = ANY(account_list))
-                AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id::TEXT = ANY(business_unit_list))
-                AND (array_length(rad_list, 1) IS NULL OR rad_id::TEXT = ANY(rad_list))
-            GROUP BY fiscal_year
-        ),
-        filtered_actual AS (
-            SELECT 
-                accounting_date,
-                COALESCE(SUM(amount), 0) AS total_actual
-            FROM multiview.vw_flat_journal_entry
-            WHERE amount IS NOT NULL
-                AND (array_length(account_list, 1) IS NULL OR account_no::TEXT = ANY(account_list))
-                AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id::TEXT = ANY(business_unit_list))
-                AND (array_length(rad_list, 1) IS NULL OR rad_id::TEXT = ANY(rad_list))
-            GROUP BY accounting_date
-        ),
-        aggregates AS (
-            SELECT
-                SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN total_actual ELSE 0 END) AS CurrentMonthActual,
-                SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN total_actual ELSE 0 END) AS CurrentYearToDate,
-                SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN total_actual ELSE 0 END) AS PriorYearToDate
-            FROM filtered_actual
-        )
-    SELECT 
-        *,
-        (SELECT total_budget FROM filtered_budget WHERE fiscal_year = current_fiscal_year_int) AS CurrentYearBudget
-    FROM aggregates;
-END;
-$$ LANGUAGE plpgsql;
+-- CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line(
+--     target_date DATE,
+--     target_beginning_of_month_date DATE,
+--     current_fiscal_year_int INT,
+--     current_fiscal_year_start_date DATE,
+--     prior_fiscal_year_start_date DATE,
+--     prior_fiscal_year_end_date DATE,
+--     account_list TEXT[] DEFAULT '{}',
+--     business_unit_list TEXT[] DEFAULT '{}',
+--     rad_list TEXT[] DEFAULT '{}'
+-- )
+-- RETURNS TABLE (
+--     "CurrentMonthActual" REAL,
+--     "CurrentYearToDate" REAL,
+--     "CurrentYearBudget" REAL,
+--     "PriorYearToDate" REAL
+-- ) AS $$
+-- BEGIN
+--     RETURN QUERY
+--     WITH
+--         filtered_budget AS (
+--             SELECT 
+--                 fiscal_year,
+--                 COALESCE(SUM(amount), 0) AS total_budget
+--             FROM multiview.vw_flat_budget
+--             WHERE amount IS NOT NULL
+--                 AND (array_length(account_list, 1) IS NULL OR account_no::TEXT = ANY(account_list))
+--                 AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id::TEXT = ANY(business_unit_list))
+--                 AND (array_length(rad_list, 1) IS NULL OR rad_id::TEXT = ANY(rad_list))
+--             GROUP BY fiscal_year
+--         ),
+--         filtered_actual AS (
+--             SELECT 
+--                 accounting_date,
+--                 COALESCE(SUM(amount), 0) AS total_actual
+--             FROM multiview.vw_flat_journal_entry
+--             WHERE amount IS NOT NULL
+--                 AND (array_length(account_list, 1) IS NULL OR account_no::TEXT = ANY(account_list))
+--                 AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id::TEXT = ANY(business_unit_list))
+--                 AND (array_length(rad_list, 1) IS NULL OR rad_id::TEXT = ANY(rad_list))
+--             GROUP BY accounting_date
+--         ),
+--         aggregates AS (
+--             SELECT
+--                 SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN total_actual ELSE 0 END) AS CurrentMonthActual,
+--                 SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN total_actual ELSE 0 END) AS CurrentYearToDate,
+--                 (SELECT total_budget FROM filtered_budget WHERE fiscal_year = current_fiscal_year_int) AS CurrentYearBudget,
+--                 SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN total_actual ELSE 0 END) AS PriorYearToDate
+--             FROM filtered_actual
+--         )
+--     SELECT 
+--         a.CurrentMonthActual,
+--         a.CurrentYearToDate,
+--         a.CurrentYearBudget,
+--         a.PriorYearToDate
+--     FROM aggregates AS a;
+-- END;
+-- $$ LANGUAGE plpgsql;

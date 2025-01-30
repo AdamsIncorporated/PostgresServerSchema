@@ -3,6 +3,7 @@ import polars as pl
 import warnings
 import logging
 import re
+import json
 
 # Configure logging
 logging.basicConfig(
@@ -228,6 +229,11 @@ class Migration:
                     "Amount",
                     "Accounting Date",
                 ]
+                + [
+                    col
+                    for col in self.budget_transaction_df.columns
+                    if "RAD" in col and "Unused" not in col and "Description" not in col
+                ]
             )
             .rename(
                 {
@@ -248,36 +254,18 @@ class Migration:
                 ]
             )
         )
-        rows = budgets.to_dicts()
-        self.__insert_many("budget", rows)
-
-        # now insert the row by row rads with type and index number
-        rads = (
-            self.budget_transaction_df.clone()
-            .select(
-                [
-                    col
-                    for col in self.budget_transaction_df.columns
-                    if "RAD" in col and "Unused" not in col and "Description" not in col
-                ]
-            )
-            .with_row_index(name="index_id", offset=1)
-        ).to_dicts()
-
-        rows = []
-
-        for row in rads:
-            for key, value in row.items():
-                if value and key != "index_id":
-                    rows.append(
-                        {
-                            "table_budget_id": row["index_id"],
-                            "rad_type_id": key.replace("RAD", "").strip(),
-                            "rad_id": value.strip(),
-                        }
-                    )
-
-        self.__insert_many("budget_rad", rows)
+        data = budgets.to_dicts()
+        keys_to_select = [
+            "budget_id",
+            "business_unit_id",
+            "account_no",
+            "amount",
+            "accounting_date",
+            "rad_data",
+        ]
+        self.__insert_many(
+            "budget", self.__construct_rad_json_data(keys_to_select, data)
+        )
 
     def __migrate_journal_data(self) -> None:
         journals = (
@@ -289,6 +277,12 @@ class Migration:
                     "Account No",
                     "Amount",
                     "Accounting Date",
+                    "Date Posted",
+                ]
+                + [
+                    col
+                    for col in self.budget_transaction_df.columns
+                    if "RAD" in col and "Unused" not in col and "Description" not in col
                 ]
             )
             .rename(
@@ -298,6 +292,7 @@ class Migration:
                     "Account No": "account_no",
                     "Amount": "amount",
                     "Accounting Date": "accounting_date",
+                    "Date Posted": "date_posted",
                 }
             )
             .with_columns(
@@ -310,36 +305,47 @@ class Migration:
                 ]
             )
         )
-        rows = journals.to_dicts()
-        self.__insert_many("journal_entry", rows)
+        data = journals.to_dicts()
+        keys_to_select = [
+            "entry_id",
+            "business_unit_id",
+            "account_no",
+            "amount",
+            "accounting_date",
+            "rad_data",
+        ]
+        self.__insert_many(
+            "journal_entry", self.__construct_rad_json_data(keys_to_select, data)
+        )
 
-        # now insert the row by row rads with type and index number
-        rads = (
-            self.journal_transaction_df.clone()
-            .select(
-                [
-                    col
-                    for col in self.journal_transaction_df.columns
-                    if "RAD" in col and "Unused" not in col and "Description" not in col
-                ]
-            )
-            .with_row_index(name="index_id", offset=1)
-        ).to_dicts()
-
+    def __construct_rad_json_data(
+        self, keys_to_select: list, data: list[dict]
+    ) -> list[dict]:
         rows = []
 
-        for row in rads:
-            for key, value in row.items():
-                if value and key != "index_id":
-                    rows.append(
+        for row in data:
+            json_rad_list = []
+
+            for key in row:
+                if "RAD" in key and row[key]:
+                    rad_type_id = key.replace(" RAD", "").strip()
+                    rad_id = row[key]
+
+                    json_rad_list.append(
                         {
-                            "journal_entry_id": row["index_id"],
-                            "rad_type_id": key.replace("RAD", "").strip(),
-                            "rad_id": value.strip(),
+                            "rad_type_id": rad_type_id,
+                            "rad_id": rad_id,
                         }
                     )
 
-        self.__insert_many("journal_entry_rad", rows)
+            if json_rad_list:
+                row["rad_data"] = json.dumps(json_rad_list)
+            else:
+                row["rad_data"] = None
+
+            rows.append({key: row[key] for key in keys_to_select if key in row})
+
+        return rows
 
     def __insert_many(self, table_name: str, rows: dict) -> int | None:
         try:
