@@ -2255,8 +2255,7 @@ VALUES (
                 "BusinessUnitId": null,
                 "RadTypeId": null,
                 "RadId": null,
-                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM",
-                "IsNegated": true
+                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
             {
                 "AggGroup1": "USE",
@@ -2268,8 +2267,7 @@ VALUES (
                 "BusinessUnitId": null,
                 "RadTypeId": null,
                 "RadId": null,
-                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM",
-                "IsNegated": true
+                "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
             {
                 "AggGroup1": "USE",
@@ -2293,7 +2291,8 @@ VALUES (
                 "BusinessUnitId": null,
                 "RadTypeId": null,
                 "RadId": null,
-                "DisplayName": "OPIOID ABATEMENT EXPENSE"
+                "DisplayName": "OPIOID ABATEMENT EXPENSE",
+                "IsNegated": true
             }
         ]'::JSONB
     );
