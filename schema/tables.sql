@@ -108,50 +108,45 @@ CREATE TABLE multiview.report_template (
     report_structure JSONB
 );
 
--- CREATE VIEW multiview.vw_flat_budget AS (
---     SELECT
---         b.id,
---         a.id AS account_id,
---         a.account_no,
---         a.account,
---         a.account_type,
---         bu.id AS table_business_unit_id,
---         bu.business_unit_id,
---         bu.business_unit,
---         br.id AS budget_rad_id,
---         br.rad_type_id,
---         br.rad_id,
---         b.amount,
---         b.budget_id,
---         b.accounting_date,
---         b.fiscal_year
---     FROM multiview.budget b
---         left join multiview.budget_rad br on b.id = br.table_budget_id
---         left join multiview.account a on a.account_no = b.account_no
---         left join multiview.business_unit bu on bu.business_unit_id = b.business_unit_id
---     ORDER BY b.accounting_date, b.id
--- );
+CREATE VIEW multiview.vw_flat_budget AS (
+    SELECT
+        b.id,
+        a.id AS account_id,
+        a.account_no,
+        a.account,
+        a.account_type,
+        bu.id AS table_business_unit_id,
+        bu.business_unit_id,
+        bu.business_unit,
+        b.rad_data,
+        b.amount,
+        b.budget_id,
+        b.accounting_date,
+        b.fiscal_year
+    FROM multiview.budget b
+        left join multiview.account a on a.account_no = b.account_no
+        left join multiview.business_unit bu on bu.business_unit_id = b.business_unit_id
+    ORDER BY b.accounting_date, b.id
+);
 
--- CREATE VIEW multiview.vw_flat_journal_entry AS (
---     SELECT
---         j.id,
---         a.id AS account_id,
---         a.account_no,
---         a.account,
---         a.account_type,
---         bu.id AS table_business_unit_id,
---         bu.business_unit_id,
---         bu.business_unit,
---         jr.id AS journal_rad_id,
---         jr.rad_type_id,
---         jr.rad_id,
---         j.amount,
---         j.entry_id,
---         j.accounting_date,
---         j.fiscal_year
---     FROM multiview.journal_entry j
---         left join multiview.journal_entry_rad jr on j.id = jr.journal_entry_id
---         left join multiview.account a on a.account_no = j.account_no
---         left join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
---     ORDER BY j.accounting_date, j.id
--- );
+CREATE VIEW multiview.vw_flat_journal_entry AS (
+    SELECT
+        j.id,
+        a.id AS account_id,
+        a.account_no,
+        a.account,
+        a.account_type,
+        bu.id AS table_business_unit_id,
+        bu.business_unit_id,
+        bu.business_unit,
+        j.rad_data,
+        j.amount,
+        j.entry_id,
+        j.accounting_date,
+        j.date_posted,
+        j.fiscal_year
+    FROM multiview.journal_entry j
+        left join multiview.account a on a.account_no = j.account_no
+        left join multiview.business_unit bu on bu.business_unit_id = j.business_unit_id
+    ORDER BY j.accounting_date, j.id
+);
