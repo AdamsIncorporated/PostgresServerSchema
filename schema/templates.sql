@@ -11,6 +11,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "ADVALTAX",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "PROPERTY TAX REVENUE"
             },
@@ -22,6 +23,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "LSEREV",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "LEASE REVENUE"
             },
@@ -33,6 +35,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "TOBSETREV",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "NET TOBACCO SETTLEMENT REVENUE"
             },
@@ -44,6 +47,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "TNR",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "PATIENT REVENUE"
             },
@@ -55,6 +59,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "INTINCREV",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER REVENUE"
             },
@@ -66,6 +71,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "46500",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OPIOID SETTLEMENT REVENUE"
             },
@@ -77,6 +83,7 @@ VALUES (
                 "AggGroup5": "HCD-Ancillary Services",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "ANCILL SRV",
                 "DisplayName": "HCD-Ancillary Services"
             },
@@ -88,6 +95,7 @@ VALUES (
                 "AggGroup5": "HCD-Cardiology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "CARDIOLOGY",
                 "DisplayName": "HCD-Cardiology"
             },
@@ -99,6 +107,7 @@ VALUES (
                 "AggGroup5": "HCD-Dental",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "DENTAL",
                 "DisplayName": "HCD-Dental"
             },
@@ -110,6 +119,7 @@ VALUES (
                 "AggGroup5": "HCD-Dermatology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "DERMATOLOGY",
                 "DisplayName": "HCD-Dermatology"
             },
@@ -121,6 +131,7 @@ VALUES (
                 "AggGroup5": "HCD-Dialysis",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "DIALYSIS",
                 "DisplayName": "HCD-Dialysis"
             },
@@ -132,6 +143,7 @@ VALUES (
                 "AggGroup5": "HCD-Durable Medical Equipment",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "DURABLE MED",
                 "DisplayName": "HCD-Durable Medical Equipment"
             },
@@ -143,6 +155,7 @@ VALUES (
                 "AggGroup5": "HCD-Endocrinology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "ENDOCRIN",
                 "DisplayName": "HCD-Endocrinology"
             },
@@ -154,6 +167,7 @@ VALUES (
                 "AggGroup5": "HCD-Ear, Nose & Throat ENT",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "ENT",
                 "DisplayName": "HCD-Ear, Nose & Throat ENT"
             },
@@ -165,6 +179,7 @@ VALUES (
                 "AggGroup5": "HCD-Gastroenterology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "GASTRO",
                 "DisplayName": "HCD-Gastroenterology"
             },
@@ -176,6 +191,7 @@ VALUES (
                 "AggGroup5": "HCD-General Surgery",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "GEN SURG",
                 "DisplayName": "HCD-General Surgery"
             },
@@ -187,6 +203,7 @@ VALUES (
                 "AggGroup5": "HCD-Gynecology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "GYN",
                 "DisplayName": "HCD-Gynecology"
             },
@@ -198,6 +215,7 @@ VALUES (
                 "AggGroup5": "HCD-Infectious Disease",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "INF DIS",
                 "DisplayName": "HCD-Infectious Disease"
             },
@@ -209,6 +227,7 @@ VALUES (
                 "AggGroup5": "HCD-Inmate Health",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "INMATE HEALT",
                 "DisplayName": "HCD-Inmate Health"
             },
@@ -220,6 +239,7 @@ VALUES (
                 "AggGroup5": "HCD-Musculoskeletal",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "MUSCULOSKELE",
                 "DisplayName": "HCD-Musculoskeletal"
             },
@@ -231,6 +251,7 @@ VALUES (
                 "AggGroup5": "HCD-Nephrology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "NEPHROLOGY",
                 "DisplayName": "HCD-Nephrology"
             },
@@ -242,6 +263,7 @@ VALUES (
                 "AggGroup5": "HCD-Neurology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "NEUROLOGY",
                 "DisplayName": "HCD-Neurology"
             },
@@ -253,6 +275,7 @@ VALUES (
                 "AggGroup5": "HCD-Oncology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "ONCOLOGY",
                 "DisplayName": "HCD-Oncology"
             },
@@ -264,6 +287,7 @@ VALUES (
                 "AggGroup5": "HCD-Ophthalmology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "OPHTHALM",
                 "DisplayName": "HCD-Ophthalmology"
             },
@@ -275,6 +299,7 @@ VALUES (
                 "AggGroup5": "HCD-Orthotics & Prosthetics",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "ORTHOTIC&PRO",
                 "DisplayName": "HCD-Orthotics & Prosthetics"
             },
@@ -286,6 +311,7 @@ VALUES (
                 "AggGroup5": "HCD-Pain Management",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PAIN MGT",
                 "DisplayName": "HCD-Pain Management"
             },
@@ -297,6 +323,7 @@ VALUES (
                 "AggGroup5": "HCD-Palliative Care",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PALL CARE",
                 "DisplayName": "HCD-Palliative Care"
             },
@@ -308,6 +335,7 @@ VALUES (
                 "AggGroup5": "HCD-Physical Med & Rehab",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PHYSMEDREHAB",
                 "DisplayName": "HCD-Physical Med & Rehab"
             },
@@ -319,6 +347,7 @@ VALUES (
                 "AggGroup5": "HCD-Podiatry",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PODIATRY",
                 "DisplayName": "HCD-Podiatry"
             },
@@ -330,6 +359,7 @@ VALUES (
                 "AggGroup5": "HCD-Project Access",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PROJ ACCESS",
                 "DisplayName": "HCD-Project Access"
             },
@@ -341,6 +371,7 @@ VALUES (
                 "AggGroup5": "HCD-Transportation",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PT TRANSPORT",
                 "DisplayName": "HCD-Transportation"
             },
@@ -352,6 +383,7 @@ VALUES (
                 "AggGroup5": "HCD-Pulmonology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PULMONOLOGY",
                 "DisplayName": "HCD-Pulmonology"
             },
@@ -363,6 +395,7 @@ VALUES (
                 "AggGroup5": "HCD-Referral Management",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "REFERRALMGT",
                 "DisplayName": "HCD-Referral Management"
             },
@@ -374,6 +407,7 @@ VALUES (
                 "AggGroup5": "HCD-Rheumatology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "RHEUMATOLOGY",
                 "DisplayName": "HCD-Rheumatology"
             },
@@ -385,6 +419,7 @@ VALUES (
                 "AggGroup5": "HCD-Sexual & Reproductive Service",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "SEXUAL&REPRO",
                 "DisplayName": "HCD-Sexual & Reproductive Service"
             },
@@ -396,6 +431,7 @@ VALUES (
                 "AggGroup5": "HCD-Specialty Care Reserve",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "SPEC RSRV",
                 "DisplayName": "HCD-Specialty Care Reserve"
             },
@@ -407,6 +443,7 @@ VALUES (
                 "AggGroup5": "HCD-Translation",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "TRANSLATE",
                 "DisplayName": "HCD-Translation"
             },
@@ -418,6 +455,7 @@ VALUES (
                 "AggGroup5": "HCD-Convenient / Urgent Care",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "URGENT CARE",
                 "DisplayName": "HCD-Convenient / Urgent Care"
             },
@@ -429,6 +467,7 @@ VALUES (
                 "AggGroup5": "HCD-Urology",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "UROLOGY",
                 "DisplayName": "HCD-Urology"
             },
@@ -440,6 +479,7 @@ VALUES (
                 "AggGroup5": "HCD-Wound Care",
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "WOUND CARE",
                 "DisplayName": "HCD-Wound Care"
             },
@@ -451,6 +491,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PRIMARY CARE",
                 "DisplayName": "PRIMARY CARE"
             },
@@ -462,6 +503,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "MENTAL HLTH",
                 "DisplayName": "SPECIALTY BEHAVIORAL HEALTH AND SUBTANCE USE"
             },
@@ -473,6 +515,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "POST ACUTE",
                 "DisplayName": "POST ACUTE CARE"
             },
@@ -484,6 +527,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65000",
                 "BusinessUnitId": "4100",
+                "RadTypeId": "PROV",
                 "RadId": "PHARMACY",
                 "DisplayName": "PHARMACY"
             },
@@ -495,6 +539,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": "PROV",
                 "RadId": "CHIF",
                 "DisplayName": "COMMUNITY HEALTHCARE INITIATIVES FUND"
             },
@@ -506,6 +551,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Direct Services Other",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "DSOT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Direct Services Other"
             },
@@ -517,6 +563,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Direct Services Support",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "DSSP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Direct Services Support"
             },
@@ -528,6 +575,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Endocrinology",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3475",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Endocrinology"
             },
@@ -539,6 +587,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Rheumatology",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3775",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Rheumatology"
             },
@@ -550,6 +599,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Cardiology",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3325",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Cardiology"
             },
@@ -561,6 +611,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Gastroenterology",
                 "AccountNo": "40000",
                 "BusinessUnitId": "3500",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Gastroenterology",
                 "IsNegated": true
@@ -573,6 +624,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Gastroenterology",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3500",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Gastroenterology"
             },
@@ -584,6 +636,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Nephrology",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Nephrology"
             },
@@ -595,6 +648,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Neurology",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3625",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Neurology"
             },
@@ -606,6 +660,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Podiatry",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3700",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Podiatry"
             },
@@ -617,6 +672,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Pulmonology",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3750",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Pulmonology"
             },
@@ -628,6 +684,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Palliative Care",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3675",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Palliative Care"
             },
@@ -639,6 +696,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Pharmacy",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3305",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Pharmacy"
             },
@@ -650,6 +708,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Operation Inactive",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Operation Inactive"
             },
@@ -661,6 +720,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Behavioral Health",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3310",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Behavioral Health"
             },
@@ -672,6 +732,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Patient Navigation Center",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3950",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Patient Navigation Center"
             },
@@ -683,6 +744,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Psychiatry",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "3311",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Psychiatry"
             },
@@ -694,6 +756,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Medical Respite",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "MRSP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Medical Respite"
             },
@@ -705,6 +768,7 @@ VALUES (
                 "AggGroup5": "Direct-Services - Transition of Care",
                 "AccountNo": "ALL",
                 "BusinessUnitId": "TOC",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Transition of Care"
             },
@@ -716,6 +780,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "TOTLAB",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "SALARY AND BENEFITS"
             },
@@ -727,6 +792,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "TOTLAB",
                 "BusinessUnitId": "HCSP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "SALARY AND BENEFITS"
             },
@@ -738,6 +804,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "44000",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "SALARY AND BENEFITS"
             },
@@ -749,6 +816,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "ALL",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "ACA PREMIUM ASSIST"
             },
@@ -760,6 +828,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "PHYSRV",
                 "BusinessUnitId": "REES",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "REAL ESTATE AND FACILITIES"
             },
@@ -771,6 +840,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "PURSRV",
                 "BusinessUnitId": "REES",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "REAL ESTATE AND FACILITIES"
             },
@@ -782,6 +852,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "SUPPLY",
                 "BusinessUnitId": "REES",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "REAL ESTATE AND FACILITIES"
             },
@@ -793,6 +864,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "OTHG&S",
                 "BusinessUnitId": "REES",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "REAL ESTATE AND FACILITIES"
             },
@@ -804,6 +876,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "CERTOBLGN",
                 "BusinessUnitId": "REES",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "REAL ESTATE AND FACILITIES"
             },
@@ -815,6 +888,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "NONOPEXP",
                 "BusinessUnitId": "REES",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "REAL ESTATE AND FACILITIES"
             },
@@ -826,6 +900,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "DEPAMI",
                 "BusinessUnitId": "REES",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "REAL ESTATE AND FACILITIES"
             },
@@ -837,6 +912,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "44200",
                 "BusinessUnitId": "6000",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "UT LAND LEASE FOR TEACHING HOSPITAL",
                 "IsNegated": true
@@ -849,6 +925,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66500",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "LEGAL"
             },
@@ -860,6 +937,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66500",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "LEGAL"
             },
@@ -871,6 +949,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66500",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "LEGAL"
             },
@@ -882,6 +961,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "CONSULTING SERVICES"
             },
@@ -893,6 +973,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "CONSULTING SERVICES"
             },
@@ -904,6 +985,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "CONSULTING SERVICES"
             },
@@ -915,6 +997,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66000",
                 "BusinessUnitId": "8650",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "CONSULTING SERVICES"
             },
@@ -926,6 +1009,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66000",
                 "BusinessUnitId": "9100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "CONSULTING SERVICES"
             },
@@ -937,6 +1021,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER PROFESSIONAL GOODS AND SERVICES"
             },
@@ -948,6 +1033,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER PROFESSIONAL GOODS AND SERVICES"
             },
@@ -959,6 +1045,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER PROFESSIONAL GOODS AND SERVICES"
             },
@@ -970,6 +1057,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER PROFESSIONAL GOODS AND SERVICES"
             },
@@ -981,6 +1069,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER PROFESSIONAL GOODS AND SERVICES"
             },
@@ -992,6 +1081,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER PROFESSIONAL GOODS AND SERVICES"
             },
@@ -1003,6 +1093,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER PROFESSIONAL GOODS AND SERVICES"
             },
@@ -1014,6 +1105,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65500",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1025,6 +1117,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65500",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1036,6 +1129,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65500",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1047,6 +1141,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65500",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1058,6 +1153,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65500",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1069,6 +1165,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65500",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1080,6 +1177,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65500",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1091,6 +1189,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1102,6 +1201,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1113,6 +1213,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1124,6 +1225,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1135,6 +1237,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1146,6 +1249,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1157,6 +1261,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OUTREACH AND EDUCATION"
             },
@@ -1168,6 +1273,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INSURANCE AND RISK MANAGEMENT"
             },
@@ -1179,6 +1285,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INSURANCE AND RISK MANAGEMENT"
             },
@@ -1190,6 +1297,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INSURANCE AND RISK MANAGEMENT"
             },
@@ -1201,6 +1309,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INSURANCE AND RISK MANAGEMENT"
             },
@@ -1212,6 +1321,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INSURANCE AND RISK MANAGEMENT"
             },
@@ -1223,6 +1333,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INSURANCE AND RISK MANAGEMENT"
             },
@@ -1234,6 +1345,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INSURANCE AND RISK MANAGEMENT"
             },
@@ -1245,6 +1357,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1256,6 +1369,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1267,6 +1381,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1278,6 +1393,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1289,6 +1405,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1300,6 +1417,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1311,6 +1429,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1322,6 +1441,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1333,6 +1453,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1344,6 +1465,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1355,6 +1477,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1366,6 +1489,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1377,6 +1501,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1388,6 +1513,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1399,6 +1525,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1410,6 +1537,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1421,6 +1549,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1432,6 +1561,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1443,6 +1573,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1454,6 +1585,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1465,6 +1597,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "INFORMATION TECHNOLOGY"
             },
@@ -1476,6 +1609,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1487,6 +1621,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1498,6 +1633,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1509,6 +1645,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1520,6 +1657,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1531,6 +1669,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1542,6 +1681,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1553,6 +1693,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1564,6 +1705,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1575,6 +1717,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1586,6 +1729,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1597,6 +1741,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1608,6 +1753,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1619,6 +1765,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRAINING, TRAVEL AND PROFESSIONAL DEVELOPMENT"
             },
@@ -1630,6 +1777,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1641,6 +1789,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1652,6 +1801,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1663,6 +1813,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1674,6 +1825,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1685,6 +1837,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1696,6 +1849,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1707,6 +1861,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1718,6 +1873,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1729,6 +1885,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1740,6 +1897,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1751,6 +1909,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1762,6 +1921,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1773,6 +1933,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1784,6 +1945,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "HCOP",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1795,6 +1957,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "8100",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1806,6 +1969,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "8200",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1817,6 +1981,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "8900",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1828,6 +1993,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "8600",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1839,6 +2005,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "4450",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1850,6 +2017,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "JTT",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OTHER OPERATING EXPENSES"
             },
@@ -1861,12 +2029,13 @@ VALUES (
                 "AggGroup5": "TRANSFER TO SENDRO RISK CAPITAL",
                 "AccountNo": null,
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TRANSFER TO SENDRO RISK CAPITAL",
-                "currentmonthactual": 0,
-                "currentyeartodate": 0,
-                "currentyearbudget": 8035000,
-                "prioryeartodate": 0
+                "CurrentMonthActual": 0,
+                "CurrentYearToDate": 0,
+                "CurrentYearBudget": 8035000,
+                "PriorYearToDate": 0
             },
             {
                 "AggGroup1": "USE",
@@ -1876,12 +2045,13 @@ VALUES (
                 "AggGroup5": "DEBT SERVICE PRINCIPAL",
                 "AccountNo": null,
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "DEBT SERVICE PRINCIPAL",
-                "currentmonthactual": 0,
-                "currentyeartodate": 0,
-                "currentyearbudget": 8000000,
-                "prioryeartodate": 0
+                "CurrentMonthActual": 0,
+                "CurrentYearToDate": 0,
+                "CurrentYearBudget": 8000000,
+                "PriorYearToDate": 0
             },
             {
                 "AggGroup1": "USE",
@@ -1891,6 +2061,7 @@ VALUES (
                 "AggGroup5": "DEBT SERVICE INTEREST",
                 "AccountNo": "48100",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "DEBT SERVICE INTEREST"
             },
@@ -1902,6 +2073,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "TOTLAB",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1913,6 +2085,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66500",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1924,6 +2097,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "66000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1935,6 +2109,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "67000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1946,6 +2121,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "68000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1957,6 +2133,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "60000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1968,6 +2145,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "71000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1979,6 +2157,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "72000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -1990,6 +2169,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "79000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -2001,6 +2181,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70100",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -2012,6 +2193,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "70200",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -2023,6 +2205,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "73000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -2034,6 +2217,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "74000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -2045,6 +2229,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "75000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -2056,6 +2241,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "76000",
                 "BusinessUnitId": "ADMN",
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM"
             },
@@ -2067,6 +2253,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "77200",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM",
                 "IsNegated": true
@@ -2079,6 +2266,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "77100",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "TOTAL ADMINISTRATIVE PROGRAM",
                 "IsNegated": true
@@ -2091,6 +2279,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "65800",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "UT AFFILIATION AGREEMENT"
             },
@@ -2102,6 +2291,7 @@ VALUES (
                 "AggGroup5": null,
                 "AccountNo": "46500",
                 "BusinessUnitId": null,
+                "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "OPIOID ABATEMENT EXPENSE"
             }
