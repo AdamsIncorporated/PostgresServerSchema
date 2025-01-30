@@ -170,61 +170,152 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line(
---     target_date DATE,
---     target_beginning_of_month_date DATE,
---     current_fiscal_year_int INT,
---     current_fiscal_year_start_date DATE,
---     prior_fiscal_year_start_date DATE,
---     prior_fiscal_year_end_date DATE,
---     account_list TEXT[] DEFAULT '{}',
---     business_unit_list TEXT[] DEFAULT '{}',
---     rad_list TEXT[] DEFAULT '{}'
--- )
--- RETURNS TABLE (
---     "CurrentMonthActual" REAL,
---     "CurrentYearToDate" REAL,
---     "CurrentYearBudget" REAL,
---     "PriorYearToDate" REAL
--- ) AS $$
--- BEGIN
---     RETURN QUERY
---     WITH
---         filtered_budget AS (
---             SELECT 
---                 fiscal_year,
---                 COALESCE(SUM(amount), 0) AS total_budget
---             FROM multiview.vw_flat_budget
---             WHERE amount IS NOT NULL
---                 AND (array_length(account_list, 1) IS NULL OR account_no::TEXT = ANY(account_list))
---                 AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id::TEXT = ANY(business_unit_list))
---                 AND (array_length(rad_list, 1) IS NULL OR rad_id::TEXT = ANY(rad_list))
---             GROUP BY fiscal_year
---         ),
---         filtered_actual AS (
---             SELECT 
---                 accounting_date,
---                 COALESCE(SUM(amount), 0) AS total_actual
---             FROM multiview.vw_flat_journal_entry
---             WHERE amount IS NOT NULL
---                 AND (array_length(account_list, 1) IS NULL OR account_no::TEXT = ANY(account_list))
---                 AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id::TEXT = ANY(business_unit_list))
---                 AND (array_length(rad_list, 1) IS NULL OR rad_id::TEXT = ANY(rad_list))
---             GROUP BY accounting_date
---         ),
---         aggregates AS (
---             SELECT
---                 SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN total_actual ELSE 0 END) AS CurrentMonthActual,
---                 SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN total_actual ELSE 0 END) AS CurrentYearToDate,
---                 (SELECT total_budget FROM filtered_budget WHERE fiscal_year = current_fiscal_year_int) AS CurrentYearBudget,
---                 SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN total_actual ELSE 0 END) AS PriorYearToDate
---             FROM filtered_actual
---         )
---     SELECT 
---         a.CurrentMonthActual,
---         a.CurrentYearToDate,
---         a.CurrentYearBudget,
---         a.PriorYearToDate
---     FROM aggregates AS a;
--- END;
--- $$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line(
+    target_date DATE,
+    target_beginning_of_month_date DATE,
+    current_fiscal_year_int INT,
+    current_fiscal_year_start_date DATE,
+    prior_fiscal_year_start_date DATE,
+    prior_fiscal_year_end_date DATE,
+    account_list TEXT[] DEFAULT '{}',
+    business_unit_list TEXT[] DEFAULT '{}',
+    rad_json JSONB DEFAULT '[]'::JSONB
+)
+RETURNS TABLE (
+    "CurrentMonthActual" FLOAT,
+    "CurrentYearToDate" FLOAT,
+    "CurrentYearBudget" FLOAT,
+    "PriorYearToDate" FLOAT
+) AS $$
+BEGIN
+    RETURN QUERY
+    WITH
+        budget_slice AS (
+            SELECT  
+                amount
+            FROM multiview.budget
+            WHERE 
+                (array_length(account_list, 1) IS NULL OR account_no = ANY(account_list))
+                AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id = ANY(business_unit_list))
+                AND fiscal_year = current_fiscal_year_int
+                AND (
+                    jsonb_array_length(rad_json) = 0
+                    OR EXISTS (
+                        SELECT 1
+                        FROM jsonb_array_elements(rad_data) AS rad_elem
+                        JOIN LATERAL jsonb_array_elements(rad_json) AS target_elem ON rad_elem = target_elem
+                    )
+                )
+                AND amount IS NOT NULL
+        ),
+        actual_slice AS (
+            SELECT  
+                accounting_date,
+                amount
+            FROM multiview.journal_entry
+            WHERE 
+                (array_length(account_list, 1) IS NULL OR account_no = ANY(account_list))
+                AND (array_length(business_unit_list, 1) IS NULL OR business_unit_id = ANY(business_unit_list))
+                AND (
+                    jsonb_array_length(rad_json) = 0
+                    OR EXISTS (
+                        SELECT 1
+                        FROM jsonb_array_elements(rad_data) AS rad_elem
+                        JOIN LATERAL jsonb_array_elements(rad_json) AS target_elem ON rad_elem = target_elem
+                    )
+                )
+                AND amount IS NOT NULL
+        ),
+        agg AS (
+            SELECT  
+                SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN amount ELSE 0 END)::FLOAT AS CurrentMonthActual,
+                SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN amount ELSE 0 END) AS CurrentYearToDate,
+                (SELECT SUM(amount) FROM budget_slice) AS CurrentYearBudget,
+                SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN amount ELSE 0 END) AS PriorYearToDate
+            FROM actual_slice
+        )
+    SELECT 
+        *
+    FROM agg;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line_detail(
+    target_date DATE,
+    target_beginning_of_month_date DATE,
+    current_fiscal_year_int INT,
+    current_fiscal_year_start_date DATE,
+    prior_fiscal_year_start_date DATE,
+    prior_fiscal_year_end_date DATE,
+    account_list TEXT[] DEFAULT '{}',
+    business_unit_list TEXT[] DEFAULT '{}',
+    rad_json JSONB DEFAULT '[]'::JSONB
+)
+RETURNS TABLE (
+    "amount" FLOAT,
+    "accounting_date" DATE,
+    "fiscal_year" INTEGER,
+    "account_no" TEXT,
+    "business_unit_id" TEXT,
+    "rad_data" JSONB,
+    "table_name" TEXT
+) AS $$
+BEGIN
+    RETURN QUERY
+    WITH actual_slice AS (
+        SELECT  
+            j.amount,
+            j.accounting_date,
+            j.fiscal_year,
+            j.account_no,
+            j.business_unit_id,
+            j.rad_data,
+            'journal_entry' AS "table_name"
+        FROM multiview.journal_entry j
+        WHERE 
+            (array_length(account_list, 1) IS NULL OR array_length(account_list, 1) = 0 OR j.account_no = ANY(account_list))
+            AND (array_length(business_unit_list, 1) IS NULL OR array_length(business_unit_list, 1) = 0 OR j.business_unit_id = ANY(business_unit_list))
+            AND (
+                jsonb_array_length(rad_json) = 0
+                OR EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(j.rad_data) AS rad_elem 
+                    JOIN LATERAL jsonb_array_elements(rad_json) AS target_elem ON rad_elem = target_elem
+                )
+            )
+    ),
+    budget_slice AS (
+        SELECT  
+            b.amount,
+            b.accounting_date,
+            b.fiscal_year,
+            b.account_no,
+            b.business_unit_id,
+            b.rad_data,
+            'budget_entry' AS "table_name"
+        FROM multiview.budget b
+        WHERE 
+            (array_length(account_list, 1) IS NULL OR array_length(account_list, 1) = 0 OR b.account_no = ANY(account_list))
+            AND (array_length(business_unit_list, 1) IS NULL OR array_length(business_unit_list, 1) = 0 OR b.business_unit_id = ANY(business_unit_list))
+            AND (
+                jsonb_array_length(rad_json) = 0
+                OR EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(b.rad_data) AS rad_elem 
+                    JOIN LATERAL jsonb_array_elements(rad_json) AS target_elem ON rad_elem = target_elem
+                )
+            )
+    ),
+    combined AS (
+        SELECT *
+        FROM actual_slice
+        UNION ALL
+        SELECT *
+        FROM budget_slice
+    )
+    SELECT * FROM combined
+    ORDER BY accounting_date DESC;
+END;
+$$ LANGUAGE plpgsql;
