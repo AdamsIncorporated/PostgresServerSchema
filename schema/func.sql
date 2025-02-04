@@ -342,24 +342,39 @@ BEGIN
             j.account_no,
             j.business_unit_id,
             j.accounting_date
+    ),
+    closing_balance AS (
+        SELECT
+            da.account_no,
+            da.business_unit_id,
+            SUM(da.daily_sum) AS closing_balance
+        FROM daily_agg da
+        GROUP BY
+            da.account_no,
+            da.business_unit_id
+    ),
+    opening_balance AS (
+        SELECT
+            da.account_no,
+            da.business_unit_id,
+            SUM(da.daily_sum) as opening_balance
+        FROM daily_agg da
+        WHERE
+            accounting_date < start_date
+        GROUP BY
+            da.account_no,
+            da.business_unit_id
     )
-    SELECT
-        da.account_no,
-        da.business_unit_id,
-        (
-            SELECT SUM(da2.daily_sum) 
-            FROM daily_agg da2 
-            WHERE 
-                da2.account_no = da.account_no
-                AND da2.business_unit_id = da.business_unit_id
-                AND da2.accounting_date < start_date
-        ) AS opening_balance,
-        SUM(da.daily_sum) AS closing_balance
-    FROM daily_agg da
-    GROUP BY
-        da.account_no,
-        da.business_unit_id
+    SELECT 
+        o.account_no,
+        o.business_unit_id,
+        o.opening_balance,
+        c.closing_balance
+    FROM 
+        opening_balance o JOIN closing_balance c 
+            ON o.account_no = c.account_no  
+            AND o.business_unit_id = c.business_unit_id  
     ORDER BY 
-        da.account_no,
-        da.business_unit_id;
+        o.account_no,
+        o.business_unit_id;
 END $$ LANGUAGE plpgsql;
