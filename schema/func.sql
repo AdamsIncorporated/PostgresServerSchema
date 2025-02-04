@@ -319,3 +319,47 @@ BEGIN
     ORDER BY accounting_date DESC;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION multiview.trial_balance(start_date DATE, end_date DATE)
+RETURNS TABLE (
+    "account_no" TEXT,
+    "business_unit_id" TEXT,
+    "opening_balance" FLOAT,
+    "closing_balance" FLOAT
+)
+AS $$
+BEGIN
+    RETURN QUERY
+    WITH daily_agg AS (
+        SELECT
+            j.account_no,
+            j.business_unit_id,
+            j.accounting_date,
+            SUM(j.amount) as daily_sum
+        FROM multiview.journal_entry j
+        GROUP BY
+            j.account_no,
+            j.business_unit_id,
+            j.accounting_date
+    )
+    SELECT
+        da.account_no,
+        da.business_unit_id,
+        (
+            SELECT SUM(da2.daily_sum) 
+            FROM daily_agg da2 
+            WHERE 
+                da2.account_no = da.account_no
+                AND da2.business_unit_id = da.business_unit_id
+                AND da2.accounting_date < start_date
+        ) AS opening_balance,
+        SUM(da.daily_sum) AS closing_balance
+    FROM daily_agg da
+    GROUP BY
+        da.account_no,
+        da.business_unit_id
+    ORDER BY 
+        da.account_no,
+        da.business_unit_id;
+END $$ LANGUAGE plpgsql;
