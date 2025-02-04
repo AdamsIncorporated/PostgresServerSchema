@@ -75,6 +75,10 @@ CREATE TABLE multiview.journal_entry (
     FOREIGN KEY (account_no) REFERENCES multiview.account (account_no)
 );
 
+CREATE INDEX idx_journal_entry_account_no_business_unit_id_accounting_date
+ON multiview.journal_entry (account_no, business_unit_id, accounting_date);
+
+
 CREATE TABLE multiview.budget (
     id SERIAL PRIMARY KEY,
     budget_id TEXT,

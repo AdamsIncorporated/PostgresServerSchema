@@ -326,6 +326,7 @@ RETURNS TABLE (
     "account_no" TEXT,
     "business_unit_id" TEXT,
     "opening_balance" FLOAT,
+    "activity_balance" FLOAT,
     "closing_balance" FLOAT
 )
 AS $$
@@ -336,7 +337,7 @@ BEGIN
             j.account_no,
             j.business_unit_id,
             j.accounting_date,
-            SUM(j.amount) as daily_sum
+            COALESCE(SUM(j.amount), 0) AS daily_sum
         FROM multiview.journal_entry j
         GROUP BY
             j.account_no,
@@ -349,6 +350,8 @@ BEGIN
             da.business_unit_id,
             SUM(da.daily_sum) AS closing_balance
         FROM daily_agg da
+        WHERE
+            accounting_date <= end_date
         GROUP BY
             da.account_no,
             da.business_unit_id
@@ -365,13 +368,15 @@ BEGIN
             da.account_no,
             da.business_unit_id
     )
-    SELECT 
-        o.account_no,
-        o.business_unit_id,
-        o.opening_balance,
-        c.closing_balance
+    SELECT
+        COALESCE(o.account_no, c.account_no) AS account_no,
+        COALESCE(o.business_unit_id, c.business_unit_id) AS business_unit_id,
+        COALESCE(o.opening_balance, 0) as opening_balance,
+        COALESCE(c.closing_balance, 0) - COALESCE(o.opening_balance, 0) as activity_balance,
+        COALESCE(c.closing_balance, 0) as closing_balance
     FROM 
-        opening_balance o JOIN closing_balance c 
+        opening_balance o 
+            FULL JOIN closing_balance c 
             ON o.account_no = c.account_no  
             AND o.business_unit_id = c.business_unit_id  
     ORDER BY 
