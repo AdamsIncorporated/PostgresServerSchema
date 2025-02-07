@@ -373,9 +373,11 @@ class Migration:
                 cur.execute(sql, [value for row in data for value in row])
                 self.conn.commit()
 
+                print(f"{len(data)} rows inserted into [{table_name}]")
                 logging.info(f"{len(data)} rows inserted into [{table_name}]")
 
         except (Exception, psycopg2.Error) as error:
+            print(f"Error while inserting to PostgreSQL {error}")
             logging.exception("Error while inserting to PostgreSQL", error)
             raise
 

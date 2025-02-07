@@ -372,7 +372,7 @@ BEGIN
             j.account_no,
             j.business_unit_id,
             COUNT(*) as transaction_count
-        FROM journal_entry j
+        FROM multiview.journal_entry j
         WHERE
             j.accounting_date BETWEEN start_date AND end_date
         GROUP BY
