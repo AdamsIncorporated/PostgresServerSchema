@@ -182,6 +182,9 @@ CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line(
     rad_json JSONB DEFAULT '[]'::JSONB
 )
 RETURNS TABLE (
+    "account_arr" TEXT[],
+    "business_unit_id_arr" TEXT[],
+    "rad_arr" JSONB,
     "CurrentMonthActual" FLOAT,
     "CurrentYearToDate" FLOAT,
     "CurrentYearBudget" FLOAT,
@@ -228,6 +231,9 @@ BEGIN
         ),
         agg AS (
             SELECT
+                account_list as account_arr,
+                business_unit_list as business_unit_id_arr,
+                rad_json as rad_arr,
                 SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN amount ELSE 0 END)::FLOAT AS CurrentMonthActual,
                 SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN amount ELSE 0 END) AS CurrentYearToDate,
                 (SELECT SUM(amount) FROM budget_slice) AS CurrentYearBudget,
