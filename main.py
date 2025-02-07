@@ -312,6 +312,7 @@ class Migration:
             "account_no",
             "amount",
             "accounting_date",
+            "date_posted",
             "rad_data",
         ]
         self.__insert_many(
