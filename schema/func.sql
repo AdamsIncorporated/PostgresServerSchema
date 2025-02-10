@@ -185,10 +185,10 @@ RETURNS TABLE (
     "account_arr" TEXT[],
     "business_unit_id_arr" TEXT[],
     "rad_arr" JSONB,
-    "CurrentMonthActual" FLOAT,
-    "CurrentYearToDate" FLOAT,
-    "CurrentYearBudget" FLOAT,
-    "PriorYearToDate" FLOAT
+    "CurrentMonthActual" DECIMAL(20, 2),
+    "CurrentYearToDate" DECIMAL(20, 2),
+    "CurrentYearBudget" DECIMAL(20, 2),
+    "PriorYearToDate" DECIMAL(20, 2)
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -234,10 +234,10 @@ BEGIN
                 account_list as account_arr,
                 business_unit_list as business_unit_id_arr,
                 rad_json as rad_arr,
-                SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN amount ELSE 0 END)::FLOAT AS CurrentMonthActual,
-                SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN amount ELSE 0 END) AS CurrentYearToDate,
-                (SELECT SUM(amount) FROM budget_slice) AS CurrentYearBudget,
-                SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN amount ELSE 0 END) AS PriorYearToDate
+                SUM(CASE WHEN accounting_date BETWEEN target_beginning_of_month_date AND target_date THEN amount ELSE 0 END)::DECIMAL(20, 2) AS CurrentMonthActual,
+                SUM(CASE WHEN accounting_date BETWEEN current_fiscal_year_start_date AND target_date THEN amount ELSE 0 END)::DECIMAL(20, 2) AS CurrentYearToDate,
+                (SELECT SUM(amount) FROM budget_slice)::DECIMAL(20, 2) AS CurrentYearBudget,
+                SUM(CASE WHEN accounting_date BETWEEN prior_fiscal_year_start_date AND prior_fiscal_year_end_date THEN amount ELSE 0 END)::DECIMAL(20, 2) AS PriorYearToDate
             FROM actual_slice
         )
     SELECT
@@ -260,7 +260,7 @@ CREATE OR REPLACE FUNCTION multiview.calculate_profit_loss_line_detail(
     rad_json JSONB DEFAULT '[]'::JSONB
 )
 RETURNS TABLE (
-    "amount" FLOAT,
+    "amount" DECIMAL(20, 2),
     "accounting_date" DATE,
     "fiscal_year" INTEGER,
     "account_no" TEXT,
@@ -344,7 +344,7 @@ BEGIN
             j.account_no,
             j.business_unit_id,
             j.accounting_date,
-            COALESCE(SUM(j.amount), 0) AS daily_sum
+            COALESCE(SUM(j.amount), 0)::DECIMAL(20, 2) AS daily_sum
         FROM multiview.journal_entry j
         WHERE j.accounting_date <= end_date
         GROUP BY
@@ -356,7 +356,7 @@ BEGIN
         SELECT
             da.account_no,
             da.business_unit_id,
-            SUM(da.daily_sum) AS closing_balance
+            SUM(da.daily_sum)::DECIMAL(20, 2) AS closing_balance
         FROM daily_agg da
         GROUP BY
             da.account_no,
@@ -366,7 +366,7 @@ BEGIN
         SELECT
             j.account_no,
             j.business_unit_id,
-            COALESCE(SUM(j.amount), 0) as opening_balance
+            COALESCE(SUM(j.amount), 0)::DECIMAL(20, 2) as opening_balance
         FROM multiview.journal_entry j
         WHERE j.accounting_date < start_date
         GROUP BY
@@ -389,10 +389,10 @@ BEGIN
         SELECT
             COALESCE(o.account_no, c.account_no) AS account_no,
             COALESCE(o.business_unit_id, c.business_unit_id) AS business_unit_id,
-            COALESCE(o.opening_balance, 0) as opening_balance,
-            COALESCE(c.closing_balance, 0) - COALESCE(o.opening_balance, 0) as activity_balance,
-            COALESCE(c.closing_balance, 0) as closing_balance,
-            COALESCE(t.transaction_count, 0) AS transaction_count
+            COALESCE(o.opening_balance::DECIMAL(20, 2), 0)::DECIMAL(20, 2) as opening_balance,
+            COALESCE(c.closing_balance::DECIMAL(20, 2), 0)::DECIMAL(20, 2) - COALESCE(o.opening_balance, 0) as activity_balance,
+            COALESCE(c.closing_balance::DECIMAL(20, 2), 0)::DECIMAL(20, 2) as closing_balance,
+            COALESCE(t.transaction_count::DECIMAL(20, 2), 0)::BIGINT AS transaction_count
         FROM
             opening_balance o
             FULL JOIN closing_balance c
@@ -401,7 +401,6 @@ BEGIN
             FULL JOIN transaction_count t
                 ON t.account_no = c.account_no
                 AND t.business_unit_id = c.business_unit_id
-
     )
     SELECT *
     FROM summary_data sd
