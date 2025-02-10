@@ -331,9 +331,9 @@ CREATE OR REPLACE FUNCTION multiview.trial_balance(start_date DATE, end_date DAT
 RETURNS TABLE (
     "account_no" TEXT,
     "business_unit_id" TEXT,
-    "opening_balance" FLOAT,
-    "activity_balance" FLOAT,
-    "closing_balance" FLOAT,
+    "opening_balance" DECIMAL(20, 2),
+    "activity_balance" DECIMAL(20, 2),
+    "closing_balance" DECIMAL(20, 2),
     "transaction_count" BIGINT
 )
 AS $$
@@ -407,14 +407,9 @@ BEGIN
     FROM summary_data sd
     WHERE 
         NOT (
-            ROUND(sd.closing_balance::numeric, 2) = 0
-            AND ROUND(sd.opening_balance::numeric, 2) = 0
+            sd.closing_balance = 0
+            AND sd.opening_balance = 0
             AND sd.transaction_count = 0 
         )
     ORDER BY account_no, business_unit_id;
 END $$ LANGUAGE plpgsql;
-
-select sum(opening_balance), sum(activity_balance), sum(closing_balance), count(*) from trial_balance(
-    '2024-12-01',
-    '2024-12-31'
-)

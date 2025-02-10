@@ -53,7 +53,7 @@ CREATE TABLE multiview.journal_entry (
     account_no TEXT,
     business_unit_id TEXT,
     rad_data JSONB NULL,
-    amount FLOAT,
+    amount DECIMAL(20, 2),
     accounting_date DATE,
     date_posted DATE,
     fiscal_year INT GENERATED ALWAYS AS (
@@ -85,7 +85,7 @@ CREATE TABLE multiview.budget (
     account_no TEXT,
     business_unit_id TEXT,
     rad_data JSONB NULL,
-    amount FLOAT,
+    amount DECIMAL(20, 2),
     accounting_date DATE,
     fiscal_year INT GENERATED ALWAYS AS (
         CASE
