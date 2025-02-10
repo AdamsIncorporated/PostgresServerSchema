@@ -401,8 +401,20 @@ BEGIN
             FULL JOIN transaction_count t
                 ON t.account_no = c.account_no
                 AND t.business_unit_id = c.business_unit_id
+
     )
     SELECT *
-    FROM summary_data
+    FROM summary_data sd
+    WHERE 
+        NOT (
+            ROUND(sd.closing_balance::numeric, 2) = 0
+            AND ROUND(sd.opening_balance::numeric, 2) = 0
+            AND sd.transaction_count = 0 
+        )
     ORDER BY account_no, business_unit_id;
 END $$ LANGUAGE plpgsql;
+
+select sum(opening_balance), sum(activity_balance), sum(closing_balance), count(*) from trial_balance(
+    '2024-12-01',
+    '2024-12-31'
+)
