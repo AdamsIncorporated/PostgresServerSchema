@@ -9,7 +9,7 @@ VALUES (
                 "AggGroup3": "PROPERTY TAX REVENUEList",
                 "AggGroup4": null,
                 "AggGroup5": null,
-                "AccountNoList": [{"AccountNo": "ADVALTAX", "IsParent": true}],
+                "AccountNoList": [{ "AccountNo": "ADVALTAX", "IsParent": true }],
                 "BusinessUnitIdList": null,
                 "RadTypeId": null,
                 "RadId": null,
@@ -21,7 +21,7 @@ VALUES (
                 "AggGroup3": "LEASE REVENUE",
                 "AggGroup4": null,
                 "AggGroup5": null,
-                "AccountNoList": [{"AccountNo": "LSEREV", "IsParent": true}],
+                "AccountNoList": [{ "AccountNo": "LSEREV", "IsParent": true }],
                 "BusinessUnitIdList": null,
                 "RadTypeId": null,
                 "RadId": null,
@@ -33,7 +33,7 @@ VALUES (
                 "AggGroup3": "NET TOBACCO SETTLEMENT REVENUE",
                 "AggGroup4": null,
                 "AggGroup5": null,
-                "AccountNoList": [{"AccountNo": "TOBSETREV", "IsParent": true}],
+                "AccountNoList": [{ "AccountNo": "TOBSETREV", "IsParent": true }],
                 "BusinessUnitIdList": null,
                 "RadTypeId": null,
                 "RadId": null,
@@ -45,7 +45,7 @@ VALUES (
                 "AggGroup3": "PATIENT REVENUE",
                 "AggGroup4": null,
                 "AggGroup5": null,
-                "AccountNoList": [{"AccountNo": "TNR", "IsParent": true}],
+                "AccountNoList": [{ "AccountNo": "TNR", "IsParent": true }],
                 "BusinessUnitIdList": null,
                 "RadTypeId": null,
                 "RadId": null,
@@ -57,7 +57,7 @@ VALUES (
                 "AggGroup3": "OTHER REVENUE",
                 "AggGroup4": null,
                 "AggGroup5": null,
-                "AccountNoList": [{"AccountNo": "INTINCREV", "IsParent": true}],
+                "AccountNoList": [{ "AccountNo": "INTINCREV", "IsParent": true }],
                 "BusinessUnitIdList": null,
                 "RadTypeId": null,
                 "RadId": null,
@@ -69,7 +69,7 @@ VALUES (
                 "AggGroup3": "OPIOID SETTLEMENT REVENUE",
                 "AggGroup4": null,
                 "AggGroup5": null,
-                "AccountNoList": [{"AccountNo": "46500", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "46500", "IsParent": false }],
                 "BusinessUnitIdList": null,
                 "RadTypeId": null,
                 "RadId": null,
@@ -81,8 +81,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Ancillary Services",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "ANCILL SRV",
                 "DisplayName": "HCD-Ancillary Services"
@@ -93,8 +93,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Cardiology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "CARDIOLOGY",
                 "DisplayName": "HCD-Cardiology"
@@ -105,8 +105,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Dental",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "DENTAL",
                 "DisplayName": "HCD-Dental"
@@ -117,8 +117,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Dermatology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "DERMATOLOGY",
                 "DisplayName": "HCD-Dermatology"
@@ -129,8 +129,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Dialysis",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "DIALYSIS",
                 "DisplayName": "HCD-Dialysis"
@@ -141,8 +141,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Durable Medical Equipment",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "DURABLE MED",
                 "DisplayName": "HCD-Durable Medical Equipment"
@@ -153,8 +153,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Endocrinology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "ENDOCRIN",
                 "DisplayName": "HCD-Endocrinology"
@@ -165,8 +165,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Ear, Nose & Throat ENT",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "ENT",
                 "DisplayName": "HCD-Ear, Nose & Throat ENT"
@@ -177,8 +177,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Gastroenterology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "GASTRO",
                 "DisplayName": "HCD-Gastroenterology"
@@ -189,8 +189,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-General Surgery",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "GEN SURG",
                 "DisplayName": "HCD-General Surgery"
@@ -201,8 +201,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Gynecology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "GYN",
                 "DisplayName": "HCD-Gynecology"
@@ -213,8 +213,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Infectious Disease",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "INF DIS",
                 "DisplayName": "HCD-Infectious Disease"
@@ -225,8 +225,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Inmate Health",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "INMATE HEALT",
                 "DisplayName": "HCD-Inmate Health"
@@ -237,8 +237,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Musculoskeletal",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "MUSCULOSKELE",
                 "DisplayName": "HCD-Musculoskeletal"
@@ -249,8 +249,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Nephrology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "NEPHROLOGY",
                 "DisplayName": "HCD-Nephrology"
@@ -261,8 +261,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Neurology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "NEUROLOGY",
                 "DisplayName": "HCD-Neurology"
@@ -273,8 +273,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Oncology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "ONCOLOGY",
                 "DisplayName": "HCD-Oncology"
@@ -285,8 +285,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Ophthalmology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "OPHTHALM",
                 "DisplayName": "HCD-Ophthalmology"
@@ -297,8 +297,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Orthotics & Prosthetics",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "ORTHOTIC&PRO",
                 "DisplayName": "HCD-Orthotics & Prosthetics"
@@ -309,8 +309,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Pain Management",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "PAIN MGT",
                 "DisplayName": "HCD-Pain Management"
@@ -321,8 +321,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Palliative Care",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "PALL CARE",
                 "DisplayName": "HCD-Palliative Care"
@@ -333,8 +333,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Physical Med & Rehab",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "PHYSMEDREHAB",
                 "DisplayName": "HCD-Physical Med & Rehab"
@@ -345,8 +345,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Podiatry",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "PODIATRY",
                 "DisplayName": "HCD-Podiatry"
@@ -357,8 +357,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Project Access",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "PROJ ACCESS",
                 "DisplayName": "HCD-Project Access"
@@ -369,8 +369,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Transportation",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "PT TRANSPORT",
                 "DisplayName": "HCD-Transportation"
@@ -381,8 +381,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Pulmonology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "PULMONOLOGY",
                 "DisplayName": "HCD-Pulmonology"
@@ -393,8 +393,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Referral Management",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "REFERRALMGT",
                 "DisplayName": "HCD-Referral Management"
@@ -405,8 +405,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Rheumatology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "RHEUMATOLOGY",
                 "DisplayName": "HCD-Rheumatology"
@@ -417,8 +417,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Sexual & Reproductive Service",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "SEXUAL&REPRO",
                 "DisplayName": "HCD-Sexual & Reproductive Service"
@@ -429,19 +429,20 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Specialty Care Reserve",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100",[{"AccountNo":  "Is}, "IsParent": false]Parent": false}],
-                "RadTypeIdList": [{"BusinessUnitId": "PROV", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
+                "RadTypeIdList": [{ "BusinessUnitId": "PROV", "IsParent": false }],
                 "RadId": "SPEC RSRV",
                 "DisplayName": "HCD-Specialty Care Reserve"
+            },
             {
                 "AggGroup1": "USE",
                 "AggGroup2": "HEALTHCARE DELIVERY PROGRAM",
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Translation",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "TRANSLATE",
                 "DisplayName": "HCD-Translation"
@@ -452,8 +453,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Convenient / Urgent Care",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "URGENT CARE",
                 "DisplayName": "HCD-Convenient / Urgent Care"
@@ -464,8 +465,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Urology",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "UROLOGY",
                 "DisplayName": "HCD-Urology"
@@ -476,8 +477,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY CARE",
                 "AggGroup5": "HCD-Wound Care",
-                "AccountNoList": [{"AccountNo": "65000", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4100", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
                 "RadTypeId": "PROV",
                 "RadId": "WOUND CARE",
                 "DisplayName": "HCD-Wound Care"
@@ -488,8 +489,18 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "PRIMARY CARE",
                 "AggGroup5": null,
-                "AccountNoList": "65000",
-                "BusinessUnitId": "4100",
+                "AccountNoList": [
+                {
+                    "AccountNo": "65000",
+                    "IsParent": false
+                }
+                ],
+                "BusinessUnitIdList": [
+                {
+                    "BusinessUnitId": "4100",
+                    "IsParent": false
+                }
+                ],
                 "RadTypeId": "PROV",
                 "RadId": "PRIMARY CARE",
                 "DisplayName": "PRIMARY CARE"
@@ -500,8 +511,18 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "SPECIALTY BEHAVIORAL HEALTH AND SUBTANCE USE",
                 "AggGroup5": null,
-                "AccountNoList": "65000",
-                "BusinessUnitId": "4100",
+                "AccountNoList": [
+                {
+                    "AccountNo": "65000",
+                    "IsParent": false
+                }
+                ],
+                "BusinessUnitIdList": [
+                {
+                    "BusinessUnitId": "4100",
+                    "IsParent": false
+                }
+                ],
                 "RadTypeId": "PROV",
                 "RadId": "MENTAL HLTH",
                 "DisplayName": "SPECIALTY BEHAVIORAL HEALTH AND SUBTANCE USE"
@@ -512,8 +533,18 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "POST ACUTE CARE",
                 "AggGroup5": null,
-                "AccountNoList": "65000",
-                "BusinessUnitId": "4100",
+                "AccountNoList": [
+                {
+                    "AccountNo": "65000",
+                    "IsParent": false
+                }
+                ],
+                "BusinessUnitIdList": [
+                {
+                    "BusinessUnitId": "4100",
+                    "IsParent": false
+                }
+                ],
                 "RadTypeId": "PROV",
                 "RadId": "POST ACUTE",
                 "DisplayName": "POST ACUTE CARE"
@@ -524,8 +555,18 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "PHARMACY",
                 "AggGroup5": null,
-                "AccountNoList": "65000",
-                "BusinessUnitId": "4100",
+                "AccountNoList": [
+                {
+                    "AccountNo": "65000",
+                    "IsParent": false
+                }
+                ],
+                "BusinessUnitIdList": [
+                {
+                    "BusinessUnitId": "4100",
+                    "IsParent": false
+                }
+                ],
                 "RadTypeId": "PROV",
                 "RadId": "PHARMACY",
                 "DisplayName": "PHARMACY"
@@ -536,8 +577,18 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "COMMUNITY HEALTHCARE INITIATIVES FUND",
                 "AggGroup5": null,
-                "AccountNoList": "65000",
-                "BusinessUnitId": "4100",
+                "AccountNoList": [
+                {
+                    "AccountNo": "65000",
+                    "IsParent": false
+                }
+                ],
+                "BusinessUnitIdList": [
+                {
+                    "BusinessUnitId": "4100",
+                    "IsParent": false
+                }
+                ],
                 "RadTypeId": "PROV",
                 "RadId": "CHIF",
                 "DisplayName": "COMMUNITY HEALTHCARE INITIATIVES FUND"
@@ -548,8 +599,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Direct Services Other",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "DSOT", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "DSOT", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Direct Services Other"
@@ -560,8 +611,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Direct Services Support",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "DSSP", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "DSSP", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Direct Services Support"
@@ -572,8 +623,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Endocrinology",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3475", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3475", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Endocrinology"
@@ -584,8 +635,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Rheumatology",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3775", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3775", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Rheumatology"
@@ -596,8 +647,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Cardiology",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3325", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3325", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Cardiology"
@@ -608,8 +659,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Gastroenterology",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3500", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3500", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Gastroenterology"
@@ -620,8 +671,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Nephrology",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3600", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3600", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Nephrology"
@@ -632,8 +683,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Neurology",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3625", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3625", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Neurology"
@@ -644,8 +695,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Podiatry",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3700", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3700", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Podiatry"
@@ -656,8 +707,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Pulmonology",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3750", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3750", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Pulmonology"
@@ -668,8 +719,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Palliative Care",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3675", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3675", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Palliative Care"
@@ -680,8 +731,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Pharmacy",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3305", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3305", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Pharmacy"
@@ -692,8 +743,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Operation Inactive",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3200", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3200", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Operation Inactive"
@@ -704,8 +755,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Behavioral Health",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3310", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3310", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Behavioral Health"
@@ -716,8 +767,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Patient Navigation Center",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3950", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3950", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Patient Navigation Center"
@@ -728,8 +779,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Psychiatry",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "3311", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "3311", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Psychiatry"
@@ -740,8 +791,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Medical Respite",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "MRSP", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "MRSP", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Medical Respite"
@@ -752,8 +803,8 @@ VALUES (
                 "AggGroup3": "SUBTOTAL PURCHASED HEALTHCARE SERVICES",
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Transition of Care",
-                "AccountNoList": [{"AccountNo": "TOTOPEXP", "IsParent": true}],
-                "BusinessUnitIdListList": [{"BusinessUnitId": "TOC", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
+                "BusinessUnitIdListList": [{ "BusinessUnitId": "TOC", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Transition of Care"
@@ -765,51 +816,51 @@ VALUES (
                 "AggGroup4": null,
                 "AggGroup5": null,
                 "AccountNoList": [
-                    {"AccountNo": "45700", "IsParent": false},
-                    {"AccountNo": "45800", "IsParent": false},
-                    {"AccountNo": "79000", "IsParent": false},
-                    {"AccountNo": "70100", "IsParent": false},
-                    {"AccountNo": "53000", "IsParent": false},
-                    {"AccountNo": "52200", "IsParent": false},
-                    {"AccountNo": "67000", "IsParent": false},
-                    {"AccountNo": "68000", "IsParent": false},
-                    {"AccountNo": "60000", "IsParent": false},
-                    {"AccountNo": "59999", "IsParent": false},
-                    {"AccountNo": "52500", "IsParent": false},
-                    {"AccountNo": "72000", "IsParent": false},
-                    {"AccountNo": "73000", "IsParent": false},
-                    {"AccountNo": "74000", "IsParent": false},
-                    {"AccountNo": "66500", "IsParent": false},
-                    {"AccountNo": "52300", "IsParent": false},
-                    {"AccountNo": "70200", "IsParent": false},
-                    {"AccountNo": "70000", "IsParent": false},
-                    {"AccountNo": "71000", "IsParent": false},
-                    {"AccountNo": "75000", "IsParent": false},
-                    {"AccountNo": "66000", "IsParent": false},
-                    {"AccountNo": "49100", "IsParent": false},
-                    {"AccountNo": "52400", "IsParent": false},
-                    {"AccountNo": "52150", "IsParent": false},
-                    {"AccountNo": "51000", "IsParent": false},
-                    {"AccountNo": "52100", "IsParent": false},
-                    {"AccountNo": "76000", "IsParent": false},
-                    {"AccountNo": "77100", "IsParent": false},
-                    {"AccountNo": "50000", "IsParent": false},
-                    {"AccountNo": "77200", "IsParent": false}
+                { "AccountNo": "45700", "IsParent": false },
+                { "AccountNo": "45800", "IsParent": false },
+                { "AccountNo": "79000", "IsParent": false },
+                { "AccountNo": "70100", "IsParent": false },
+                { "AccountNo": "53000", "IsParent": false },
+                { "AccountNo": "52200", "IsParent": false },
+                { "AccountNo": "67000", "IsParent": false },
+                { "AccountNo": "68000", "IsParent": false },
+                { "AccountNo": "60000", "IsParent": false },
+                { "AccountNo": "59999", "IsParent": false },
+                { "AccountNo": "52500", "IsParent": false },
+                { "AccountNo": "72000", "IsParent": false },
+                { "AccountNo": "73000", "IsParent": false },
+                { "AccountNo": "74000", "IsParent": false },
+                { "AccountNo": "66500", "IsParent": false },
+                { "AccountNo": "52300", "IsParent": false },
+                { "AccountNo": "70200", "IsParent": false },
+                { "AccountNo": "70000", "IsParent": false },
+                { "AccountNo": "71000", "IsParent": false },
+                { "AccountNo": "75000", "IsParent": false },
+                { "AccountNo": "66000", "IsParent": false },
+                { "AccountNo": "49100", "IsParent": false },
+                { "AccountNo": "52400", "IsParent": false },
+                { "AccountNo": "52150", "IsParent": false },
+                { "AccountNo": "51000", "IsParent": false },
+                { "AccountNo": "52100", "IsParent": false },
+                { "AccountNo": "76000", "IsParent": false },
+                { "AccountNo": "77100", "IsParent": false },
+                { "AccountNo": "50000", "IsParent": false },
+                { "AccountNo": "77200", "IsParent": false }
                 ],
                 "BusinessUnitIdList": [
-                    {"BusinessUnitId": "5200", "IsParent": false},
-                    {"BusinessUnitId": "9800", "IsParent": false},
-                    {"BusinessUnitId": "9550", "IsParent": false},
-                    {"BusinessUnitId": "9043", "IsParent": false},
-                    {"BusinessUnitId": "9042", "IsParent": false},
-                    {"BusinessUnitId": "9300", "IsParent": false},
-                    {"BusinessUnitId": "9400", "IsParent": false},
-                    {"BusinessUnitId": "9200", "IsParent": false},
-                    {"BusinessUnitId": "9850", "IsParent": false},
-                    {"BusinessUnitId": "9100", "IsParent": false},
-                    {"BusinessUnitId": "9900", "IsParent": false},
-                    {"BusinessUnitId": "9500", "IsParent": false},
-                    {"BusinessUnitId": "9000", "IsParent": false}
+                { "BusinessUnitId": "5200", "IsParent": false },
+                { "BusinessUnitId": "9800", "IsParent": false },
+                { "BusinessUnitId": "9550", "IsParent": false },
+                { "BusinessUnitId": "9043", "IsParent": false },
+                { "BusinessUnitId": "9042", "IsParent": false },
+                { "BusinessUnitId": "9300", "IsParent": false },
+                { "BusinessUnitId": "9400", "IsParent": false },
+                { "BusinessUnitId": "9200", "IsParent": false },
+                { "BusinessUnitId": "9850", "IsParent": false },
+                { "BusinessUnitId": "9100", "IsParent": false },
+                { "BusinessUnitId": "9900", "IsParent": false },
+                { "BusinessUnitId": "9500", "IsParent": false },
+                { "BusinessUnitId": "9000", "IsParent": false }
                 ],
                 "RadTypeId": null,
                 "RadId": null,
@@ -821,13 +872,14 @@ VALUES (
                 "AggGroup3": null,
                 "AggGroup4": null,
                 "AggGroup5": null,
-                "AccountNoList": [{"AccountNo": "65800", "IsParent": false}],
-                "BusinessUnitIdList": [{"BusinessUnitId": "4998", "IsParent": false}],
+                "AccountNoList": [{ "AccountNo": "65800", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "4998", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "UT AFFILIATION AGREEMENT"
             }
-        ]'::JSONB
+            ]
+            '::JSONB
     );
 
 INSERT INTO
