@@ -538,7 +538,7 @@ VALUES (
                 "AggGroup4": "COMMUNITY HEALTHCARE INITIATIVES FUND",
                 "AggGroup5": null,
                 "AccountNo": "65000",
-                "BusinessUnitId": "8200",
+                "BusinessUnitId": "4100",
                 "RadTypeId": "PROV",
                 "RadId": "CHIF",
                 "DisplayName": "COMMUNITY HEALTHCARE INITIATIVES FUND"
