@@ -327,10 +327,92 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION multiview.trial_balance(start_date DATE, end_date DATE)
+CREATE OR REPLACE FUNCTION multiview.trial_balance_journal_entry(start_date DATE, end_date DATE)
 RETURNS TABLE (
     "account_no" TEXT,
     "business_unit_id" TEXT,
+    "opening_balance" DECIMAL(20, 2),
+    "activity_balance" DECIMAL(20, 2),
+    "closing_balance" DECIMAL(20, 2),
+    "transaction_count" BIGINT
+) 
+AS $$
+BEGIN
+    RETURN QUERY
+    WITH aggregated AS (
+        SELECT
+            j.account_no,
+            j.business_unit_id,
+            SUM(CASE WHEN j.accounting_date < start_date THEN j.amount ELSE 0 END)::DECIMAL(20,2) AS opening_balance,
+            SUM(CASE WHEN j.accounting_date BETWEEN start_date AND end_date THEN j.amount ELSE 0 END)::DECIMAL(20,2) AS activity_balance,
+            SUM(j.amount)::DECIMAL(20,2) AS closing_balance,
+            COUNT(*) FILTER (WHERE j.accounting_date BETWEEN start_date AND end_date) AS transaction_count
+        FROM multiview.journal_entry j
+        WHERE j.accounting_date <= end_date
+        GROUP BY j.account_no, j.business_unit_id
+    )
+    SELECT 
+        a.account_no,
+        a.business_unit_id,
+        a.opening_balance,
+        a.activity_balance,
+        a.closing_balance,
+        a.transaction_count
+    FROM aggregated a 
+    WHERE NOT (
+        a.closing_balance = 0 
+        AND a.opening_balance = 0 
+        AND a.transaction_count = 0
+    )
+    ORDER BY account_no, business_unit_id;
+END $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION multiview.trial_balance_budget(start_date DATE, end_date DATE)
+RETURNS TABLE (
+    "account_no" TEXT,
+    "business_unit_id" TEXT,
+    "opening_balance" DECIMAL(20, 2),
+    "activity_balance" DECIMAL(20, 2),
+    "closing_balance" DECIMAL(20, 2),
+    "transaction_count" BIGINT
+) 
+AS $$
+BEGIN
+    RETURN QUERY
+    WITH aggregated AS (
+        SELECT
+            b.account_no,
+            b.business_unit_id,
+            SUM(CASE WHEN b.accounting_date < start_date THEN b.amount ELSE 0 END)::DECIMAL(20,2) AS opening_balance,
+            SUM(CASE WHEN b.accounting_date BETWEEN start_date AND end_date THEN b.amount ELSE 0 END)::DECIMAL(20,2) AS activity_balance,
+            SUM(b.amount)::DECIMAL(20,2) AS closing_balance,
+            COUNT(*) FILTER (WHERE b.accounting_date BETWEEN start_date AND end_date) AS transaction_count
+        FROM multiview.budget b
+        WHERE b.accounting_date <= end_date
+        GROUP BY b.account_no, b.business_unit_id
+    )
+    SELECT 
+        a.account_no,
+        a.business_unit_id,
+        a.opening_balance,
+        a.activity_balance,
+        a.closing_balance,
+        a.transaction_count
+    FROM aggregated a 
+    WHERE NOT (
+        a.closing_balance = 0 
+        AND a.opening_balance = 0 
+        AND a.transaction_count = 0
+    )
+    ORDER BY account_no, business_unit_id;
+END $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION multiview.trial_balance_by_rad_journal_entry(start_date DATE, end_date DATE)
+RETURNS TABLE (
+    "account_no" TEXT,
+    "business_unit_id" TEXT,
+    "rad_data" JSONB,
     "opening_balance" DECIMAL(20, 2),
     "activity_balance" DECIMAL(20, 2),
     "closing_balance" DECIMAL(20, 2),
@@ -339,76 +421,69 @@ RETURNS TABLE (
 AS $$
 BEGIN
     RETURN QUERY
-    WITH daily_agg AS (
+    WITH aggregated_data AS (
         SELECT
             j.account_no,
             j.business_unit_id,
-            j.accounting_date,
-            COALESCE(SUM(j.amount), 0)::DECIMAL(20, 2) AS daily_sum
+            j.rad_data,
+            SUM(CASE WHEN j.accounting_date < start_date THEN j.amount ELSE 0 END) AS opening_balance,
+            SUM(CASE WHEN j.accounting_date BETWEEN start_date AND end_date THEN j.amount ELSE 0 END) AS activity_balance,
+            SUM(CASE WHEN j.accounting_date <= end_date THEN j.amount ELSE 0 END) AS closing_balance,
+            COUNT(*) FILTER (WHERE j.accounting_date BETWEEN start_date AND end_date) AS transaction_count
         FROM multiview.journal_entry j
         WHERE j.accounting_date <= end_date
-        GROUP BY
-            j.account_no,
-            j.business_unit_id,
-            j.accounting_date
-    ),
-    closing_balance AS (
-        SELECT
-            da.account_no,
-            da.business_unit_id,
-            SUM(da.daily_sum)::DECIMAL(20, 2) AS closing_balance
-        FROM daily_agg da
-        GROUP BY
-            da.account_no,
-            da.business_unit_id
-    ),
-    opening_balance AS (
-        SELECT
-            j.account_no,
-            j.business_unit_id,
-            COALESCE(SUM(j.amount), 0)::DECIMAL(20, 2) as opening_balance
-        FROM multiview.journal_entry j
-        WHERE j.accounting_date < start_date
-        GROUP BY
-            j.account_no,
-            j.business_unit_id
-    ),
-    transaction_count AS (
-        SELECT
-            j.account_no,
-            j.business_unit_id,
-            COUNT(*) as transaction_count
-        FROM multiview.journal_entry j
-        WHERE
-            j.accounting_date BETWEEN start_date AND end_date
-        GROUP BY
-            j.account_no,
-            j.business_unit_id
-    ),
-    summary_data AS (
-        SELECT
-            COALESCE(o.account_no, c.account_no) AS account_no,
-            COALESCE(o.business_unit_id, c.business_unit_id) AS business_unit_id,
-            COALESCE(o.opening_balance::DECIMAL(20, 2), 0)::DECIMAL(20, 2) as opening_balance,
-            COALESCE(c.closing_balance::DECIMAL(20, 2), 0)::DECIMAL(20, 2) - COALESCE(o.opening_balance, 0) as activity_balance,
-            COALESCE(c.closing_balance::DECIMAL(20, 2), 0)::DECIMAL(20, 2) as closing_balance,
-            COALESCE(t.transaction_count::DECIMAL(20, 2), 0)::BIGINT AS transaction_count
-        FROM
-            opening_balance o
-            FULL JOIN closing_balance c
-                ON o.account_no = c.account_no
-                AND o.business_unit_id = c.business_unit_id
-            FULL JOIN transaction_count t
-                ON t.account_no = c.account_no
-                AND t.business_unit_id = c.business_unit_id
+        GROUP BY j.account_no, j.business_unit_id, j.rad_data
     )
-    SELECT *
-    FROM summary_data sd
+    SELECT 
+        ad.account_no,
+        ad.business_unit_id,
+        ad.rad_data,
+        COALESCE(ad.opening_balance, 0)::DECIMAL(20, 2),
+        COALESCE(ad.activity_balance, 0)::DECIMAL(20, 2),
+        COALESCE(ad.closing_balance, 0)::DECIMAL(20, 2),
+        COALESCE(ad.transaction_count, 0)::BIGINT
+    FROM aggregated_data ad
     WHERE 
-        NOT (
-            sd.closing_balance = 0
-            AND sd.opening_balance = 0
-            AND sd.transaction_count = 0 
-        )
-    ORDER BY account_no, business_unit_id;
+        NOT (ad.closing_balance = 0 AND ad.opening_balance = 0 AND ad.transaction_count = 0)
+    ORDER BY ad.account_no, ad.business_unit_id;
+END $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION multiview.trial_balance_by_rad_budget(start_date DATE, end_date DATE)
+RETURNS TABLE (
+    "account_no" TEXT,
+    "business_unit_id" TEXT,
+    "rad_data" JSONB,
+    "opening_balance" DECIMAL(20, 2),
+    "activity_balance" DECIMAL(20, 2),
+    "closing_balance" DECIMAL(20, 2),
+    "transaction_count" BIGINT
+)
+AS $$
+BEGIN
+    RETURN QUERY
+    WITH aggregated_data AS (
+        SELECT
+            b.account_no,
+            b.business_unit_id,
+            b.rad_data,
+            SUM(CASE WHEN b.accounting_date < start_date THEN b.amount ELSE 0 END) AS opening_balance,
+            SUM(CASE WHEN b.accounting_date BETWEEN start_date AND end_date THEN b.amount ELSE 0 END) AS activity_balance,
+            SUM(CASE WHEN b.accounting_date <= end_date THEN b.amount ELSE 0 END) AS closing_balance,
+            COUNT(*) FILTER (WHERE b.accounting_date BETWEEN start_date AND end_date) AS transaction_count
+        FROM multiview.budget b
+        WHERE b.accounting_date <= end_date
+        GROUP BY b.account_no, b.business_unit_id, b.rad_data
+    )
+    SELECT 
+        ad.account_no,
+        ad.business_unit_id,
+        ad.rad_data,
+        COALESCE(ad.opening_balance, 0)::DECIMAL(20, 2),
+        COALESCE(ad.activity_balance, 0)::DECIMAL(20, 2),
+        COALESCE(ad.closing_balance, 0)::DECIMAL(20, 2),
+        COALESCE(ad.transaction_count, 0)::BIGINT
+    FROM aggregated_data ad
+    WHERE 
+        NOT (ad.closing_balance = 0 AND ad.opening_balance = 0 AND ad.transaction_count = 0)
+    ORDER BY ad.account_no, ad.business_unit_id;
 END $$ LANGUAGE plpgsql;

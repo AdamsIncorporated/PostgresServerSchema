@@ -431,7 +431,7 @@ VALUES (
                 "AggGroup5": "HCD-Specialty Care Reserve",
                 "AccountNoList": [{ "AccountNo": "65000", "IsParent": false }],
                 "BusinessUnitIdList": [{ "BusinessUnitId": "4100", "IsParent": false }],
-                "RadTypeIdList": [{ "BusinessUnitId": "PROV", "IsParent": false }],
+                "RadTypeId": "PROV",
                 "RadId": "SPEC RSRV",
                 "DisplayName": "HCD-Specialty Care Reserve"
             },
@@ -804,7 +804,7 @@ VALUES (
                 "AggGroup4": "DIRECT SERVICES",
                 "AggGroup5": "Direct-Services - Transition of Care",
                 "AccountNoList": [{ "AccountNo": "TOTOPEXP", "IsParent": true }],
-                "BusinessUnitIdListList": [{ "BusinessUnitId": "TOC", "IsParent": false }],
+                "BusinessUnitIdList": [{ "BusinessUnitId": "TOC", "IsParent": false }],
                 "RadTypeId": null,
                 "RadId": null,
                 "DisplayName": "Direct-Services - Transition of Care"
