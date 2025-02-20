@@ -367,47 +367,6 @@ BEGIN
     ORDER BY account_no, business_unit_id;
 END $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION multiview.trial_balance_budget(start_date DATE, end_date DATE)
-RETURNS TABLE (
-    "account_no" TEXT,
-    "business_unit_id" TEXT,
-    "opening_balance" DECIMAL(20, 2),
-    "activity_balance" DECIMAL(20, 2),
-    "closing_balance" DECIMAL(20, 2),
-    "transaction_count" BIGINT
-) 
-AS $$
-BEGIN
-    RETURN QUERY
-    WITH aggregated AS (
-        SELECT
-            b.account_no,
-            b.business_unit_id,
-            SUM(CASE WHEN b.accounting_date < start_date THEN b.amount ELSE 0 END)::DECIMAL(20,2) AS opening_balance,
-            SUM(CASE WHEN b.accounting_date BETWEEN start_date AND end_date THEN b.amount ELSE 0 END)::DECIMAL(20,2) AS activity_balance,
-            SUM(b.amount)::DECIMAL(20,2) AS closing_balance,
-            COUNT(*) FILTER (WHERE b.accounting_date BETWEEN start_date AND end_date) AS transaction_count
-        FROM multiview.budget b
-        WHERE b.accounting_date <= end_date
-        GROUP BY b.account_no, b.business_unit_id
-    )
-    SELECT 
-        a.account_no,
-        a.business_unit_id,
-        a.opening_balance,
-        a.activity_balance,
-        a.closing_balance,
-        a.transaction_count
-    FROM aggregated a 
-    WHERE NOT (
-        a.closing_balance = 0 
-        AND a.opening_balance = 0 
-        AND a.transaction_count = 0
-    )
-    ORDER BY account_no, business_unit_id;
-END $$ LANGUAGE plpgsql;
-
-
 CREATE OR REPLACE FUNCTION multiview.trial_balance_by_rad_journal_entry(start_date DATE, end_date DATE)
 RETURNS TABLE (
     "account_no" TEXT,
@@ -448,42 +407,100 @@ BEGIN
     ORDER BY ad.account_no, ad.business_unit_id;
 END $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION multiview.trial_balance_by_rad_budget(start_date DATE, end_date DATE)
+CREATE OR REPLACE FUNCTION multiview.trial_balance_summary(anchor_date DATE)
 RETURNS TABLE (
-    "account_no" TEXT,
-    "business_unit_id" TEXT,
-    "rad_data" JSONB,
-    "opening_balance" DECIMAL(20, 2),
-    "activity_balance" DECIMAL(20, 2),
-    "closing_balance" DECIMAL(20, 2),
-    "transaction_count" BIGINT
-)
-AS $$
+    account_no TEXT,
+    account TEXT,
+    account_type TEXT,
+    business_unit_id TEXT,
+    business_unit TEXT,
+    opening_balance NUMERIC,
+    activity_balance NUMERIC,
+    closing_balance NUMERIC,
+    transaction_count BIGINT,
+    time_period TEXT,
+    consumption TEXT
+) AS $$
 BEGIN
     RETURN QUERY
-    WITH aggregated_data AS (
-        SELECT
-            b.account_no,
-            b.business_unit_id,
-            b.rad_data,
-            SUM(CASE WHEN b.accounting_date < start_date THEN b.amount ELSE 0 END) AS opening_balance,
-            SUM(CASE WHEN b.accounting_date BETWEEN start_date AND end_date THEN b.amount ELSE 0 END) AS activity_balance,
-            SUM(CASE WHEN b.accounting_date <= end_date THEN b.amount ELSE 0 END) AS closing_balance,
-            COUNT(*) FILTER (WHERE b.accounting_date BETWEEN start_date AND end_date) AS transaction_count
-        FROM multiview.budget b
-        WHERE b.accounting_date <= end_date
-        GROUP BY b.account_no, b.business_unit_id, b.rad_data
-    )
     SELECT 
-        ad.account_no,
-        ad.business_unit_id,
-        ad.rad_data,
-        COALESCE(ad.opening_balance, 0)::DECIMAL(20, 2),
-        COALESCE(ad.activity_balance, 0)::DECIMAL(20, 2),
-        COALESCE(ad.closing_balance, 0)::DECIMAL(20, 2),
-        COALESCE(ad.transaction_count, 0)::BIGINT
-    FROM aggregated_data ad
-    WHERE 
-        NOT (ad.closing_balance = 0 AND ad.opening_balance = 0 AND ad.transaction_count = 0)
-    ORDER BY ad.account_no, ad.business_unit_id;
-END $$ LANGUAGE plpgsql;
+        master.account_no::TEXT,
+        a."account"::TEXT,
+        a.account_type::TEXT,
+        master.business_unit_id::TEXT,
+        b.business_unit::TEXT,
+        master.opening_balance::NUMERIC,
+        master.activity_balance::NUMERIC,
+        master.closing_balance::NUMERIC,
+        master.transaction_count::BIGINT,
+        master.time_period::TEXT,
+        ''::TEXT AS consumption
+    FROM (
+        -- Current Month
+        SELECT 
+            je.account_no::TEXT, 
+            je.business_unit_id::TEXT,
+            je.opening_balance::NUMERIC, 
+            je.activity_balance::NUMERIC, 
+            je.closing_balance::NUMERIC, 
+            je.transaction_count::BIGINT, 
+            'CurrentMonth' AS time_period
+        FROM multiview.trial_balance_journal_entry(
+            start_date := DATE_TRUNC('month', anchor_date)::DATE,
+            end_date := anchor_date
+        ) AS je
+
+        UNION ALL
+
+        -- Current YTD
+        SELECT 
+            je.account_no::TEXT, 
+            je.business_unit_id::TEXT,
+            je.opening_balance::NUMERIC, 
+            je.activity_balance::NUMERIC, 
+            je.closing_balance::NUMERIC, 
+            je.transaction_count::BIGINT, 
+            'CurrentYTD' AS time_period
+        FROM multiview.trial_balance_journal_entry(
+            start_date := (multiview.get_fiscal_year(anchor_date)::TEXT || '-10-01')::DATE,
+            end_date := anchor_date
+        ) AS je
+
+        UNION ALL
+
+        -- Current FY Budget
+        SELECT 
+            bgt.account_no::TEXT, 
+            bgt.business_unit_id::TEXT, 
+            0::NUMERIC as opening_balance, -- there are no balances for budget data
+            sum(amount)::NUMERIC as activity_balance, 
+            0::NUMERIC as closing_balance,  -- there are no balances for budget data
+            bgt.transaction_count::BIGINT, 
+            'CurrentFYBudget' AS time_period
+        FROM budget bgt 
+        WHERE 
+            bgt.accounting_date >= (multiview.get_fiscal_year(anchor_date)::TEXT || '-10-01')::DATE,
+            end_date := anchor_date
+
+        UNION ALL
+
+        -- Prior YTD
+        SELECT 
+            je.account_no::TEXT, 
+            je.business_unit_id::TEXT, 
+            je.opening_balance::NUMERIC, 
+            je.activity_balance::NUMERIC, 
+            je.closing_balance::NUMERIC, 
+            je.transaction_count::BIGINT, 
+            'PriorYTD' AS time_period
+        FROM multiview.trial_balance_journal_entry(
+            start_date := ((multiview.get_fiscal_year(anchor_date) - 1)::TEXT || '-10-01')::DATE,
+            end_date := (anchor_date - INTERVAL '1 year')::DATE
+        ) AS je
+
+    ) AS master
+    JOIN "account" a ON master.account_no = a.account_no
+    JOIN business_unit b ON master.business_unit_id = b.business_unit_id;
+END;
+$$ LANGUAGE plpgsql;
+
