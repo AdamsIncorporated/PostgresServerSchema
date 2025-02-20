@@ -414,6 +414,7 @@ RETURNS TABLE (
     account_type TEXT,
     business_unit_id TEXT,
     business_unit TEXT,
+    rad_data JSONB,
     opening_balance NUMERIC,
     activity_balance NUMERIC,
     closing_balance NUMERIC,
@@ -429,6 +430,7 @@ BEGIN
         a.account_type::TEXT,
         master.business_unit_id::TEXT,
         b.business_unit::TEXT,
+        master.rad_data::JSONB,
         master.opening_balance::NUMERIC,
         master.activity_balance::NUMERIC,
         master.closing_balance::NUMERIC,
@@ -440,12 +442,13 @@ BEGIN
         SELECT 
             je.account_no::TEXT, 
             je.business_unit_id::TEXT,
+            je.rad_data::JSONB,
             je.opening_balance::NUMERIC, 
             je.activity_balance::NUMERIC, 
             je.closing_balance::NUMERIC, 
             je.transaction_count::BIGINT, 
             'CurrentMonth' AS time_period
-        FROM multiview.trial_balance_journal_entry(
+        FROM multiview.trial_balance_by_rad_journal_entry(
             start_date := DATE_TRUNC('month', anchor_date)::DATE,
             end_date := anchor_date
         ) AS je
@@ -456,12 +459,13 @@ BEGIN
         SELECT 
             je.account_no::TEXT, 
             je.business_unit_id::TEXT,
+            je.rad_data::JSONB,
             je.opening_balance::NUMERIC, 
             je.activity_balance::NUMERIC, 
             je.closing_balance::NUMERIC, 
             je.transaction_count::BIGINT, 
             'CurrentYTD' AS time_period
-        FROM multiview.trial_balance_journal_entry(
+        FROM multiview.trial_balance_by_rad_journal_entry(
             start_date := (multiview.get_fiscal_year(anchor_date)::TEXT || '-10-01')::DATE,
             end_date := anchor_date
         ) AS je
@@ -471,36 +475,41 @@ BEGIN
         -- Current FY Budget
         SELECT 
             bgt.account_no::TEXT, 
-            bgt.business_unit_id::TEXT, 
+            bgt.business_unit_id::TEXT,
+            bgt.rad_data::JSONB,
             0::NUMERIC as opening_balance, -- there are no balances for budget data
             sum(amount)::NUMERIC as activity_balance, 
             0::NUMERIC as closing_balance,  -- there are no balances for budget data
-            bgt.transaction_count::BIGINT, 
+            count(*) as transaction_count,  
             'CurrentFYBudget' AS time_period
-        FROM budget bgt 
+        FROM multiview.budget bgt 
         WHERE 
-            bgt.accounting_date >= (multiview.get_fiscal_year(anchor_date)::TEXT || '-10-01')::DATE,
-            end_date := anchor_date
+            bgt.accounting_date >= (multiview.get_fiscal_year(anchor_date)::TEXT || '-10-01')::DATE
+            AND bgt.accounting_date <= anchor_date
+        GROUP BY
+            bgt.account_no::TEXT, 
+            bgt.business_unit_id::TEXT,
+            bgt.rad_data::JSONB
 
         UNION ALL
 
         -- Prior YTD
         SELECT 
             je.account_no::TEXT, 
-            je.business_unit_id::TEXT, 
+            je.business_unit_id::TEXT,
+            je.rad_data::JSONB, 
             je.opening_balance::NUMERIC, 
             je.activity_balance::NUMERIC, 
             je.closing_balance::NUMERIC, 
             je.transaction_count::BIGINT, 
             'PriorYTD' AS time_period
-        FROM multiview.trial_balance_journal_entry(
+        FROM multiview.trial_balance_by_rad_journal_entry(
             start_date := ((multiview.get_fiscal_year(anchor_date) - 1)::TEXT || '-10-01')::DATE,
             end_date := (anchor_date - INTERVAL '1 year')::DATE
         ) AS je
 
     ) AS master
-    JOIN "account" a ON master.account_no = a.account_no
-    JOIN business_unit b ON master.business_unit_id = b.business_unit_id;
+    JOIN multiview."account" a ON master.account_no = a.account_no
+    JOIN multiview.business_unit b ON master.business_unit_id = b.business_unit_id;
 END;
 $$ LANGUAGE plpgsql;
-

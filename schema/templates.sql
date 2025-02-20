@@ -563,209 +563,200 @@ VALUES (
         'Balance Sheet',
         '[
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "CASH AND CASH EQUIVALENTS",
-            "Accounts": [
-            "11000",
-            "11100",
-            "11298",
-            "11299",
-            "11300",
-            "11310",
-            "11400",
-            "11500",
-            "11600",
-            "11800"
-            ]
+            "AccountNoList": [{ "AccountNo": "CASH", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "CASH AND CASH EQUIVALENTS"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "SHORT TERM INVESTMENTS",
-            "Accounts": [
-            "12000",
-            "12100",
-            "12200",
-            "12300",
-            "12400",
-            "12500",
-            "12600",
-            "12900",
-            "30101"
-            ]
+            "AccountNoList": [{ "AccountNo": "INVESTMENT", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "SHORT TERM INVESTMENTS"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "LEASE RECEIVABLE SHORT TERM",
-            "Accounts": ["14302", "14301"]
+            "AccountNoList": [{ "AccountNo": "LEAREC", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "LEASE RECEIVABLE SHORT TERM"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "ACCOUNTS RECEIVABLE TAX",
-            "Accounts": ["13030", "13040", "13050", "13060", "13070", "13080", "15200"]
+            "AccountNoList": [{ "AccountNo": "ARTAX", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RECEIVABLE TAX"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "OTHER RECEIVABLES",
-            "Accounts": [
-            "13099",
-            "13999",
-            "14001",
-            "14100",
-            "14150",
-            "14151",
-            "14200",
-            "15000",
-            "15100",
-            "15300",
-            "15500",
-            "15600"
-            ]
+            "AccountNoList": [{ "AccountNo": "ARPAT", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "OTHER RECEIVABLES"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "RESTRICTED TCHD LPPF CASH & INVESTMENTS",
-            "Accounts": ["11900", "12010"]
+            "AccountNoList": [{ "AccountNo": "AROTH", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "OTHER RECEIVABLES"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "RESTRICTED OPIOID FUNDS",
-            "Accounts": ["46500"]
+            "AccountNoList": [{ "AccountNo": "RSTAST", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RESTRICTED TCHD LPPF CASH & INVESTMENTS"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "RESTRICTED FOR CAPITAL ACQUISITION",
-            "Accounts": ["12020", "16900"]
+            "AccountNoList": [{ "AccountNo": "RSTCAPACQ", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RESTRICTED FOR CAPITAL ACQUISITION"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "SENDERO PAID-IN CAPITAL",
-            "Accounts": ["16200"]
+            "AccountNoList": [{ "AccountNo": "16200", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "SENDERO PAID-IN CAPITAL"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "SENDERO SURPLUS DEBENTURE",
-            "Accounts": ["16300"]
+            "AccountNoList": [{ "AccountNo": "16300", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "SENDERO SURPLUS DEBENTURE"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "ADVANCE RECEIVABLE",
-            "Accounts": ["15900", "16100"]
+            "AccountNoList": [{ "AccountNo": "16100", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "ADVANCE RECEIVABLE"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "LEASE RECEIVABLE LONG TERM",
-            "Accounts": ["15301"]
+            "AccountNoList": [{ "AccountNo": "LSERECLT", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "LEASE RECEIVABLE LONG TERM"
         },
         {
-            "AccountTypeDisplayName": "Asset",
-            "DisplayName": "TOTAL CAPITAL ASSETS, NET OF DEPRECIATION",
-            "Accounts": [
-            "17000",
-            "17100",
-            "17200",
-            "17300",
-            "17400",
-            "17500",
-            "17550",
-            "17600",
-            "17700",
-            "17800",
-            "17850",
-            "17900",
-            "18000",
-            "18100",
-            "18200",
-            "18300"
-            ]
+            "AccountNoList": [{ "AccountNo": "TOTCAPAST", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "TOTAL CAPITAL ASSETS, NET OF DEPRECIATION"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "ACCOUNTS PAYABLE",
-            "Accounts": [
-            "20000",
-            "20001",
-            "20000H",
-            "20100",
-            "20101",
-            "20200",
-            "20300",
-            "20400",
-            "22500",
-            "22600",
-            "22700",
-            "20500",
-            "20600"
-            ]
+            "AccountNoList": [{ "AccountNo": "ACTPAY", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "AccountNoList PAYABLE"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "SALARIES & BENEFITS PAYABLE",
-            "Accounts": [
-            "21000",
-            "21100",
-            "21200",
-            "21300",
-            "21350",
-            "21400",
-            "21500",
-            "21550",
-            "21600",
-            "21700",
-            "21900"
-            ]
+            "AccountNoList": [{ "AccountNo": "SBPAY", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "SALARIES & BENEFITS PAYABLE"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "SHORT-TERM DEBT SERVICE PAYABLE",
-            "Accounts": ["23000", "23001"]
+            "AccountNoList": [{ "AccountNo": "DEBTST", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "SHORT-TERM DEBT SERVICE PAYABLE"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "DEFERRED TAX REVENUE",
-            "Accounts": ["24000"]
+            "AccountNoList": [{ "AccountNo": "DEFTAXREV", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "DEFERRED TAX REVENUE"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "FUNDS HELD FOR TCHD LPPF",
-            "Accounts": ["25000"]
+            "AccountNoList": [{ "AccountNo": "FUNDSLPPF", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "FUNDS HELD FOR TCHD LPPF"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "LONG-TERM DEBT SERVICE PAYABLE",
-            "Accounts": ["26000", "27000"]
+            "AccountNoList": [{ "AccountNo": "DEBTLT", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "LONG-TERM DEBT SERVICE PAYABLE"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "LEASE & SUBSCRIPTION LIABILITIES",
-            "Accounts": ["20301", "20302", "24700", "23301", "23302", "27301", "27302"]
+            "AccountNoList": [{ "AccountNo": "NONCLEASES", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "LEASE & SUBSCRIPTION LIABILITIES"
         },
         {
-            "AccountTypeDisplayName": "Liability",
-            "DisplayName": "DEFERRED REVENUE",
-            "Accounts": ["24600", "24500"]
+            "AccountNoList": [{ "AccountNo": "OTHDEFREV", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "DEFERRED REVENUE"
         },
         {
-            "AccountTypeDisplayName": "Capital",
-            "DisplayName": "RESTRICTED FOR CAPITAL ASSETS",
-            "Accounts": ["30300", "30200"]
+            "AccountNoList": [{ "AccountNo": "30300", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RESTRICTED FOR CAPITAL ASSETS"
         },
         {
-            "AccountTypeDisplayName": "Capital",
-            "DisplayName": "RESTRICTED FOR OPIOID SETTLEMENT",
-            "Accounts": ["30101"]
+            "AccountNoList": [{ "AccountNo": "30200", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RESTRICTED FOR CAPITAL ASSETS"
         },
         {
-            "AccountTypeDisplayName": "Capital",
-            "DisplayName": "RESTRICTED CAPITAL",
-            "Accounts": ["30100", "30500"]
+            "AccountNoList": [{ "AccountNo": "30101", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RESTRICTED FOR OPIOID SETTLEMENT"
         },
         {
-            "AccountTypeDisplayName": "Capital",
-            "DisplayName": "UNRESTRICTED CAPITAL",
-            "Accounts": [
-            "30400",
-            "30000"
-            ]
+            "AccountNoList": [{ "AccountNo": "30100", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RESTRICTED CAPITAL"
+        },
+        {
+            "AccountNoList": [{ "AccountNo": "30500", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "RESTRICTED CAPITAL"
+        },
+        {
+            "AccountNoList": [{ "AccountNo": "30400", "IsParent": false }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "UNRESTRICTED CAPITAL"
+        },
+        {
+            "AccountNoList": [{ "AccountNo": "UNA", "IsParent": true }],
+            "BusinessUnitIdList": null,
+            "RadTypeId": null,
+            "RadId": null,
+            "DisplayName": "UNRESTRICTED CAPITAL"
         }
         ]'::JSONB
     );
