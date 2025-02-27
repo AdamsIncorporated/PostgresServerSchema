@@ -578,7 +578,7 @@ VALUES (
             "BusinessUnitIdList": null,
             "RadTypeId": null,
             "RadId": null,
-            "DisplayName": "RECEIVABLE TAX"
+            "DisplayName": "ACCOUNTS RECEIVABLE TAX"
         },
         {
             "AccountNoList": [{ "AccountNo": "ARPAT", "IsParent": true }],
@@ -623,7 +623,7 @@ VALUES (
             "DisplayName": "SENDERO SURPLUS DEBENTURE"
         },
         {
-            "AccountNoList": [{ "AccountNo": "16100", "IsParent": false }],
+            "AccountNoList": [{ "AccountNo": "16100", "IsParent": true }],
             "BusinessUnitIdList": null,
             "RadTypeId": null,
             "RadId": null,
