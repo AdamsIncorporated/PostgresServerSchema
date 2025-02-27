@@ -326,8 +326,7 @@ BEGIN
             'CurrentFYBudget' AS time_period
         FROM multiview.budget bgt 
         WHERE 
-            bgt.accounting_date >= (((multiview.get_fiscal_year(anchor_date) - 1)::TEXT || '-10-01')::DATE)::DATE
-            AND bgt.accounting_date <= anchor_date
+            bgt.fiscal_year >= multiview.get_fiscal_year(anchor_date)
         GROUP BY
             bgt.account_no::TEXT, 
             bgt.business_unit_id::TEXT,
