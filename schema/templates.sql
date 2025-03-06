@@ -541,6 +541,13 @@ VALUES (
     "RadTypeId": null,
     "RadId": null,
     "DisplayName": "UT AFFILIATION AGREEMENT"
+  },
+  {
+    "AccountNoList": [{ "AccountNo": "DEPAMI", "IsParent": true }],
+    "BusinessUnitIdList": null,
+    "RadTypeId": null,
+    "RadId": null,
+    "DisplayName": "NON_CASH"
   }
 ]
 
